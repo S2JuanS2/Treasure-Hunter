@@ -6,9 +6,9 @@ public class Treasure {
 	private final Coordinate position;
 	private final int rarity;
 	private final int weight;
-	private final int price;
+	private final float price;
 	
-	public Treasure(TreasureType type, Coordinate position, int weight, int rarity, int price) {
+	public Treasure(TreasureType type, Coordinate position, int weight, int rarity, float price) {
 		super();
 		this.type = type;
 		this.position = position;
@@ -33,7 +33,7 @@ public class Treasure {
 		return weight;
 	}
 
-	public int getPrice() {
+	public float getPrice() {
 		return price;
 	}
 

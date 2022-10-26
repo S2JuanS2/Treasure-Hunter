@@ -98,9 +98,33 @@ public class Director {
 	
 	public void constructRandomTreasure(TreasureBuilder builder) {
 		
-		int treasureRandom = (int)(Math.random()*11);
+		int randomProbability = (int)(Math.random()*100+1);
+		int treasureRandom  = 0;
 		
-		
+		if(randomProbability <= 17) {
+			treasureRandom = 0;
+		}else if(randomProbability <= 34) {
+			treasureRandom = 1;
+		}else if(randomProbability <= 44){
+			treasureRandom = 2;
+		}else if(randomProbability <= 54){
+			treasureRandom = 3;
+		}else if(randomProbability <= 64){
+			treasureRandom = 4;
+		}else if(randomProbability <= 72){
+			treasureRandom = 5;
+		}else if(randomProbability <= 80){
+			treasureRandom = 6;
+		}else if(randomProbability <= 88){
+			treasureRandom = 7;
+		}else if(randomProbability <= 94){
+			treasureRandom = 8;
+		}else if(randomProbability <= 98){
+			treasureRandom = 9;
+		}else if(randomProbability <= 100){
+			treasureRandom = 10;
+		}
+			
 		switch(treasureRandom) {
 		case 0:
 			this.constructGraniteTreasure(builder);

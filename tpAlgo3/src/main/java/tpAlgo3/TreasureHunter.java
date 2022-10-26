@@ -4,21 +4,26 @@ public class TreasureHunter {
 
 	public static final java.util.Scanner keyboard = new java.util.Scanner(System.in);
 	public static final java.io.PrintStream screen = new java.io.PrintStream(System.out);
-	public static final int MAX_TREASURES = 20;
-	public static final int DIMENSION_MAP = 20;
+	
+	static final int MAX_TREASURES = 20;
+	static final int DIMENSION_MAP = 300;
+	static final String LEFT = "A";
+	static final String RIGHT = "D";
+	static final String DOWN = "E";
+	static final String BUY = "B";
 	
 	
 	public static void main(String[] args) {
 		
 		screen.print("TREASURE HUNTER\n");
 		screen.print("Ingrese nombre del personaje:");
-		String name = keyboard.nextLine();
+		//String name = keyboard.nextLine();
+		String name = "test";
 		screen.print("\n");
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name, DIMENSION_MAP);
 		
 		Director director = new Director();
 		TreasureBuilder builder = new TreasureBuilder();
-		
 		
 		//ITERADOR PARA GENERAR TESOROS
 		for(int i = 0; i < MAX_TREASURES; i++) {
@@ -33,28 +38,40 @@ public class TreasureHunter {
 		screen.print("\n");
 		screen.print(treasureHunterGame.showPlayerStats());
 		screen.print("\n");
-		screen.print("\n");
 		screen.print(treasureHunterGame.showHookStats());
 		screen.print("\n");
+		screen.print("\n");
 		
-		
-		//POSICIONAR EL GANCHO PARA RECOLECTAR
-		for(int i = 0; i < 10; i++) {
-			screen.print("X:");
-			int a = Integer.parseInt(keyboard.nextLine());
-			screen.print("Y:");
-			int b = Integer.parseInt(keyboard.nextLine());
+		for (int i = 0; i < 100; i++) {
 			
-			treasureHunterGame.getHook().getPositionHook().setX(a);
-			treasureHunterGame.getHook().getPositionHook().setY(b);
-			treasureHunterGame.collectTreasure();
-			screen.print(treasureHunterGame.showPlayerStats());
+			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m ($200.0): ");
+			String mover = keyboard.nextLine();
+			
+			switch(mover) {
+			case LEFT:
+				treasureHunterGame.getHook().getPositionHook().oneLessX();
+				break;
+			case RIGHT:
+				treasureHunterGame.getHook().getPositionHook().oneAddX();
+				break;
+			case DOWN:
+				treasureHunterGame.goDownHook();
+				break;
+			case BUY:
+				treasureHunterGame.improveHook();
+				break;
+			}
+				
+			treasureHunterGame.goUpHook();
+			
 			screen.print("\n");
 			treasureHunterGame.showTreasures();
 			screen.print("\n");
-			
+			screen.print(treasureHunterGame.showPlayerStats());
+			screen.print("\n");
+			screen.print(treasureHunterGame.showHookStats());
+			screen.print("\n");
 		}
-
 	}
 
 }

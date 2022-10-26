@@ -2,7 +2,7 @@ package tpAlgo3;
 
 public class Player {
 	private String name;
-	private int balance;
+	private double balance;
 	private int strengh;
 	private int resistance;
 	
@@ -22,11 +22,11 @@ public class Player {
 		this.name = name;
 	}
 
-	public int getBalance() {
+	public double getBalance() {
 		return balance;
 	}
 
-	public void setBalance(int balance) {
+	public void setBalance(float balance) {
 		this.balance += balance;
 	}
 

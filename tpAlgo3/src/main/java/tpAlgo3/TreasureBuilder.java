@@ -6,7 +6,7 @@ public class TreasureBuilder implements Builder{
 	private Coordinate position;
 	private int rarity;
 	private int weight;
-	private int price;
+	private float price;
 	
 	@Override
 	public void setTreasureType(TreasureType type) {
@@ -32,7 +32,7 @@ public class TreasureBuilder implements Builder{
 	@Override
 	public void setPrice() {	//FORMULA
 		
-		int calculatePrice = (this.rarity * this.weight *10);
+		int calculatePrice = (this.rarity * this.weight *100)/2;
 		this.price = calculatePrice;
 	}
 	
