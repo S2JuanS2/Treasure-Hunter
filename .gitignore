@@ -1,4 +1,7 @@
 .metadata
+tpAlgo3/target/
+tpAlgo3/.classpath
+tpAlgo3/.project
 bin/
 tmp/
 *.tmp
