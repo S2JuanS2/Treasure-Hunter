@@ -13,6 +13,7 @@ public class TreasureHunter {
 	static final String BUY = "B";
 	static final String YES = "S";
 	static final String NO = "N";
+	static final String END = "F";
 	
 	public static void main(String[] args) {
 		
@@ -57,9 +58,9 @@ public class TreasureHunter {
 		screen.print("\n");
 		screen.print("\n");
 		
-		for (int i = 0; i < 20; i++) {
+		for (int i = 0; i < 100; i++) {
 			
-			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m ($200.0): ");
+			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m [$100.0]): ");
 			String mover = keyboard.nextLine();
 			
 			switch(mover) {
@@ -74,6 +75,9 @@ public class TreasureHunter {
 				break;
 			case BUY:
 				treasureHunterGame.improveHook();
+				break;
+			case END:
+				i = 100;
 				break;
 			}
 				
