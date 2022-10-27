@@ -1,7 +1,11 @@
 package tpAlgo3;
 
-public class Hook {
+import java.io.Serializable;
 
+public class Hook implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	static final int INITIAL_LENGHT = 80;
 	static final int POSITION_X = 150;
 	static final int POSITION_Y = 20;

@@ -23,12 +23,20 @@ public class TreasureHunterGame {
 		return hook;
 	}
 
+	public void setHook(Hook hook) {
+		this.hook = hook;
+	}
+
 	public List<Treasure> getTreasure() {
 		return treasure;
 	}
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 
 	public Map getMap() {

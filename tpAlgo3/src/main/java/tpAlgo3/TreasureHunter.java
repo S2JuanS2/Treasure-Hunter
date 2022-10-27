@@ -11,16 +11,31 @@ public class TreasureHunter {
 	static final String RIGHT = "D";
 	static final String DOWN = "E";
 	static final String BUY = "B";
-	
+	static final String YES = "S";
+	static final String NO = "N";
 	
 	public static void main(String[] args) {
 		
 		screen.print("TREASURE HUNTER\n");
-		screen.print("Ingrese nombre del personaje:");
-		//String name = keyboard.nextLine();
-		String name = "test";
-		screen.print("\n");
+		screen.print("Deseas continuar la partida? (S o N):");
+		String optContinue = keyboard.nextLine();
+		
+		Memento memento = new Memento(null,null);
+		String name = null;
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name, DIMENSION_MAP);
+		
+		switch(optContinue) {
+			
+			case NO:
+				screen.print("Ingrese nombre del personaje:");
+				treasureHunterGame.getPlayer().setName(keyboard.nextLine());
+				screen.print("\n");
+				break;
+			case YES:
+				treasureHunterGame.setPlayer(memento.playerUpload());
+				treasureHunterGame.setHook(memento.HookUpload());
+				break;
+		}
 		
 		Director director = new Director();
 		TreasureBuilder builder = new TreasureBuilder();
@@ -42,7 +57,7 @@ public class TreasureHunter {
 		screen.print("\n");
 		screen.print("\n");
 		
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 20; i++) {
 			
 			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m ($200.0): ");
 			String mover = keyboard.nextLine();
@@ -72,6 +87,11 @@ public class TreasureHunter {
 			screen.print(treasureHunterGame.showHookStats());
 			screen.print("\n");
 		}
+		
+		memento.playerSave(treasureHunterGame.getPlayer());
+		memento.hookSave(treasureHunterGame.getHook());
+		
+		screen.print("FIN DEL JUEGO");
 	}
 
 }
