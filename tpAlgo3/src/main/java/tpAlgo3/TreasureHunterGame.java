@@ -27,7 +27,9 @@ public class TreasureHunterGame {
 	public static final String PLAY = "play.wav";
 	
 	static final String LEFT = "A";
+	static final String DOUBLE_LEFT = "AA";
 	static final String RIGHT = "D";
+	static final String DOUBLE_RIGHT = "DD";
 	static final String DOWN = "E";
 	static final String BUY_HOOK = "B";
 	static final String BUY_FUEL = "G";
@@ -146,11 +148,11 @@ public class TreasureHunterGame {
 	void goDownHook() {
 		
 		
-		if(getHook().getFuel() >= getHook().getLenght()) {
+		if(getHook().getFuel() > 0) {
 			playSound(HOOK_SOUND);
 			
 			int contador = 0;
-			while( !( collisionTreasure() || collisionBorderMap() || contador >= getHook().getLenght() ) ) {
+			while( ( (!( collisionTreasure() || collisionBorderMap() || contador >= getHook().getLenght() ) && getHook().getFuel() > 0) ) ) {
 				getHook().getPositionHook().oneAddY();
 				getHook().setFuel(-1);
 				contador++;
@@ -170,11 +172,17 @@ public class TreasureHunterGame {
 
 	public void improveHook() {
 		if(player.getBalance() >= 100) {
-			playSound(BOUGTH);
-			player.setBalance(-100);
-			hook.setLenght(10);
+			
+			if(hook.getLenght() < 280) {		
+				playSound(BOUGTH);
+				player.setBalance(-100);
+				hook.setLenght(10);
+			}else {
+				screen.print("Longitud maxima alcanzada.");
+				playSound(NO_FUEL);
+			}
 		}else {
-			System.out.println("Dinero insuficiente\n");
+			screen.print("Dinero insuficiente\n");
 			playSound(ERROR_MONEY);
 		}
 	}
@@ -194,7 +202,7 @@ public class TreasureHunterGame {
 
 		playSound(PLAY);
 		
-		while (getHook().getFuel() >= getHook().getLenght() || getPlayer().getBalance() >= 80) {
+		while (getHook().getFuel() > 0 || getPlayer().getBalance() >= 80) {
 			
 			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m [$100.0]) || G(Recargar combustible [$80.0]): ");
 			String mover = keyboard.nextLine();
@@ -210,11 +218,35 @@ public class TreasureHunterGame {
 					playSound(NO_FUEL);
 				}
 				break;
+			case DOUBLE_LEFT:
+				if(getHook().getFuel() >= 10) {
+					playSound(MOVE_HOOK);
+					for(int i = 0; i < 10; i++) {	
+						getHook().getPositionHook().oneLessX();
+						getHook().setFuel(-1);
+					}
+				}else {
+					screen.print("Combustible insuficiente");
+					playSound(NO_FUEL);
+				}
+				break;
 			case RIGHT:
 				if(getHook().getFuel() >= 1) {
 					getHook().getPositionHook().oneAddX();
 					getHook().setFuel(-1);
 					playSound(MOVE_HOOK);
+				}else {
+					screen.print("Combustible insuficiente");
+					playSound(NO_FUEL);
+				}
+				break;
+			case DOUBLE_RIGHT:
+				if(getHook().getFuel() >= 10) {
+					playSound(MOVE_HOOK);
+					for(int i = 0; i < 10; i++) {	
+						getHook().getPositionHook().oneAddX();
+						getHook().setFuel(-1);
+					}
 				}else {
 					screen.print("Combustible insuficiente");
 					playSound(NO_FUEL);
