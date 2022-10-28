@@ -54,10 +54,7 @@ public class TreasureHunter {
 		screen.print("\n");
 		screen.print("\n");
 		
-		treasureHunterGame.play();
-		
-		memento.playerSave(treasureHunterGame.getPlayer());
-		memento.hookSave(treasureHunterGame.getHook());
+		treasureHunterGame.play(memento);
 							
 		screen.print("La mina se derrumbo\n");
 		screen.print("Pulse una tecla para finalizar");

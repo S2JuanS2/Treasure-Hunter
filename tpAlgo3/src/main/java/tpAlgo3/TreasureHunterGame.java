@@ -190,7 +190,7 @@ public class TreasureHunterGame {
 		}
 	}
 
-	public void play() {
+	public void play(Memento memento) {
 
 		playSound(PLAY);
 		
@@ -242,6 +242,9 @@ public class TreasureHunterGame {
 				screen.print("\n");
 				screen.print(showHookStats());
 				screen.print("\n");		
+				
+				memento.playerSave(getPlayer());
+				memento.hookSave(getHook());
 		}
 		
 		playSound(DEFEAT);
