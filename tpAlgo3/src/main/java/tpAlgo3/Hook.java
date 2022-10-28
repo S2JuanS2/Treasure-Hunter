@@ -9,18 +9,16 @@ public class Hook implements Serializable{
 	static final int INITIAL_LENGHT = 80;
 	static final int POSITION_X = 150;
 	static final int POSITION_Y = 20;
+	static final int INITIAL_FUEL = 1000;
 	
 	private Coordinate positionHook;
 	private int lenght;
-	private int vx;
-	private int vy;
+	private double fuel;
 	
-
 	public Hook() {
 		this.positionHook = new Coordinate(POSITION_X,POSITION_Y);
 		this.lenght = INITIAL_LENGHT;
-		this.setVx(0);
-		this.setVy(0);
+		this.setFuel(INITIAL_FUEL);
 	}
 
 	public int getLenght() {
@@ -37,23 +35,15 @@ public class Hook implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Hook [positionHook=" + positionHook + ", lenght=" + lenght + ", vx=" + vx + ", vy=" + vy + "]";
+		return "Hook [positionHook=" + positionHook + ", lenght=" + lenght + ", fuel=" + fuel + "]";
 	}
 
-	public int getVx() {
-		return vx;
+	public double getFuel() {
+		return fuel;
 	}
 
-	public void setVx(int vx) {
-		this.vx = vx;
-	}
-
-	public int getVy() {
-		return vy;
-	}
-
-	public void setVy(int vy) {
-		this.vy = vy;
+	public void setFuel(double fuel) {
+		this.fuel += fuel;
 	}
 	
 }

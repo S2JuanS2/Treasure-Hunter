@@ -14,10 +14,25 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class TreasureHunterGame {
 	
+	public static final java.util.Scanner keyboard = new java.util.Scanner(System.in);
+	public static final java.io.PrintStream screen = new java.io.PrintStream(System.out);
+	
 	public static final String HOOK_SOUND = "hook.wav";
 	public static final String TREASURE_COLLISION_SOUND = "treasure.wav";
 	public static final String BOUGTH = "buy.wav";
 	public static final String ERROR_MONEY = "errorMoney.wav";
+	public static final String MOVE_HOOK = "moveHook.wav";
+	public static final String NO_FUEL = "noFuel.wav";
+	public static final String DEFEAT = "defeat.wav";
+	public static final String PLAY = "play.wav";
+	
+	static final String LEFT = "A";
+	static final String RIGHT = "D";
+	static final String DOWN = "E";
+	static final String BUY_HOOK = "B";
+	static final String BUY_FUEL = "G";
+	static final String END = "F";
+
 	
 
 	private Hook hook;
@@ -130,12 +145,19 @@ public class TreasureHunterGame {
 
 	void goDownHook() {
 		
-		playSound("hook.wav");
 		
-		int contador = 0;
-		while( !( collisionTreasure() || collisionBorderMap() || contador >= getHook().getLenght() ) ) {
-			getHook().getPositionHook().oneAddY();
-			contador++;
+		if(getHook().getFuel() >= getHook().getLenght()) {
+			playSound(HOOK_SOUND);
+			
+			int contador = 0;
+			while( !( collisionTreasure() || collisionBorderMap() || contador >= getHook().getLenght() ) ) {
+				getHook().getPositionHook().oneAddY();
+				getHook().setFuel(-1);
+				contador++;
+			}
+		}else {
+			screen.print("Combustible insuficiente");
+			playSound(NO_FUEL);
 		}
 		
 	}
@@ -155,5 +177,73 @@ public class TreasureHunterGame {
 			System.out.println("Dinero insuficiente\n");
 			playSound(ERROR_MONEY);
 		}
+	}
+	
+	public void buyFuel() {
+		if(player.getBalance() >= 80) {
+			playSound(BOUGTH);
+			player.setBalance(-80);
+			getHook().setFuel(200);
+		}else {
+			System.out.println("Dinero insuficiente\n");
+			playSound(ERROR_MONEY);
+		}
+	}
+
+	public void play() {
+
+		playSound(PLAY);
+		
+		while (getHook().getFuel() >= getHook().getLenght() || getPlayer().getBalance() >= 80) {
+			
+			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar soga 10m [$100.0]) || G(Recargar combustible [$80.0]): ");
+			String mover = keyboard.nextLine();
+			
+			switch(mover) {
+			case LEFT:
+				if(getHook().getFuel() >= 1) {
+					getHook().getPositionHook().oneLessX();
+					getHook().setFuel(-1);
+					playSound(MOVE_HOOK);
+				}else {
+					screen.print("Combustible insuficiente");
+					playSound(NO_FUEL);
+				}
+				break;
+			case RIGHT:
+				if(getHook().getFuel() >= 1) {
+					getHook().getPositionHook().oneAddX();
+					getHook().setFuel(-1);
+					playSound(MOVE_HOOK);
+				}else {
+					screen.print("Combustible insuficiente");
+					playSound(NO_FUEL);
+				}
+				break;
+			case DOWN:
+				goDownHook();
+				break;
+			case BUY_HOOK:
+				improveHook();
+				break;
+			case BUY_FUEL:
+				buyFuel();
+				break;
+			case END:
+				
+				break;
+			}
+				goUpHook();
+				
+				screen.print("\n");
+				showTreasures();
+				screen.print("\n");
+				screen.print(showPlayerStats());
+				screen.print("\n");
+				screen.print(showHookStats());
+				screen.print("\n");		
+		}
+		
+		playSound(DEFEAT);
 	}
 }
