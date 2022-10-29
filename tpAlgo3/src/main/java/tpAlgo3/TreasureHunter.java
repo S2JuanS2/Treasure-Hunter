@@ -11,32 +11,36 @@ public class TreasureHunter {
 	
 	public static void main(String[] args) {
 		
-		screen.print("TREASURE HUNTER\n");
-		screen.print("Deseas continuar la partida? (S o N):");
-		String optContinue = keyboard.nextLine();
-		
-		//while (optContinue != YES && optContinue != NO) {
-			//screen.print("Opcion incorrecta\n");
-			//screen.print("Deseas continuar la partida? (S o N):");
-			//optContinue = keyboard.nextLine();
-		//}
-		
 		Memento memento = new Memento(null,null);
 		String name = null;
+		boolean correctOpt = false;
+		
+		screen.print("TREASURE HUNTER\n");
+		screen.print("Deseas continuar la partida? (S o N):");
+		String optContinue = keyboard.nextLine();	
 		
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name);
 		
-		switch(optContinue) {
+		while((!correctOpt)) {
 			
-			case NO:
-				screen.print("Ingrese nombre del personaje:"); 
-				treasureHunterGame.getPlayer().setName(keyboard.nextLine());
-				screen.print("\n");
-				break;
-			case YES:
-				treasureHunterGame.setPlayer(memento.loadPlayer());
-				treasureHunterGame.setHook(memento.loadHook());
-				break;
+			switch(optContinue) {
+				case NO:
+					screen.print("Ingrese nombre del personaje:"); 
+					treasureHunterGame.getPlayer().setName(keyboard.nextLine());
+					screen.print("\n");
+					correctOpt = true;
+					break;
+				case YES:
+					treasureHunterGame.setPlayer(memento.loadPlayer());
+					treasureHunterGame.setHook(memento.loadHook());
+					correctOpt = true;
+					break;
+					
+				default:
+					screen.print("Opcion incorrecta\n");
+					screen.print("Deseas continuar la partida? (S o N):");
+					optContinue = keyboard.nextLine();
+			}
 		}
 		
 		Director director = new Director();
@@ -49,7 +53,7 @@ public class TreasureHunter {
 			treasureHunterGame.addTreasure(treasure);
 		}
 		
-		treasureHunterGame.play(memento);
+		treasureHunterGame.start(memento);
 						
 		optContinue = keyboard.nextLine();
 	}

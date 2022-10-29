@@ -11,7 +11,6 @@ public class Memento extends SaveAndLoadGame{
 		this.hookState = hookStateToSave;
 	}
 
-
 	public Player getPlayerState() {
 		return playerState;
 	}

@@ -7,19 +7,22 @@ import org.junit.Test;
 public class TreasureHunterTest {
 
 	@Test
-	public void testInitial() {
+	public void testInitialPlayer() {
 		var treasure = new TreasureHunterGame("test");
 		
-		//Player
 		assertEquals("test",treasure.getPlayer().getName());
 		assertEquals(0,0, treasure.getPlayer().getBalance());
 		
-		//Hook
+	}
+	
+	@Test
+	public void testInitialHook() {
+		var treasure = new TreasureHunterGame("test");
+
 		assertEquals(80, treasure.getHook().getLenght());
-		assertEquals((TreasureHunterGame.DIMENSION_MAP)/2, treasure.getHook().getPositionHook().getX());
+		assertEquals((TreasureHunterGame.WIDTH)/2, treasure.getHook().getPositionHook().getX());
 		assertEquals(20, treasure.getHook().getPositionHook().getY());
 		assertEquals(1000,0, treasure.getHook().getFuel());
-		
 	}
 	
 	@Test
@@ -59,7 +62,7 @@ public class TreasureHunterTest {
 		var treasureGame = new TreasureHunterGame("test");
 	
 		treasureGame.goDownHook();
-		treasureGame.goUpHook();
+		treasureGame.getHook().goUp();
 		assertEquals(20, treasureGame.getHook().getPositionHook().getY());
 	}
 	

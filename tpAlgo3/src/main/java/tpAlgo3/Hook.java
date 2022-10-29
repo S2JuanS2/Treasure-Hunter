@@ -49,7 +49,7 @@ public class Hook implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "Hook [positionHook=" + positionHook + ", lenght=" + lenght + ", fuel=" + fuel + "]";
+		return "  Hook [positionHook=" + positionHook + ", lenght=" + lenght + ", fuel=" + fuel + "]";
 	}
 
 	public void moveLeft() {
@@ -68,8 +68,10 @@ public class Hook implements Serializable{
 	}
 	
 	public void goUp() {
-		positionHook.oneLessY();
-		setFuel(-1);
+		while (getPositionHook().getY() > Hook.INITIAL_POSITION_Y && thereIsFuel()) {
+			positionHook.oneLessY();
+			setFuel(-1);
+		}
 	}
 	
 	public boolean thereIsFuel() {

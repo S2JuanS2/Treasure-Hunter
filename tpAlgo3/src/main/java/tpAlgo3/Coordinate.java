@@ -12,10 +12,8 @@ public class Coordinate implements Serializable{
 	// GENERA COORDENADAS RANDOM
 	public Coordinate() {
 		
-		int xRandom = (int)(Math.random()*270);
-		int yRandom = (int)(Math.random()*270+30);
-		this.x = xRandom;
-		this.y = yRandom;
+		this.x = (int)(Math.random()*300);
+		this.y = (int)(Math.random()*470+30);
 	}
 	
 	public Coordinate(int x, int y) {
@@ -55,8 +53,8 @@ public class Coordinate implements Serializable{
 		y--;
 	}
 
-	boolean equals(int x, int y) {
-		return(this.x == x && this.y == y);
+	boolean equals(Coordinate coords) {
+		return(this.x == coords.getX() && this.y == coords.getY());
 	}
 	
 	@Override

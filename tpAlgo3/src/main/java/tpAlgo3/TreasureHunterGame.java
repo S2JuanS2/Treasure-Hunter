@@ -13,8 +13,9 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class TreasureHunterGame implements Sound{
-			
-	static final int DIMENSION_MAP = 300;
+
+	static final int WIDTH = 300;
+	static final int DEPTH = 500;
 	
 	//opt
 	static final String LEFT = "A";
@@ -36,7 +37,7 @@ public class TreasureHunterGame implements Sound{
 		
 		this.player = new Player(name);
 		this.hook = new Hook();
-		this.map = new Map(DIMENSION_MAP);
+		this.map = new Map(WIDTH, WIDTH);
 		this.treasure = new ArrayList<Treasure>();
 		
 	}
@@ -99,14 +100,20 @@ public class TreasureHunterGame implements Sound{
 		}
 	}
 		
-	//VIOLA EL PRINCIPIO DE RESPONSABILIDAD UNICA
-	boolean collisionTreasure() {
+	public void lineBreak(int i) {
+		
+		for( int j = 0; j < i; j++) {
+			TreasureHunter.screen.print("\n");
+		}
+	}
+	
+	//PRINCIPIO DE RESPONSABILIDAD UNICA  -> BUSCA, APREMIA, ELIMINA		;podría devolver el tesoro
+	public boolean collisionTreasure() {
 		
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
 			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().getX() == hook.getPositionHook().getX() && 
-			   treasureAux.getPosition().getY() == hook.getPositionHook().getY()) {
+			if(treasureAux.getPosition().equals(getHook().getPositionHook())) {
 				playSound(TREASURE_COLLISION_SOUND);
 				player.setBalance(treasureAux.getPrice());
 				TreasureHunter.screen.print("recurso recolectado: " + treasureAux.getType());
@@ -117,14 +124,14 @@ public class TreasureHunterGame implements Sound{
 		return false;
 	}
 	
-	boolean collisionBorderMap(){
+	public boolean collisionBorderMap(){
 		
-		return(getHook().getPositionHook().getX() <= 0 || getHook().getPositionHook().getX() >= map.getDimension() || getHook().getPositionHook().getY() >= map.getDimension());
+		return(getHook().getPositionHook().getX() <= 0 || getHook().getPositionHook().getX() >= map.getWidth() || getHook().getPositionHook().getY() >= map.getDepth());
 	}
 
-	void goDownHook() {
+	public void goDownHook() {
 		
-		if(getHook().getFuel() > 0) {
+		if(getHook().thereIsFuel()) {
 			playSound(HOOK_SOUND);
 			
 			int contador = 0;
@@ -135,13 +142,6 @@ public class TreasureHunterGame implements Sound{
 		}else {
 			TreasureHunter.screen.print("Combustible insuficiente");
 			playSound(NO_FUEL);
-		}
-		
-	}
-
-	public void goUpHook() {
-		while (getHook().getPositionHook().getY() > Hook.INITIAL_POSITION_Y) {
-			getHook().goUp();
 		}
 	}
 
@@ -177,85 +177,81 @@ public class TreasureHunterGame implements Sound{
 		return(getHook().getFuel() > 0 || getPlayer().getBalance() >= Hook.FUEL_COST);
 	}
 	
-	public void selectOption(String option, boolean end) {
+	public void selectOption(String option) {
+			
+		if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
+			switch(option) {
+				case LEFT:
+					getHook().moveLeft();
+					playSound(MOVE_HOOK);
+					break;
+				case RIGHT:
+					getHook().moveRight();
+					playSound(MOVE_HOOK);
+					break;
+			}
+		}else {
+			TreasureHunter.screen.print("Combustible insuficiente");
+			playSound(NO_FUEL);
+		}
+		if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)){
+			switch(option) {
+				case DOUBLE_LEFT:
+					playSound(MOVE_HOOK);
+					for(int i = 0; i < Hook.MOVE_FUEL_COST*10; i++) {
+						getHook().moveLeft();
+					}
+					break;
+				case DOUBLE_RIGHT:
+					playSound(MOVE_HOOK);
+					for(int i = 0; i < Hook.MOVE_FUEL_COST*10; i++) {	
+						getHook().moveRight();
+					}
+					break;
+			}
+		}else {
+			TreasureHunter.screen.print("Combustible insuficiente");
+			playSound(NO_FUEL);
+		}
 		
 		switch(option) {
-		case LEFT:
-			if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
-				getHook().moveLeft();
-				playSound(MOVE_HOOK);
-			}else {
-				TreasureHunter.screen.print("Combustible insuficiente");
-				playSound(NO_FUEL);
-			}
-			break;
-		case DOUBLE_LEFT:
-			if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
-				playSound(MOVE_HOOK);
-				for(int i = 0; i < 10; i++) {	
-					getHook().moveLeft();
-				}
-			}else {
-				TreasureHunter.screen.print("Combustible insuficiente");
-				playSound(NO_FUEL);
-			}
-			break;
-		case RIGHT:
-			if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
-				getHook().moveRight();
-				playSound(MOVE_HOOK);
-			}else {
-				TreasureHunter.screen.print("Combustible insuficiente");
-				playSound(NO_FUEL);
-			}
-			break;
-		case DOUBLE_RIGHT:
-			if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
-				playSound(MOVE_HOOK);
-				for(int i = 0; i < 10; i++) {	
-					getHook().moveRight();
-				}
-			}else {
-				TreasureHunter.screen.print("Combustible insuficiente");
-				playSound(NO_FUEL);
-			}
-			break;
-		case DOWN:
-			goDownHook();
-			break;
-		case BUY_HOOK:
-			improveHook();
-			break;
-		case BUY_FUEL:
-			buyFuel();
-			break;
-		case END:
-			end = true;
-			break;
+			case DOWN:
+				goDownHook();
+				break;
+			case BUY_HOOK:
+				improveHook();
+				break;
+			case BUY_FUEL:
+				buyFuel();
+				break;
 		}
 	}
 	
-	public void play(Memento memento) {
+	public void start(Memento memento) {
 
 		playSound(PLAY);
 		boolean end = false;
 		
 		while (inGame() && !(end)) {
 			
-			TreasureHunter.screen.print("\n");
+			lineBreak(2);
 			showTreasures();
-			TreasureHunter.screen.print("\n");
+			lineBreak(1);
 			TreasureHunter.screen.print(showPlayerStats());
-			TreasureHunter.screen.print("\n");
 			TreasureHunter.screen.print(showHookStats());
-			TreasureHunter.screen.print("\n");	
+			lineBreak(1);
 			
 			TreasureHunter.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [" + Hook.COST_CHAIN + "]) || G(Recargar combustible ["+ Hook.FUEL_COST + "]): ");
 			String option = TreasureHunter.keyboard.nextLine();
 			
-			selectOption(option, end);
-			
-			goUpHook();
+			switch(option){
+				case END:
+					end = true;
+					break;
+				default:
+					selectOption(option);
+			}
+			getHook().goUp();
 							
 			memento.setPlayerState(getPlayer());
 			memento.setHookState(getHook());
@@ -263,7 +259,7 @@ public class TreasureHunterGame implements Sound{
 		}
 		
 		TreasureHunter.screen.print("La mina se derrumbo\n");
-		TreasureHunter.screen.print("Pulse una tecla para finalizar");
 		playSound(DEFEAT);
+		TreasureHunter.screen.print("Pulse una tecla para finalizar");
 	}
 }
