@@ -14,6 +14,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class TreasureHunterGame implements Sound{
 			
+	static final int DIMENSION_MAP = 300;
+	
 	//opt
 	static final String LEFT = "A";
 	static final String DOUBLE_LEFT = "AA";
@@ -25,20 +27,28 @@ public class TreasureHunterGame implements Sound{
 	static final String END = "F";
 	
 	//attributes
-	private Hook hook;
-	private List<Treasure> treasure;
 	private Player player;
+	private Hook hook;
 	private Map map;
+	private List<Treasure> treasure;
 	
-	public TreasureHunterGame(String name, int dimension) {
+	public TreasureHunterGame(String name) {
 		
-		this.hook = new Hook();
-		this.treasure = new ArrayList<Treasure>();
 		this.player = new Player(name);
-		this.map = new Map(dimension);
+		this.hook = new Hook();
+		this.map = new Map(DIMENSION_MAP);
+		this.treasure = new ArrayList<Treasure>();
 		
 	}
 
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
 	public Hook getHook() {
 		return hook;
 	}
@@ -47,20 +57,12 @@ public class TreasureHunterGame implements Sound{
 		this.hook = hook;
 	}
 
-	public List<Treasure> getTreasure() {
-		return treasure;
-	}
-
-	public Player getPlayer() {
-		return player;
-	}
-
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-
 	public Map getMap() {
 		return map;
+	}
+	
+	public List<Treasure> getTreasure() {
+		return treasure;
 	}
 
 	public void addTreasure(Treasure treasure) {
@@ -175,6 +177,64 @@ public class TreasureHunterGame implements Sound{
 		return(getHook().getFuel() > 0 || getPlayer().getBalance() >= Hook.FUEL_COST);
 	}
 	
+	public void selectOption(String option, boolean end) {
+		
+		switch(option) {
+		case LEFT:
+			if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
+				getHook().moveLeft();
+				playSound(MOVE_HOOK);
+			}else {
+				TreasureHunter.screen.print("Combustible insuficiente");
+				playSound(NO_FUEL);
+			}
+			break;
+		case DOUBLE_LEFT:
+			if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
+				playSound(MOVE_HOOK);
+				for(int i = 0; i < 10; i++) {	
+					getHook().moveLeft();
+				}
+			}else {
+				TreasureHunter.screen.print("Combustible insuficiente");
+				playSound(NO_FUEL);
+			}
+			break;
+		case RIGHT:
+			if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
+				getHook().moveRight();
+				playSound(MOVE_HOOK);
+			}else {
+				TreasureHunter.screen.print("Combustible insuficiente");
+				playSound(NO_FUEL);
+			}
+			break;
+		case DOUBLE_RIGHT:
+			if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
+				playSound(MOVE_HOOK);
+				for(int i = 0; i < 10; i++) {	
+					getHook().moveRight();
+				}
+			}else {
+				TreasureHunter.screen.print("Combustible insuficiente");
+				playSound(NO_FUEL);
+			}
+			break;
+		case DOWN:
+			goDownHook();
+			break;
+		case BUY_HOOK:
+			improveHook();
+			break;
+		case BUY_FUEL:
+			buyFuel();
+			break;
+		case END:
+			end = true;
+			break;
+		}
+	}
+	
 	public void play(Memento memento) {
 
 		playSound(PLAY);
@@ -191,62 +251,9 @@ public class TreasureHunterGame implements Sound{
 			TreasureHunter.screen.print("\n");	
 			
 			TreasureHunter.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [" + Hook.COST_CHAIN + "]) || G(Recargar combustible ["+ Hook.FUEL_COST + "]): ");
-			String mover = TreasureHunter.keyboard.nextLine();
+			String option = TreasureHunter.keyboard.nextLine();
 			
-			switch(mover) {
-				case LEFT:
-					if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
-						getHook().moveLeft();
-						playSound(MOVE_HOOK);
-					}else {
-						TreasureHunter.screen.print("Combustible insuficiente");
-						playSound(NO_FUEL);
-					}
-					break;
-				case DOUBLE_LEFT:
-					if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
-						playSound(MOVE_HOOK);
-						for(int i = 0; i < 10; i++) {	
-							getHook().moveLeft();
-						}
-					}else {
-						TreasureHunter.screen.print("Combustible insuficiente");
-						playSound(NO_FUEL);
-					}
-					break;
-				case RIGHT:
-					if(getHook().getFuel() >= Hook.MOVE_FUEL_COST) {
-						getHook().moveRight();
-						playSound(MOVE_HOOK);
-					}else {
-						TreasureHunter.screen.print("Combustible insuficiente");
-						playSound(NO_FUEL);
-					}
-					break;
-				case DOUBLE_RIGHT:
-					if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)) {
-						playSound(MOVE_HOOK);
-						for(int i = 0; i < 10; i++) {	
-							getHook().moveRight();
-						}
-					}else {
-						TreasureHunter.screen.print("Combustible insuficiente");
-						playSound(NO_FUEL);
-					}
-					break;
-				case DOWN:
-					goDownHook();
-					break;
-				case BUY_HOOK:
-					improveHook();
-					break;
-				case BUY_FUEL:
-					buyFuel();
-					break;
-				case END:
-					end = true;
-					break;
-				}
+			selectOption(option, end);
 			
 			goUpHook();
 							

@@ -8,41 +8,138 @@ public class TreasureHunterTest {
 
 	@Test
 	public void testInitial() {
-		var treasure = new TreasureHunterGame("test", 300);
+		var treasure = new TreasureHunterGame("test");
+		
+		//Player
+		assertEquals("test",treasure.getPlayer().getName());
 		assertEquals(0,0, treasure.getPlayer().getBalance());
+		
+		//Hook
 		assertEquals(80, treasure.getHook().getLenght());
-		assertEquals(150, treasure.getHook().getPositionHook().getX());
+		assertEquals((TreasureHunterGame.DIMENSION_MAP)/2, treasure.getHook().getPositionHook().getX());
 		assertEquals(20, treasure.getHook().getPositionHook().getY());
+		assertEquals(1000,0, treasure.getHook().getFuel());
 		
 	}
+	
 	@Test
-	public void treasureTest() {
-		
-		var treasureGame = new TreasureHunterGame("test", 300);
+	public void addTreasureTest() {
+		var treasureGame = new TreasureHunterGame("test");
 		Treasure treasureGranite = new Treasure(TreasureType.GRANITE, new Coordinate(150,40), 1, 1, 200);
 		treasureGame.addTreasure(treasureGranite);
 		
-		//baja el gancho y colisiona
+		assertFalse(treasureGame.getTreasure().isEmpty());
+		
+	}
+	
+	@Test
+	public void treasureCollisionHookTest() {
+		
+		var treasureGame = new TreasureHunterGame("test");
+		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(150,40), 1, 1, 200);
+		treasureGame.addTreasure(treasure);
+		
 		treasureGame.goDownHook();
-		assertEquals(40, treasureGame.getHook().getPositionHook().getY());
+		assertEquals(40, treasureGame.getHook().getPositionHook().getY());	
+		assertFalse(treasureGame.collisionTreasure());	
+	}
+	
+	@Test
+	public void borderMapCollisionHookTest() {
 		
-		//elimina el tesoro
-		assertFalse(treasureGame.collisionTreasure());
+		var treasureGame = new TreasureHunterGame("test");
+		treasureGame.getHook().setLenght(280);
+		treasureGame.goDownHook();
+		assertTrue(treasureGame.collisionBorderMap());		
+	}
+	
+	@Test
+	public void resetPositionHookTest() {
 		
-		//sube el gancho
+		var treasureGame = new TreasureHunterGame("test");
+	
+		treasureGame.goDownHook();
 		treasureGame.goUpHook();
 		assertEquals(20, treasureGame.getHook().getPositionHook().getY());
+	}
+	
+	@Test
+	public void payTreasureCollectPlayerTest() {
 		
-		//recibe 200
-		assertEquals(200,0, treasureGame.getPlayer().getBalance());
+		var treasureGame = new TreasureHunterGame("test");
+		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,100), 1, 1, 950);
+		treasureGame.addTreasure(treasure);
+		treasureGame.goDownHook();
+		assertEquals(950,0, treasureGame.getPlayer().getBalance());
 		
-		//mejora el gancho y pierde 200
+	}
+	
+	@Test
+	public void notPaymentTreasureNotCollectTest() {
+		
+		var treasureGame = new TreasureHunterGame("test");
+		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,101), 1, 1, 950);
+		treasureGame.addTreasure(treasure);
+		treasureGame.goDownHook();
+		assertEquals(0,0, treasureGame.getPlayer().getBalance());
+	}
+	
+	@Test
+	public void improveHookTest() {
+		
+		var treasureGame = new TreasureHunterGame("test");
+		
+		treasureGame.getPlayer().setBalance(100);
+
 		treasureGame.improveHook();
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
 		assertEquals(90,treasureGame.getHook().getLenght());
 		
+	}
+	
+	@Test
+	public void rechargeFuelTest() {
 		
+		var treasureGame = new TreasureHunterGame("test");
 		
+		treasureGame.getPlayer().setBalance(80);
+
+		treasureGame.buyFuel();
+		assertEquals(0,0, treasureGame.getPlayer().getBalance());
+		assertEquals(1200,0,treasureGame.getHook().getFuel());
 		
 	}
+	
+	@Test
+	public void rechargeFuelBorderTest() {
+		
+		var treasureGame = new TreasureHunterGame("test");
+		
+		treasureGame.getPlayer().setBalance(79);
+
+		treasureGame.buyFuel();
+		assertEquals(79,0, treasureGame.getPlayer().getBalance());
+		assertEquals(1000,0,treasureGame.getHook().getFuel());
+		
+	}
+	
+	@Test
+	public void moveLeftHookTest() {
+		var treasureGame = new TreasureHunterGame("test");
+		
+		treasureGame.getHook().moveLeft();
+		
+		assertEquals(149,treasureGame.getHook().getPositionHook().getX());
+	}
+	
+	@Test
+	public void moveRightHookTest() {
+		var treasureGame = new TreasureHunterGame("test");
+		
+		treasureGame.getHook().moveRight();
+		
+		assertEquals(151,treasureGame.getHook().getPositionHook().getX());
+	}
+	
+	
 }

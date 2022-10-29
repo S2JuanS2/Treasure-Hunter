@@ -6,7 +6,6 @@ public class TreasureHunter {
 	public static final java.io.PrintStream screen = new java.io.PrintStream(System.out);
 	
 	static final int MAX_TREASURES = 25;
-	static final int DIMENSION_MAP = 300;
 	static final String YES = "S";
 	static final String NO = "N";
 	
@@ -25,7 +24,7 @@ public class TreasureHunter {
 		Memento memento = new Memento(null,null);
 		String name = null;
 		
-		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name, DIMENSION_MAP);
+		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name);
 		
 		switch(optContinue) {
 			
