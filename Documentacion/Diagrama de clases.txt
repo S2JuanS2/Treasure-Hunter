@@ -1,0 +1,69 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 0
+
+class TreasureHunter{
+ - Hook hook
+ - List<Treasure>
+ - Character character
+
+}
+
+class Coord{
+ - int x
+ - int y
+}
+
+class Character{
+ - int money
+}
+
+class Hook{
+ - int strengh
+ - int length
+ - int velocity
+ - Coord position
+}
+
+class Treasure{
+ - Enum type
+ - Enum subType
+ - Coord position
+ - int size
+ - int rarity
+ - int price
+}
+
+class TreasureBuilder{
+ - Enum type
+ - Enum subType
+ - Coord position
+ - int size
+ - int rarity
+ - int price
+
+}
+interface TBuilder{
+ + void setType()
+ + void setSubType()
+ + void setPosition()
+ + void setSize()
+ + void setRarity()
+ + void setPrice()
+}
+
+class Director{
+
+
+}
+Hook<--* TreasureHunter
+Coord<--* Hook
+Treasure<--* TreasureHunter
+Coord<--* Treasure
+Character<--* TreasureHunter 
+
+TreasureBuilder--> Treasure
+Director --> TBuilder
+TreasureBuilder ..|> TBuilder
+@enduml
+
