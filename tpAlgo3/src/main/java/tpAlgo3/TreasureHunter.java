@@ -12,25 +12,31 @@ public class TreasureHunter {
 	
 	public static void main(String[] args) {
 		
-		
 		screen.print("TREASURE HUNTER\n");
 		screen.print("Deseas continuar la partida? (S o N):");
 		String optContinue = keyboard.nextLine();
 		
+		//while (optContinue != YES && optContinue != NO) {
+			//screen.print("Opcion incorrecta\n");
+			//screen.print("Deseas continuar la partida? (S o N):");
+			//optContinue = keyboard.nextLine();
+		//}
+		
 		Memento memento = new Memento(null,null);
 		String name = null;
+		
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame(name, DIMENSION_MAP);
 		
 		switch(optContinue) {
 			
 			case NO:
-				screen.print("Ingrese nombre del personaje:");
+				screen.print("Ingrese nombre del personaje:"); 
 				treasureHunterGame.getPlayer().setName(keyboard.nextLine());
 				screen.print("\n");
 				break;
 			case YES:
-				treasureHunterGame.setPlayer(memento.playerUpload());
-				treasureHunterGame.setHook(memento.HookUpload());
+				treasureHunterGame.setPlayer(memento.loadPlayer());
+				treasureHunterGame.setHook(memento.loadHook());
 				break;
 		}
 		
@@ -39,25 +45,13 @@ public class TreasureHunter {
 		
 		//ITERADOR PARA GENERAR TESOROS
 		for(int i = 0; i < MAX_TREASURES; i++) {
-			
 			director.constructRandomTreasure(builder); 
 			Treasure treasure = builder.getResults();
 			treasureHunterGame.addTreasure(treasure);
 		}
 		
-		//MOSTRAR ESTADISTICAS
-		treasureHunterGame.showTreasures();
-		screen.print("\n");
-		screen.print(treasureHunterGame.showPlayerStats());
-		screen.print("\n");
-		screen.print(treasureHunterGame.showHookStats());
-		screen.print("\n");
-		screen.print("\n");
-		
 		treasureHunterGame.play(memento);
-							
-		screen.print("La mina se derrumbo\n");
-		screen.print("Pulse una tecla para finalizar");
+						
 		optContinue = keyboard.nextLine();
 	}
 

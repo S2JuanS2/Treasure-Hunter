@@ -10,8 +10,6 @@ public class TreasureHunterTest {
 	public void testInitial() {
 		var treasure = new TreasureHunterGame("test", 300);
 		assertEquals(0,0, treasure.getPlayer().getBalance());
-		assertEquals(0, treasure.getPlayer().getResistance());
-		assertEquals(0, treasure.getPlayer().getStrengh());
 		assertEquals(80, treasure.getHook().getLenght());
 		assertEquals(150, treasure.getHook().getPositionHook().getX());
 		assertEquals(20, treasure.getHook().getPositionHook().getY());

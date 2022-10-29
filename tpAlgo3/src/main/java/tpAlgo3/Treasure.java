@@ -37,17 +37,17 @@ public class Treasure {
 		return price;
 	}
 
+	public void setPosition(int i, int j) {
+		position.setX(i);
+		position.setY(j);
+	}
+	
 	@Override
 	public String toString() {
 		return "Treasure [type=" + type + ", position=" + position + ", rarity=" + rarity + ", weight=" + weight
 				+ ", price=" + price + "]";
 	}
 
-	public void setPosition(int i, int j) {
-		position.setX(i);
-		position.setY(j);
-		
-	}
 	
 	
 	

@@ -24,19 +24,22 @@ public class TreasureBuilder implements Builder{
 	}
 	
 	@Override
-	public void setWeight() {	//RANDOM
+	public void setWeight() {
+		
 		int weightRandom = (int)(Math.random()*3+1);
 		this.weight = weightRandom;
+		
 	}
 	
 	@Override
-	public void setPrice() {	//FORMULA
+	public void setPrice() {
 		
 		int calculatePrice = (this.rarity * this.weight *100)/2;
 		this.price = calculatePrice;
 	}
 	
 	public Treasure getResults() {
+		
 		return new Treasure(type, position, weight, rarity, price);
 	}
 

@@ -1,22 +1,9 @@
 package tpAlgo3;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-public class Memento {
+public class Memento extends SaveAndLoadGame{
 
 	private Player playerState;
 	private Hook hookState;
-	
-	public FileInputStream input;
-	public FileOutputStream output;
-	public File fileInput, fileOutput;
-	
 	
 	public Memento(Player playerStateToSave, Hook hookStateToSave) {
 
@@ -34,133 +21,27 @@ public class Memento {
 		return hookState;
 	}
 
+	public void setPlayerState(Player playerState) {
+		this.playerState = playerState;
+	}
 
-	public Player playerUpload() {
+
+	public void setHookState(Hook hookState) {
+		this.hookState = hookState;
+	}
+
+	public void saveGame() {
 		
-		FileInputStream fichero = null;
-		
-		try {
-			fichero = new FileInputStream("datosPlayer.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectInputStream objectInput = null;
-		
-		try {
-			objectInput = new ObjectInputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			this.playerState = (Player)objectInput.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			objectInput.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return playerState;
+		playerSave(playerState);
+		hookSave(hookState);
 	}
 	
-	
-	public void playerSave(Player playerStateToSave) {
-		
-		
-		this.playerState = playerStateToSave;
-		
-		FileOutputStream fichero = null;
-		try {
-			fichero = new FileOutputStream("datosPlayer.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectOutputStream tuberia = null;
-		try {
-			tuberia = new ObjectOutputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			tuberia.writeObject(playerState);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fichero.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public Player loadPlayer() {
+		return(playerUpload());
 	}
 	
-	public Hook HookUpload() {
-		
-		FileInputStream fichero = null;
-		
-		try {
-			fichero = new FileInputStream("datosHook.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectInputStream objectInput = null;
-		
-		try {
-			objectInput = new ObjectInputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			this.hookState = (Hook)objectInput.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			objectInput.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return hookState;
+	public Hook loadHook() {
+		return(hookUpload());
 	}
-	
-	
-	public void hookSave(Hook hookStateToSave) {
-		
-		
-		this.hookState = hookStateToSave;
-		
-		FileOutputStream fichero = null;
-		try {
-			fichero = new FileOutputStream("datosHook.txt");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectOutputStream tuberia = null;
-		try {
-			tuberia = new ObjectOutputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			tuberia.writeObject(hookState);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fichero.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	
 	
 }

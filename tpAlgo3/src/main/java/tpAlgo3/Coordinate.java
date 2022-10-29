@@ -18,12 +18,10 @@ public class Coordinate implements Serializable{
 		this.y = yRandom;
 	}
 	
-	public Coordinate(int i, int j) {
-		x = i;
-		y = j;
+	public Coordinate(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
-
-
 
 	public int getX() {
 		return x;
@@ -60,7 +58,6 @@ public class Coordinate implements Serializable{
 	boolean equals(int x, int y) {
 		return(this.x == x && this.y == y);
 	}
-	
 	
 	@Override
 	public String toString() {
