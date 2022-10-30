@@ -29,7 +29,7 @@ public abstract class Sound {
 	        clip.start();
 	        
 		}catch(UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-			Menu.screen.print("Error al reproducir el sonido.");
+			Interactions.screen.print("Error al reproducir el sonido.");
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package tpAlgo3;
 
-public abstract class Menu {
+public abstract class Interactions{
 	
 	public static final java.util.Scanner keyboard = new java.util.Scanner(System.in);
 	public static final java.io.PrintStream screen = new java.io.PrintStream(System.out);

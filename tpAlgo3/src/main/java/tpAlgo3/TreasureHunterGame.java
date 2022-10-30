@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TreasureHunterGame{
+public class TreasureHunterGame extends Interactions{
 
 	public static final int MAP_WIDTH = 300;
 	public static final int MAP_DEPTH = 500;
-	public static final int MAX_TREASURES = 10;
+	public static final int MAX_TREASURES = 25;
 	
 	public static final String NO_FUEL = "Combustible insuficiente\n";
 	public static final String NO_MONEY = "Dinero insuficiente\n";
@@ -82,7 +82,8 @@ public class TreasureHunterGame{
 	public void showTreasures() {
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
-			System.out.println(it.next());
+			Interactions.screen.print(it.next());
+			lineBreak(1);
 		}
 	}
 	
@@ -97,7 +98,7 @@ public class TreasureHunterGame{
 	public void lineBreak(int i) {
 		
 		for( int j = 0; j < i; j++) {
-			Menu.screen.print("\n");
+			Interactions.screen.print("\n");
 		}
 	}
 	
@@ -108,7 +109,7 @@ public class TreasureHunterGame{
 			Treasure treasureAux = it.next();
 			if(treasureAux.getPosition().equals(getHook().getPositionHook())) {
 				player.setBalance(treasureAux.getPrice());
-				Menu.screen.print("recurso recolectado: " + treasureAux.getType());
+				Interactions.screen.print("recurso recolectado: " + treasureAux.getType());
 				it.remove();
 				Sound.playSound(Sound.TREASURE_COLLISION_SOUND);
 				return true;
@@ -127,9 +128,6 @@ public class TreasureHunterGame{
 				getHook().goDown();
 				loweredMeter++;
 			}
-		}else {
-			Menu.screen.print(NO_FUEL);
-			Sound.playSound(Sound.NO_FUEL_SOUND);
 		}
 	}
 
@@ -140,11 +138,11 @@ public class TreasureHunterGame{
 				player.setBalance(-Hook.COST_CHAIN);
 				hook.setLenght(Hook.IMPROVE_LENGHT);
 			}else {
-				Menu.screen.print("Longitud maxima alcanzada.\n");
+				Interactions.screen.print("Longitud maxima alcanzada.\n");
 				Sound.playSound(Sound.NO_FUEL_SOUND);
 			}
 		}else {
-			Menu.screen.print(NO_MONEY);
+			Interactions.screen.print(NO_MONEY);
 			Sound.playSound(Sound.ERROR_MONEY_SOUND);
 		}
 	}
@@ -155,7 +153,7 @@ public class TreasureHunterGame{
 			player.setBalance(-Hook.FUEL_COST);
 			getHook().setFuel(Hook.RECHARGE_FUEL);
 		}else {
-			System.out.println(NO_MONEY);
+			Interactions.screen.print(NO_MONEY);
 			Sound.playSound(Sound.ERROR_MONEY_SOUND);
 		}
 	}
@@ -164,7 +162,7 @@ public class TreasureHunterGame{
 		return(getHook().thereIsFuel() || getPlayer().canBuyFuel());
 	}
 	
-	public void selectOption(String option) {		//YA NO PASA LOS BORDES PERO CONSUME COMBUSTIBLE IGUAL.
+	public void selectOption(String option) {
 			
 		if(getHook().thereIsFuel()) {
 			switch(option) {
@@ -174,6 +172,7 @@ public class TreasureHunterGame{
 						getHook().moveRight();
 					}else {
 						Sound.playSound(Sound.MOVE_HOOK_SOUND);
+						getHook().setFuel(-1);
 					}
 					break;
 				case RIGHT:
@@ -181,45 +180,47 @@ public class TreasureHunterGame{
 					if(getHook().collisionBorderMap(map)) {
 						getHook().moveLeft();
 					}else {
-						Sound.playSound(Sound.MOVE_HOOK_SOUND);			
+						Sound.playSound(Sound.MOVE_HOOK_SOUND);	
+						getHook().setFuel(-1);
 					}
 					break;
 			}
-		}else {
-			Menu.screen.print(NO_FUEL);
-			Sound.playSound(Sound.NO_FUEL_SOUND);
 		}
 		if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)){
+			int fuelCounter = 0;
 			switch(option) {
 				case DOUBLE_LEFT:
 					for(int i = 0; (i < Hook.MOVE_FUEL_COST*10) && (!getHook().collisionBorderMap(map)); i++) {
 						getHook().moveLeft();
+						fuelCounter--;
 					}
 					if(getHook().collisionBorderMap(map)){
 						getHook().moveRight();
-					}else {
+						fuelCounter++;
+					}if(fuelCounter != 0){
 						Sound.playSound(Sound.MOVE_HOOK_SOUND);
+						getHook().setFuel(fuelCounter);
 					}
 					break;
 				case DOUBLE_RIGHT:
 					for(int i = 0; (i < Hook.MOVE_FUEL_COST*10) && (!getHook().collisionBorderMap(map)); i++) {	
 						getHook().moveRight();
+						fuelCounter--;
 					}
 					if(getHook().collisionBorderMap(map)) {
 						getHook().moveLeft();
-					}else {
+						fuelCounter++;
+					}if(fuelCounter != 0){
 						Sound.playSound(Sound.MOVE_HOOK_SOUND);
+						getHook().setFuel(fuelCounter);
 					}
 					break;
 			}
-		}else {
-			Menu.screen.print(NO_FUEL);
-			Sound.playSound(Sound.NO_FUEL_SOUND);
 		}
-		
 		switch(option) {
 			case DOWN:
 				goDownHook();
+				getHook().goUp();
 				break;
 			case BUY_HOOK:
 				improveHook();
@@ -227,6 +228,10 @@ public class TreasureHunterGame{
 			case BUY_FUEL:
 				buyFuel();
 				break;
+		}
+		if(!getHook().thereIsFuel()) {
+			Interactions.screen.print(NO_FUEL);
+			Sound.playSound(Sound.NO_FUEL_SOUND);
 		}
 	}
 	
@@ -240,15 +245,19 @@ public class TreasureHunterGame{
 		
 		while (inGame() && !(end)) {
 			
+			memento.setPlayerState(getPlayer());
+			memento.setHookState(getHook());
+			memento.saveGame();
+			
 			lineBreak(2);
 			showTreasures();
 			lineBreak(1);
-			Menu.screen.print(showPlayerStats());
-			Menu.screen.print(showHookStats());
+			Interactions.screen.print(showPlayerStats());
+			Interactions.screen.print(showHookStats());
 			lineBreak(1);
 			
-			Menu.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Hook.COST_CHAIN + "]) || G(Recargar combustible [$"+ Hook.FUEL_COST + "]): ");
-			option = Menu.keyboard.nextLine();
+			Interactions.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Hook.COST_CHAIN + "]) || G(Recargar combustible [$"+ Hook.FUEL_COST + "])\n F(Salir): ");
+			option = Interactions.keyboard.nextLine();
 			
 			switch(option){
 				case END:
@@ -256,21 +265,21 @@ public class TreasureHunterGame{
 					break;
 				default:
 					selectOption(option);
-			}
-			getHook().goUp();
-							
-			memento.setPlayerState(getPlayer());
-			memento.setHookState(getHook());
-			memento.saveGame();
+			}						
 		}
 		
+		lineBreak(1);
+		Interactions.screen.print(showPlayerStats());
+		Interactions.screen.print(showHookStats());
+		lineBreak(1);
+		
 		if(inGame()) {
-			Menu.screen.print("Partida guardada.\n");
+			Interactions.screen.print("Partida guardada.\n");
 		}else {
-			Menu.screen.print("La mina se derrumbo\n");
+			Interactions.screen.print("GAME OVER: La mina se derrumbo\n");
 			Sound.playSound(Sound.DEFEAT_SOUND);
+			Interactions.screen.print("Pulse una tecla para finalizar");
+			option = Interactions.keyboard.nextLine();
 		}
-		Menu.screen.print("Pulse una tecla para finalizar");
-		option = Menu.keyboard.nextLine();
 	}
 }

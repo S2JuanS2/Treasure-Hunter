@@ -54,12 +54,10 @@ public class Hook implements Serializable{
 
 	public void moveLeft() {
 		position.oneLessX();
-		setFuel(-1);
 	}
 	
 	public void moveRight() {
 		position.oneAddX();
-		setFuel(-1);
 	}
 	
 	public void goDown() {
