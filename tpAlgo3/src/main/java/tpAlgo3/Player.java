@@ -34,5 +34,12 @@ public class Player implements Serializable{
 	public String toString() {
 		return "Player [name=" + name + ", balance=" + balance + "]";
 	}
+	
+	public boolean canBuyUpgradeHook() {
+		return(getBalance() >= Hook.COST_CHAIN);
+	}
 
+	public boolean canBuyFuel() {
+		return(getBalance() >= Hook.FUEL_COST);
+	}
 }

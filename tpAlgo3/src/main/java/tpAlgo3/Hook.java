@@ -17,12 +17,12 @@ public class Hook implements Serializable{
 	static final float FUEL_COST = 80;
 	static final float COST_CHAIN = 100;
 	
-	private Coordinate positionHook;
+	private Coordinate position;
 	private int lenght;
 	private double fuel;
 	
 	public Hook() {
-		this.positionHook = new Coordinate(INITIAL_POSITION_X,INITIAL_POSITION_Y);
+		this.position = new Coordinate(INITIAL_POSITION_X,INITIAL_POSITION_Y);
 		this.lenght = INITIAL_LENGHT;
 		this.setFuel(INITIAL_FUEL);
 	}
@@ -44,32 +44,32 @@ public class Hook implements Serializable{
 	}
 
 	public Coordinate getPositionHook() {
-		return positionHook;
+		return position;
 	}
 	
 	@Override
 	public String toString() {
-		return "  Hook [positionHook=" + positionHook + ", lenght=" + lenght + ", fuel=" + fuel + "]";
+		return "  Hook [positionHook=" + position + ", lenght=" + lenght + ", fuel=" + fuel + "]";
 	}
 
 	public void moveLeft() {
-		positionHook.oneLessX();
+		position.oneLessX();
 		setFuel(-1);
 	}
 	
 	public void moveRight() {
-		positionHook.oneAddX();
+		position.oneAddX();
 		setFuel(-1);
 	}
 	
 	public void goDown() {
-		positionHook.oneAddY();
+		position.oneAddY();
 		setFuel(-1);
 	}
 	
 	public void goUp() {
-		while (getPositionHook().getY() > Hook.INITIAL_POSITION_Y && thereIsFuel()) {
-			positionHook.oneLessY();
+		while (getPositionHook().getY() > INITIAL_POSITION_Y && thereIsFuel()) {
+			position.oneLessY();
 			setFuel(-1);
 		}
 	}
@@ -77,4 +77,15 @@ public class Hook implements Serializable{
 	public boolean thereIsFuel() {
 		return (fuel > 0);
 	}
+	
+	public boolean noMaxLength() {
+		return(getLenght() < MAX_LENGHT);
+	}
+	
+	public boolean collisionBorderMap(Map map){
+		
+		return(getPositionHook().getX() <= 0 || getPositionHook().getX() >= map.getWidth() || getPositionHook().getY() >= map.getDepth());
+	}
 }
+
+

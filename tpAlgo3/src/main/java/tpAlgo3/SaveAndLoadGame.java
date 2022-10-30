@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class SaveAndLoadGame {
+public abstract class SaveAndLoadGame {
 	
 	static final String FILE_PLAYER = "datosPlayer.txt";
 	static final String FILE_HOOK = "datosHook.txt";
 
-	public Player playerUpload() {
+	public static Player playerUpload() {
 		
 		Player playerState = null;
 		FileInputStream fichero = null;
@@ -47,7 +47,7 @@ public class SaveAndLoadGame {
 	}
 	
 	
-	public void playerSave(Player playerStateToSave) {
+	public static void playerSave(Player playerStateToSave) {
 				
 		FileOutputStream fichero = null;
 		try {
@@ -73,7 +73,7 @@ public class SaveAndLoadGame {
 		}
 	}
 	
-	public Hook hookUpload() {
+	public static Hook hookUpload() {
 		
 		Hook hookState = null;
 		FileInputStream fichero = null;
@@ -108,7 +108,7 @@ public class SaveAndLoadGame {
 	}
 	
 	
-	public void hookSave(Hook hookStateToSave) {
+	public static void hookSave(Hook hookStateToSave) {
 				
 		FileOutputStream fichero = null;
 		try {

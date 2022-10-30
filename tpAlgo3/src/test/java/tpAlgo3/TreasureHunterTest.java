@@ -8,26 +8,26 @@ public class TreasureHunterTest {
 
 	@Test
 	public void testInitialPlayer() {
-		var treasure = new TreasureHunterGame("test");
+		var treasure = new TreasureHunterGame();
 		
-		assertEquals("test",treasure.getPlayer().getName());
+		assertEquals(null,treasure.getPlayer().getName());
 		assertEquals(0,0, treasure.getPlayer().getBalance());
 		
 	}
 	
 	@Test
 	public void testInitialHook() {
-		var treasure = new TreasureHunterGame("test");
+		var treasure = new TreasureHunterGame();
 
 		assertEquals(80, treasure.getHook().getLenght());
-		assertEquals((TreasureHunterGame.WIDTH)/2, treasure.getHook().getPositionHook().getX());
+		assertEquals((TreasureHunterGame.MAP_WIDTH)/2, treasure.getHook().getPositionHook().getX());
 		assertEquals(20, treasure.getHook().getPositionHook().getY());
 		assertEquals(1000,0, treasure.getHook().getFuel());
 	}
 	
 	@Test
 	public void addTreasureTest() {
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		Treasure treasureGranite = new Treasure(TreasureType.GRANITE, new Coordinate(150,40), 1, 1, 200);
 		treasureGame.addTreasure(treasureGranite);
 		
@@ -38,7 +38,7 @@ public class TreasureHunterTest {
 	@Test
 	public void treasureCollisionHookTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(150,40), 1, 1, 200);
 		treasureGame.addTreasure(treasure);
 		
@@ -50,16 +50,16 @@ public class TreasureHunterTest {
 	@Test
 	public void borderMapCollisionHookTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
-		treasureGame.getHook().setLenght(280);
+		var treasureGame = new TreasureHunterGame();
+		treasureGame.getHook().setLenght((treasureGame.getMap().getDepth()) -20);
 		treasureGame.goDownHook();
-		assertTrue(treasureGame.collisionBorderMap());		
+		assertTrue(treasureGame.getHook().collisionBorderMap(treasureGame.getMap()));		
 	}
 	
 	@Test
 	public void resetPositionHookTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 	
 		treasureGame.goDownHook();
 		treasureGame.getHook().goUp();
@@ -69,7 +69,7 @@ public class TreasureHunterTest {
 	@Test
 	public void payTreasureCollectPlayerTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,100), 1, 1, 950);
 		treasureGame.addTreasure(treasure);
 		treasureGame.goDownHook();
@@ -80,7 +80,7 @@ public class TreasureHunterTest {
 	@Test
 	public void notPaymentTreasureNotCollectTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,101), 1, 1, 950);
 		treasureGame.addTreasure(treasure);
 		treasureGame.goDownHook();
@@ -90,7 +90,7 @@ public class TreasureHunterTest {
 	@Test
 	public void improveHookTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		
 		treasureGame.getPlayer().setBalance(100);
 
@@ -103,7 +103,7 @@ public class TreasureHunterTest {
 	@Test
 	public void rechargeFuelTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		
 		treasureGame.getPlayer().setBalance(80);
 
@@ -116,7 +116,7 @@ public class TreasureHunterTest {
 	@Test
 	public void rechargeFuelBorderTest() {
 		
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		
 		treasureGame.getPlayer().setBalance(79);
 
@@ -128,7 +128,7 @@ public class TreasureHunterTest {
 	
 	@Test
 	public void moveLeftHookTest() {
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		
 		treasureGame.getHook().moveLeft();
 		
@@ -137,7 +137,7 @@ public class TreasureHunterTest {
 	
 	@Test
 	public void moveRightHookTest() {
-		var treasureGame = new TreasureHunterGame("test");
+		var treasureGame = new TreasureHunterGame();
 		
 		treasureGame.getHook().moveRight();
 		
