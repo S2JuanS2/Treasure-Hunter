@@ -25,7 +25,7 @@ public class TreasureHunterGame extends Interactions{
 	
 	//attributes
 	private Player player;
-	private Hook hook;
+	private Hook hook;  //atributo de Player
 	private Map map;
 	private ArrayList<Treasure> treasure;
 	
@@ -102,13 +102,13 @@ public class TreasureHunterGame extends Interactions{
 		}
 	}
 	
-	public boolean collisionTreasure() {
+	public boolean collisionTreasure() {  //necesito un boolean para chequear que colisionó con un tesoro y al mismo tiempo necesito que me devuelva el tesoro con el cual pasó
 		
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
 			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().equals(getHook().getPositionHook())) {
-				player.setBalance(treasureAux.getPrice());
+			if(treasureAux.getPosition().equals(getHook().getPositionHook())) { //player.collisionTreasureHook(treasureAux)
+				player.setBalance(treasureAux.getPrice()); //esto deberia ser un metodo de Player, en donde recibe un tesoro y lo suma al balance.
 				Interactions.screen.print("recurso recolectado: " + treasureAux.getType());
 				it.remove();
 				Sound.playSound(Sound.TREASURE_COLLISION_SOUND);
@@ -131,7 +131,7 @@ public class TreasureHunterGame extends Interactions{
 		}
 	}
 
-	public void improveHook() {
+	public void improveHook() {  //metodo de player,
 		if(player.canBuyUpgradeHook()) {
 			if(hook.noMaxLength()) {		
 				Sound.playSound(Sound.BOUGTH_SOUND);

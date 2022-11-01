@@ -9,7 +9,7 @@ public class Director {
 	static final int LEGENDARY = 5;
 	static final int MYTHICAL = 6;
 
-	public void constructGraniteTreasure(TreasureBuilder builder) {
+	public void constructGraniteTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.GRANITE);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(COMMON);
@@ -17,7 +17,7 @@ public class Director {
 		builder.setPrice();
 	}
 
-	public void constructBasaltTreasure(TreasureBuilder builder) {
+	public void constructBasaltTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.BASALT);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(COMMON);
@@ -25,14 +25,14 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructQuartziteTreasure(TreasureBuilder builder) {
+	public void constructQuartziteTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.QUARTZITE);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(LITTLE_COMMON);
 		builder.setWeight();
 		builder.setPrice();
 	}
-	public void constructIronTreasure(TreasureBuilder builder) {
+	public void constructIronTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.IRON);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(LITTLE_COMMON);
@@ -40,7 +40,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructCopperTreasure(TreasureBuilder builder) {
+	public void constructCopperTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.COPPER);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(LITTLE_COMMON);
@@ -48,7 +48,7 @@ public class Director {
 		builder.setPrice();	
 	}
 
-	public void constructMarbleTreasure(TreasureBuilder builder) {
+	public void constructMarbleTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.MARBLE);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(RARE);
@@ -56,7 +56,7 @@ public class Director {
 		builder.setPrice();
 	}
 	
-	public void constructBoneTreasure(TreasureBuilder builder) {
+	public void constructBoneTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.BONE);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(RARE);
@@ -64,7 +64,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructAmberTreasure(TreasureBuilder builder) {
+	public void constructAmberTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.AMBER);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(RARE);
@@ -72,7 +72,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructRubyTreasure(TreasureBuilder builder) {
+	public void constructRubyTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.RUBY);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(EPIC);
@@ -80,7 +80,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructGoldTreasure(TreasureBuilder builder) {
+	public void constructGoldTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.GOLD);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(LEGENDARY);
@@ -88,7 +88,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructDiamondTreasure(TreasureBuilder builder) {
+	public void constructDiamondTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.DIAMOND);
 		builder.setPosition(new Coordinate());
 		builder.setRarity(MYTHICAL);
@@ -96,7 +96,7 @@ public class Director {
 		builder.setPrice();	
 	}
 	
-	public void constructRandomTreasure(TreasureBuilder builder) {
+	public void constructRandomTreasure(Builder builder) {
 		
 		int randomProbability = (int)(Math.random()*100+1);
 		int treasureRandom  = 0;
