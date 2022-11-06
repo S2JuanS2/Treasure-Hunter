@@ -9,7 +9,6 @@ public class Coordinate implements Serializable{
 	private int x;
 	private int y;
 	
-	// GENERA COORDENADAS RANDOM
 	public Coordinate() {
 		
 		this.x = (int)(Math.random()*300);
