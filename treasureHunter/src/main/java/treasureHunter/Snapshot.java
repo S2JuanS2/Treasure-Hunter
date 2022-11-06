@@ -1,11 +1,11 @@
 package treasureHunter;
 
-public class Memento extends File{
+public class Snapshot extends File{
 
 	private Player playerState;
 	private Hook hookState;
 	
-	public Memento(Player playerStateToSave, Hook hookStateToSave) {
+	public Snapshot(Player playerStateToSave, Hook hookStateToSave) {
 
 		this.playerState = playerStateToSave;
 		this.hookState = hookStateToSave;

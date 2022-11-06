@@ -14,8 +14,8 @@ public class Hook implements Serializable{
 	static final int INITIAL_FUEL = 1000;
 	static final int RECHARGE_FUEL = 200;
 	static final int MOVE_FUEL_COST = 1;
-	static final float FUEL_COST = 80;
-	static final float COST_CHAIN = 100;
+	
+	public static final String NO_FUEL = "Combustible insuficiente\n";
 	
 	private Coordinate position;
 	private int lenght;
@@ -24,27 +24,31 @@ public class Hook implements Serializable{
 	public Hook() {
 		this.position = new Coordinate(INITIAL_POSITION_X,INITIAL_POSITION_Y);
 		this.lenght = INITIAL_LENGHT;
-		this.setFuel(INITIAL_FUEL);
+		this.fuel = INITIAL_FUEL;
 	}
 
 	public int getLenght() {
 		return lenght;
 	}
-
-	public void setLenght(int lenght) {
-		this.lenght += lenght;
-	}
 	
 	public double getFuel() {
 		return fuel;
 	}
+	
+	public void deductFuel(double fuel) {
+		this.fuel -= fuel;
+	}
 
-	public void setFuel(double fuel) {
+	public void accreditFuel(double fuel) {
 		this.fuel += fuel;
 	}
 
-	public Coordinate getPositionHook() {
+	public Coordinate getPosition() {
 		return position;
+	}
+	
+	public void increaseLenght() {
+		this.lenght += IMPROVE_LENGHT;
 	}
 	
 	@Override
@@ -53,37 +57,61 @@ public class Hook implements Serializable{
 	}
 
 	public void moveLeft() {
-		position.oneLessX();
+		if(position.getX()-1 > 0 && thereIsFuel()) {
+			position.oneLessX();
+			deductFuel(MOVE_FUEL_COST);
+		}
 	}
 	
-	public void moveRight() {
-		position.oneAddX();
+	public void moveRight(int width) {
+		if(position.getX() < width && thereIsFuel()) {
+			position.oneAddX();
+			deductFuel(MOVE_FUEL_COST);
+		}
 	}
 	
-	public void goDown() {
-		position.oneAddY();
-		setFuel(-1);
+	public void goDown(int width, int depth) {
+		if( !(collisionBorderMap(width, depth)) && thereIsFuel() ){		
+			position.oneAddY();
+			deductFuel(MOVE_FUEL_COST);
+		}
 	}
 	
 	public void goUp() {
-		while (getPositionHook().getY() > INITIAL_POSITION_Y && thereIsFuel()) {
+		while (getPosition().getY() > INITIAL_POSITION_Y && thereIsFuel()) {
 			position.oneLessY();
-			setFuel(-1);
+			deductFuel(MOVE_FUEL_COST);
 		}
 	}
 	
 	public boolean thereIsFuel() {
-		return (fuel > 0);
+		if(fuel > 0) {
+			return true;
+		}else{
+			System.out.println(NO_FUEL);
+			return false;
+		}
 	}
 	
 	public boolean noMaxLength() {
-		return(getLenght() < MAX_LENGHT);
+		if(getLenght() < MAX_LENGHT) {
+			return true;
+		}else {
+			System.out.println("Longitud maxima alcanzada.\n");
+			return false;
+		}
 	}
 	
 	public boolean collisionBorderMap(int width, int depth){
 		
-		return(getPositionHook().getX() <= 0 || getPositionHook().getX() >= width || getPositionHook().getY() >= depth);
+		return(getPosition().getX() <= 0 || getPosition().getX() >= width || getPosition().getY() >= depth);
 	}
+	
+	public boolean canKeepGoingDown(int loweredMeter) {
+		
+		return (loweredMeter <= getLenght());
+	}
+	
 }
 
 

@@ -1,6 +1,6 @@
 package treasureHunter;
 
-public class Director {
+public class DirectorTreasure {
 	
 	static final int COMMON = 1;
 	static final int LITTLE_COMMON = 2;

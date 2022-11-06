@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TreasureHunterGame{
+public class TreasureHunterGame {
 
 	public static final int MAP_WIDTH = 300;
 	public static final int MAP_DEPTH = 500;
 	public static final int MAX_TREASURES = 25;
-	
-	public static final String NO_FUEL = "Combustible insuficiente\n";
-	public static final String NO_MONEY = "Dinero insuficiente\n";
-	
+		
 	//opt
 	public static final String LEFT = "A";
 	public static final String RIGHT = "D";
@@ -23,7 +20,7 @@ public class TreasureHunterGame{
 	
 	//attributes
 	private Player player;
-	private Hook hook;  //atributo de Player
+	private Hook hook;
 	private ArrayList<Treasure> treasure;
 	
 	public TreasureHunterGame() {
@@ -59,7 +56,7 @@ public class TreasureHunterGame{
 	
 	public void generateTreasures() {
 		
-		Director director = new Director();
+		DirectorTreasure director = new DirectorTreasure();
 		TreasureBuilder builder = new TreasureBuilder();
 		
 		for(int i = 0; i < MAX_TREASURES; i++) {
@@ -77,21 +74,20 @@ public class TreasureHunterGame{
 	}
 	
 	public String showPlayerStats() {
-		return (this.getPlayer().toString());
+		return (getPlayer().toString());
 	}
 	
 	public String showHookStats() {
-		return (this.getHook().toString());
+		return (getHook().toString());
 	}
-		
-	public boolean collisionTreasure() {  //necesito un boolean para chequear que colisionó con un tesoro y al mismo tiempo necesito que me devuelva el tesoro con el cual pasó
+	
+	public boolean collisionTreasure() {
 		
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
 			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().equals(getHook().getPositionHook())) { //player.collisionTreasureHook(treasureAux)
-				player.setBalance(treasureAux.getPrice()); //esto deberia ser un metodo de Player, en donde recibe un tesoro y lo suma al balance.
-				System.out.println("recurso recolectado: " + treasureAux.getType());
+			if(treasureAux.getPosition().equals(getHook().getPosition())) {
+				player.accreditBalance(treasureAux.getPrice());
 				it.remove();
 				return true;
 			}
@@ -101,35 +97,24 @@ public class TreasureHunterGame{
 	
 	public void goDownHook() {
 		
-		if(getHook().thereIsFuel()) {
-			
-			int loweredMeter = 0;
-			while( ( (!( collisionTreasure() || getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH) || loweredMeter >= getHook().getLenght() ) && getHook().thereIsFuel()) ) ) {
-				getHook().goDown();
-				loweredMeter++;
-			}
+		for(int i = 1; !(collisionTreasure()) && getHook().thereIsFuel() && getHook().canKeepGoingDown(i); i++) {	//ORDEN DE PRIORI		
+			getHook().goDown(MAP_WIDTH, MAP_DEPTH);
 		}
 	}
 
-	public void improveHook() {  //metodo de player,
+	public void improveHook() {
 		if(player.canBuyUpgradeHook()) {
 			if(hook.noMaxLength()) {		
-				player.setBalance(-Hook.COST_CHAIN);
-				hook.setLenght(Hook.IMPROVE_LENGHT);
-			}else {
-				System.out.println("Longitud maxima alcanzada.\n");
+				player.deductBalance(Player.COST_UPGRADE);
+				hook.increaseLenght();
 			}
-		}else {
-			System.out.println(NO_MONEY);
 		}
 	}
 	
 	public void buyFuel() {
 		if(player.canBuyFuel()) {
-			player.setBalance(-Hook.FUEL_COST);
-			getHook().setFuel(Hook.RECHARGE_FUEL);
-		}else {
-			System.out.println(NO_MONEY);
+			player.deductBalance(Player.FUEL_COST);
+			getHook().accreditFuel(Hook.RECHARGE_FUEL);
 		}
 	}
 
@@ -139,27 +124,13 @@ public class TreasureHunterGame{
 	
 	public void selectOption(String option) {
 			
-		if(getHook().thereIsFuel()) {
-			switch(option) {
-				case LEFT:
-					getHook().moveLeft();
-					if(getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH)) {
-						getHook().moveRight();
-					}else {
-						getHook().setFuel(-1);
-					}
-					break;
-				case RIGHT:
-					getHook().moveRight();
-					if(getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH)) {
-						getHook().moveLeft();
-					}else {
-						getHook().setFuel(-1);
-					}
-					break;
-			}
-		}
 		switch(option) {
+			case LEFT:
+				getHook().moveLeft();
+				break;
+			case RIGHT:
+				getHook().moveRight(MAP_WIDTH);
+				break;
 			case DOWN:
 				goDownHook();
 				getHook().goUp();
@@ -171,12 +142,9 @@ public class TreasureHunterGame{
 				buyFuel();
 				break;
 		}
-		if(!getHook().thereIsFuel()) {
-			System.out.println(NO_FUEL);
-		}
 	}
 	
-	public void start(Memento memento) {
+	public void start(Snapshot memento) {
 
 		String option;
 		boolean end = false;
@@ -193,8 +161,8 @@ public class TreasureHunterGame{
 			System.out.println(showPlayerStats());
 			System.out.println(showHookStats());
 			
-			System.out.println("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Hook.COST_CHAIN + "]) "
-					           + "|| G(Recargar combustible [$"+ Hook.FUEL_COST + "]) F(Salir): ");
+			System.out.println("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Player.COST_UPGRADE + "]) "
+					           + "|| G(Recargar combustible [$"+ Player.FUEL_COST + "]) F(Salir): ");
 			option = TreasureHunter.keyboard.nextLine();
 			
 			switch(option){

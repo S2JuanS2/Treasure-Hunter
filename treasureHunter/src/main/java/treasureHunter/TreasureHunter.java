@@ -10,7 +10,7 @@ public class TreasureHunter{
 	
 	public static void main(String[] args) {
 		
-		Memento memento = new Memento(null,null);
+		Snapshot memento = new Snapshot(null,null);
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame();
 						
 		boolean correctOpt = false;
