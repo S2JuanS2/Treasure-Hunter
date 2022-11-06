@@ -1,0 +1,105 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam roundcorner 0
+
+class TreasureHunter{
+ + main()
+}
+
+class TreasureHunterGame{
+ - Player player
+ - Hook hook
+ - ArrayList<Treasure> treasure
+ + TreasureHunterGame()
+
+}
+
+class Coordinate{
+ - int x
+ - int y
+ + Coordinate()
+ + equals(Coordinate coords)
+}
+
+class Player{
+ - String name
+ - double balance
+ + Player(Sring)
+}
+
+class Hook{
+ - Coord position
+ - int length
+ - double fuel
+ + Hook()
+}
+
+abstract class File{
+ + PlayerUpload()
+ + HookUpload()
+}
+
+class Snapshot{
+ - Player playerState
+ - Hook hookState
+ + Snapshot(Player, Hook)
+}
+
+class Treasure{
+ - Enum TreasureType type
+ - Coord position
+ - int rarity
+ - int weight
+ - float price
+}
+
+class TreasureBuilder{
+ - Enum TreasureType type
+ - Coord position
+ - int rarity
+ - int weight
+ - float price
+
+}
+interface Builder{
+ + void setType(TreasureType)
+ + void setPosition(Coordinate)
+ + void setRarity()
+ + void setWeight()
+ + void setPrice()
+}
+
+enum TreasureType{
+
+}
+
+class DirectorTreasure{
+
+}
+
+TreasureHunterGame *--> Player
+TreasureHunterGame *--> Hook
+TreasureHunterGame *--> Treasure
+TreasureHunterGame ..> DirectorTreasure
+TreasureHunterGame ..> TreasureBuilder
+TreasureHunterGame ..> Snapshot
+
+Hook *--> Coordinate
+
+Snapshot *--> Player
+Snapshot *--> Hook
+Snapshot --|> File
+
+Treasure --> TreasureType
+Treasure *--> Coordinate
+
+TreasureBuilder ..|> Builder
+TreasureBuilder --> TreasureType
+TreasureBuilder *--> Coordinate
+TreasureBuilder --> Treasure
+
+TreasureHunter --> TreasureHunterGame
+TreasureHunter --> Snapshot 
+
+DirectorTreasure --> Builder
+@enduml
