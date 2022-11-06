@@ -15,9 +15,7 @@ public class TreasureHunterGame{
 	
 	//opt
 	public static final String LEFT = "A";
-	public static final String DOUBLE_LEFT = "AA";
 	public static final String RIGHT = "D";
-	public static final String DOUBLE_RIGHT = "DD";
 	public static final String DOWN = "E";
 	public static final String BUY_HOOK = "B";
 	public static final String BUY_FUEL = "G";
@@ -26,14 +24,12 @@ public class TreasureHunterGame{
 	//attributes
 	private Player player;
 	private Hook hook;  //atributo de Player
-	private Map map;
 	private ArrayList<Treasure> treasure;
 	
 	public TreasureHunterGame() {
 		
 		this.player = new Player(null);
 		this.hook = new Hook();
-		this.map = new Map(MAP_WIDTH, MAP_DEPTH);
 		this.treasure = new ArrayList<>();	
 	}
 
@@ -52,19 +48,13 @@ public class TreasureHunterGame{
 	public void setHook(Hook hook) {
 		this.hook = hook;
 	}
-
-	public Map getMap() {
-		return map;
-	}
 	
 	public List<Treasure> getTreasure() {
 		return treasure;
 	}
 
 	public void addTreasure(Treasure treasure) {
-		
 		this.treasure.add(treasure);
-		
 	}
 	
 	public void generateTreasures() {
@@ -94,13 +84,6 @@ public class TreasureHunterGame{
 		return (this.getHook().toString());
 	}
 		
-	public void lineBreak(int i) {
-		
-		for( int j = 0; j < i; j++) {
-			System.out.print("\n");
-		}
-	}
-	
 	public boolean collisionTreasure() {  //necesito un boolean para chequear que colisionó con un tesoro y al mismo tiempo necesito que me devuelva el tesoro con el cual pasó
 		
 		Iterator<Treasure> it = treasure.iterator();
@@ -121,7 +104,7 @@ public class TreasureHunterGame{
 		if(getHook().thereIsFuel()) {
 			
 			int loweredMeter = 0;
-			while( ( (!( collisionTreasure() || getHook().collisionBorderMap(map) || loweredMeter >= getHook().getLenght() ) && getHook().thereIsFuel()) ) ) {
+			while( ( (!( collisionTreasure() || getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH) || loweredMeter >= getHook().getLenght() ) && getHook().thereIsFuel()) ) ) {
 				getHook().goDown();
 				loweredMeter++;
 			}
@@ -160,7 +143,7 @@ public class TreasureHunterGame{
 			switch(option) {
 				case LEFT:
 					getHook().moveLeft();
-					if(getHook().collisionBorderMap(map)) {
+					if(getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH)) {
 						getHook().moveRight();
 					}else {
 						getHook().setFuel(-1);
@@ -168,39 +151,10 @@ public class TreasureHunterGame{
 					break;
 				case RIGHT:
 					getHook().moveRight();
-					if(getHook().collisionBorderMap(map)) {
+					if(getHook().collisionBorderMap(MAP_WIDTH, MAP_DEPTH)) {
 						getHook().moveLeft();
 					}else {
 						getHook().setFuel(-1);
-					}
-					break;
-			}
-		}
-		if(getHook().getFuel() >= (Hook.MOVE_FUEL_COST*10)){
-			int fuelCounter = 0;
-			switch(option) {
-				case DOUBLE_LEFT:
-					for(int i = 0; (i < Hook.MOVE_FUEL_COST*10) && (!getHook().collisionBorderMap(map)); i++) {
-						getHook().moveLeft();
-						fuelCounter--;
-					}
-					if(getHook().collisionBorderMap(map)){
-						getHook().moveRight();
-						fuelCounter++;
-					}if(fuelCounter != 0){
-						getHook().setFuel(fuelCounter);
-					}
-					break;
-				case DOUBLE_RIGHT:
-					for(int i = 0; (i < Hook.MOVE_FUEL_COST*10) && (!getHook().collisionBorderMap(map)); i++) {	
-						getHook().moveRight();
-						fuelCounter--;
-					}
-					if(getHook().collisionBorderMap(map)) {
-						getHook().moveLeft();
-						fuelCounter++;
-					}if(fuelCounter != 0){
-						getHook().setFuel(fuelCounter);
 					}
 					break;
 			}
@@ -236,11 +190,11 @@ public class TreasureHunterGame{
 			memento.saveGame();
 			
 			showTreasures();
-			lineBreak(1);
 			System.out.println(showPlayerStats());
 			System.out.println(showHookStats());
 			
-			System.out.println("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Hook.COST_CHAIN + "]) || G(Recargar combustible [$"+ Hook.FUEL_COST + "])\n F(Salir): ");
+			System.out.println("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Hook.COST_CHAIN + "]) "
+					           + "|| G(Recargar combustible [$"+ Hook.FUEL_COST + "]) F(Salir): ");
 			option = TreasureHunter.keyboard.nextLine();
 			
 			switch(option){
@@ -252,10 +206,8 @@ public class TreasureHunterGame{
 			}						
 		}
 		
-		lineBreak(1);
 		System.out.println(showPlayerStats());
 		System.out.println(showHookStats());
-		lineBreak(1);
 		
 		if(inGame()) {
 			System.out.println("Partida guardada.\n");

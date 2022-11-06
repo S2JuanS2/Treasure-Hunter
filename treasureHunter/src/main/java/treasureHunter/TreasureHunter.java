@@ -17,7 +17,7 @@ public class TreasureHunter{
 			
 		screen.print("TREASURE HUNTER\n");
 		screen.print("Deseas continuar la partida? (S o N):");
-		String optContinue = keyboard.nextLine();	
+		String optContinue = keyboard.nextLine();
 			
 			
 		while((!correctOpt)) {

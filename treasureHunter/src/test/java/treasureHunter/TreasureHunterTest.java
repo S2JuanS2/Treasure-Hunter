@@ -51,9 +51,9 @@ public class TreasureHunterTest {
 	public void borderMapCollisionHookTest() {
 		
 		var treasureGame = new TreasureHunterGame();
-		treasureGame.getHook().setLenght((treasureGame.getMap().getDepth()) -20);
+		treasureGame.getHook().setLenght((TreasureHunterGame.MAP_DEPTH) -20);
 		treasureGame.goDownHook();
-		assertTrue(treasureGame.getHook().collisionBorderMap(treasureGame.getMap()));		
+		assertTrue(treasureGame.getHook().collisionBorderMap(TreasureHunterGame.MAP_WIDTH,TreasureHunterGame.MAP_DEPTH));		
 	}
 	
 	@Test

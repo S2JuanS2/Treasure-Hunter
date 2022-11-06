@@ -49,7 +49,7 @@ public class Hook implements Serializable{
 	
 	@Override
 	public String toString() {
-		return "  Hook [positionHook=" + position + ", lenght=" + lenght + ", fuel=" + fuel + "]";
+		return "Hook [positionHook=" + position + ", lenght=" + lenght + ", fuel=" + fuel + "]";
 	}
 
 	public void moveLeft() {
@@ -80,9 +80,9 @@ public class Hook implements Serializable{
 		return(getLenght() < MAX_LENGHT);
 	}
 	
-	public boolean collisionBorderMap(Map map){
+	public boolean collisionBorderMap(int width, int depth){
 		
-		return(getPositionHook().getX() <= 0 || getPositionHook().getX() >= map.getWidth() || getPositionHook().getY() >= map.getDepth());
+		return(getPositionHook().getX() <= 0 || getPositionHook().getX() >= width || getPositionHook().getY() >= depth);
 	}
 }
 
