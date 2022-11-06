@@ -1,6 +1,6 @@
-package tpAlgo3;
+package treasureHunter;
 
-public class Memento extends SaveAndLoadGame{
+public class Memento extends File{
 
 	private Player playerState;
 	private Hook hookState;

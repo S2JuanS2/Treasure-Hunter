@@ -1,4 +1,4 @@
-package tpAlgo3;
+package treasureHunter;
 
 import java.io.Serializable;
 

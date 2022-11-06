@@ -1,4 +1,4 @@
-package tpAlgo3;
+package treasureHunter;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public abstract class SaveAndLoadGame {
+public abstract class File {
 	
 	static final String FILE_PLAYER = "datosPlayer.txt";
 	static final String FILE_HOOK = "datosHook.txt";
