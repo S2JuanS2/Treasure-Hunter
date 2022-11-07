@@ -27,12 +27,12 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		
 		this.player = new Player(null);
 		this.hook = new Hook();
-		this.treasure = new ArrayList<>();	
+		this.treasure = new ArrayList<>();
 		
-		setPlayer(player);
-		setHook(hook);
+		setState(this.player);
+		setState(this.hook);
 	}
-
+	
 	public Player getPlayer() {
 		return player;
 	}
@@ -41,14 +41,36 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		return hook;
 	}
 	
+	public void setPlayer(Player player) {
+		this.player = player;
+		setState(this.player);
+	}
+	
+	public void setHook(Hook hook) {
+		this.hook = hook;
+		setState(this.hook);
+		this.hook.setState(this.hook.getPosition(), this.hook.getEngine());
+	}
+	
+	public void setTreasure(ArrayList<Treasure> treasure) {
+		this.treasure = treasure;
+	}
+	
 	public List<Treasure> getTreasure() {
 		return treasure;
 	}
 
+
+	/*
+	 * AGREGA UN TESORO A LA LISTA DE TESOROS
+	 */
 	public void addTreasure(Treasure treasure) {
 		this.treasure.add(treasure);
 	}
 	
+	/*
+	 * INSTANCIA TESOROS Y LOS AGREGA A LA LISTA
+	 */
 	public void generateTreasures() {
 		
 		DirectorTreasure director = new DirectorTreasure();
@@ -61,14 +83,23 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		}
 	}
 	
+	/*
+	 * MUESTRA LAS ESTADISTICAS EL JUGADOR
+	 */
 	public void showPlayerStats() {
 		screen.print(player + "\n");
 	}
 	
+	/*
+	 * MUESTRA LAS ESTADISTICAS DEL GANCHO
+	 */
 	public void showHookStats() {
 		screen.print(hook  + "\n");
 	}
 	
+	/*
+	 * MUESTRA LA LISTA DE TESOROS
+	 */
 	public void showTreasures() {
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
@@ -76,6 +107,11 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		}
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI EL GANCHO COLISIONA CON UN TESORO, 
+	 * ELIMINA DE LA LISTA EL TESORO CON EL CUAL COLISONÓ
+	 * SE LE ACREDITA AL JUGADOR EL PRECIO DEL MISMO
+	 */
 	public boolean collisionTreasure() {
 		
 		Iterator<Treasure> it = treasure.iterator();
@@ -90,6 +126,9 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		return false;
 	}
 	
+	/*
+	 * SOLICITA AL GANCHO QUE DESCIENDA
+	 */
 	public void goDownHook() {
 		
 		for(int i = 1; !(collisionTreasure()) && hook.thereIsFuel() && hook.canKeepGoingDown(i); i++) {		
@@ -97,6 +136,10 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		}
 	}
 
+	/*
+	 * RECIBE LA OPCION ELEGIDA POR EL USUARIO
+	 * Y LA INVOCA
+	 */
 	public void selectOption(String option) {
 			
 		switch(option) {
@@ -119,21 +162,28 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		}
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI EL GANCHO TIENE COMBUSTIBLE O SI EL JUGADOR
+	 * PUEDE COMPRAR EL MISMO.
+	 */
 	public boolean inGame() {
 		return(hook.thereIsFuel() || player.canBuyUpgrade(FUEL_COST));
 	}
 	
+	/*
+	 *  MUESTRA LOS TESOROS AL USUARIO Y SUS ESTADISTICAS
+	 * LE PIDE AL USUARIO QUE ELIJA UNA OPCION
+	 */
 	public void start(Snapshot snapshot) {
 
 		String option;
 		boolean end = false;
-		
-		generateTreasures();
-		
+				
 		while (inGame() && !(end)) {
 			
 			snapshot.setPlayerState(player);
 			snapshot.setHookState(hook);
+			snapshot.setTreasureState(treasure);
 			snapshot.saveGame();
 			
 			showTreasures();
@@ -150,7 +200,7 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 					break;
 				default:
 					selectOption(option);
-			}						
+			}
 		}
 		showPlayerStats();
 		showHookStats();

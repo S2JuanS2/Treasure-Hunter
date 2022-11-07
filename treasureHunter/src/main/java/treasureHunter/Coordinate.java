@@ -36,23 +36,26 @@ public class Coordinate implements Serializable{
 		this.y = y;
 	}
 	
-	void oneAddX() {
+	public void oneAddX() {
 		x++;
 	}
 	
-	void oneAddY() {
+	public void oneAddY() {
 		y++;
 	}
 	
-	void oneLessX() {
+	public void oneLessX() {
 		x--;
 	}
 	
-	void oneLessY() {
+	public void oneLessY() {
 		y--;
 	}
 
-	boolean equals(Coordinate coords) {
+	/*
+	 * DEVUELVE TRUE SI LAS POSICIONES SON IGUALES
+	 */
+	public boolean equals(Coordinate coords) {
 		return(this.x == coords.getX() && this.y == coords.getY());
 	}
 	

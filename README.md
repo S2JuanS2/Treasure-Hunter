@@ -4,7 +4,7 @@ Del Rio Juan Sebastián, padrón: 103.337
 
 Descripción:
 
-El juego consiste en recolectar tesoros (minerales, rocas, fósiles) mediante un gancho que realizará un movimiento pendular. Al presionar una tecla el gancho descenderá hasta colisionar con algún objeto, este lo agarrará y se le asignará al jugador una recompensa según la rareza del objeto extraído. En cada partida se establecerá un límite de tiempo o de acciones (a definir).
+El juego consiste en recolectar tesoros (minerales, rocas, fósiles) mediante un gancho que se moverá de forma horizontal. Al presionar una tecla el gancho descenderá hasta colisionar con algún objeto, este lo agarrará y se le asignará al jugador una recompensa según la rareza del objeto extraído. En cada partida se establecerá un límite de tiempo o de acciones (a definir).
 
 
 

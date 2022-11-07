@@ -2,23 +2,22 @@ package treasureHunter;
 
 public abstract class Movable {
 	
-	static final int MOVE_FUEL_COST = 1;
-	static final int INITIAL_POSITION_Y = 20;
+	public static final int MOVE_FUEL_COST = 1;
+	public static final int INITIAL_POSITION_Y = 20;
 	
 	public static final String NO_FUEL = "Combustible insuficiente\n";
 	
 	private Coordinate position;
 	private Engine engine;
 	
-	public void setPosition(Coordinate position) {
+	public void setState(Coordinate position, Engine engine) {
 		this.position = position;
-	}
-	
-	public void setEngine(Engine engine) {
 		this.engine = engine;
 	}
 	
-	
+	/*
+	 *  MUEVE UNA POSICION A LA IZQUIERDA EL GANCHO
+	 */
 	public void moveLeft() {
 		if(position.getX()-1 > 0 && thereIsFuel()) {
 			position.oneLessX();
@@ -26,6 +25,9 @@ public abstract class Movable {
 		}
 	}
 	
+	/*
+	 * MUEVE UNA POSICION A LA DERECHA EL GANCHO
+	 */
 	public void moveRight(int width) {
 		if(position.getX() < width && thereIsFuel()) {
 			position.oneAddX();
@@ -33,6 +35,9 @@ public abstract class Movable {
 		}
 	}
 	
+	/*
+	 * DESCIENDE EL GANCHO
+	 */
 	public void goDown(int width, int depth) {
 		if( !(collisionBorderMap(width, depth)) && thereIsFuel() ){		
 			position.oneAddY();
@@ -40,6 +45,9 @@ public abstract class Movable {
 		}
 	}
 	
+	/*
+	 * VUELVE AL GANCHO A SU POSICION ORIGINAL
+	 */
 	public void goUp() {
 		while (position.getY() > INITIAL_POSITION_Y && thereIsFuel()) {
 			position.oneLessY();
@@ -47,6 +55,9 @@ public abstract class Movable {
 		}
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI HAY COMBUSTIBLE
+	 */
 	public boolean thereIsFuel() {
 		if(engine.getFuel() > 0) {
 			return true;
@@ -56,6 +67,9 @@ public abstract class Movable {
 		}
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI COLISIONÓ CON EL BORDE DEL MAPA
+	 */
 	public boolean collisionBorderMap(int width, int depth){
 		
 		return(position.getX() <= 0 || position.getX() >= width || position.getY() >= depth);

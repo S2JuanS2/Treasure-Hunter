@@ -2,13 +2,16 @@ package treasureHunter;
 
 public class DirectorTreasure {
 	
-	static final int COMMON = 1;
-	static final int LITTLE_COMMON = 2;
-	static final int RARE = 3;
-	static final int EPIC = 4;
-	static final int LEGENDARY = 5;
-	static final int MYTHICAL = 6;
+	public static final int COMMON = 1;
+	public static final int LITTLE_COMMON = 2;
+	public static final int RARE = 3;
+	public static final int EPIC = 4;
+	public static final int LEGENDARY = 5;
+	public static final int MYTHICAL = 6;
 
+	/*
+	 * PASOS DE CONSTRUCCION DE UN TESORO
+	 */
 	public void constructGraniteTreasure(Builder builder) {
 		builder.setTreasureType(TreasureType.GRANITE);
 		builder.setPosition(new Coordinate());
@@ -96,7 +99,10 @@ public class DirectorTreasure {
 		builder.setPrice();	
 	}
 	
-	public void constructRandomTreasure(Builder builder) {
+	/*
+	 * DEVUELVE UN NUMERO ALEATORIO CON UN RANGO DE POSIBILIDADES
+	 */
+	public int randomOdds() {
 		
 		int randomProbability = (int)(Math.random()*100+1);
 		int treasureRandom  = 0;
@@ -124,7 +130,16 @@ public class DirectorTreasure {
 		}else if(randomProbability <= 100){
 			treasureRandom = 10;
 		}
-			
+		return treasureRandom;
+	}
+	
+	/*
+	 * CONSTRUYE UN TESORO ALEATORIO
+	 */
+	public void constructRandomTreasure(Builder builder) {
+		
+		int treasureRandom = randomOdds();
+		
 		switch(treasureRandom) {
 		case 0:
 			this.constructGraniteTreasure(builder);

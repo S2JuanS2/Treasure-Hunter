@@ -4,6 +4,7 @@ treasureHunter/.classpath
 treasureHunter/.project
 treasureHunter/datosHook.txt
 treasureHunter/datosPlayer.txt
+treasureHunter/datosTreasure.txt
 bin/
 tmp/
 *.tmp

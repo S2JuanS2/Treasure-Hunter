@@ -15,6 +15,9 @@ public class Player implements Serializable{
 		this.balance = 0;
 	}
 
+	/*
+	 * DEVUELVE EL NOMBRE DEL JUGADOR
+	 */
 	public String getName() {
 		return name;
 	}
@@ -23,18 +26,33 @@ public class Player implements Serializable{
 		this.name = name;
 	}
 
+	/*
+	 * DEVUELVE EL BALANCE DEL JUGADOR
+	 */
 	public double getBalance() {
 		return balance;
 	}
 
+	/*
+	 * REDUCE EL BALANCE DEL JUGADOR CON LA CANTIDAD RECIBIDA
+	 * POR PARAMETRO
+	 */
 	public void deductBalance(float balance) {
 		this.balance -= balance;
 	}
 	
+	/*
+	 * AUMENTA EL BALANCE DEL JUGADOR CON LA CANTIDAD RECIBIDA
+	 * POR PARAMETRO
+	 */
 	public void accreditBalance(float balance) {
 		this.balance += balance;
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI EL BALANCE SUPERA O IGUALA AL PRECIO RECIBIDO
+	 * POR PARAMETRO
+	 */
 	public boolean canBuyUpgrade(float price) {
 		if(getBalance() >= price) {
 			return true;

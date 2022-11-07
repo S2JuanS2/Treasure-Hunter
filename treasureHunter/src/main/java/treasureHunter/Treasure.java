@@ -1,7 +1,11 @@
 package treasureHunter;
 
-public class Treasure {
+import java.io.Serializable;
 
+public class Treasure implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	private final TreasureType type;
 	private final Coordinate position;
 	private final int rarity;
@@ -17,26 +21,45 @@ public class Treasure {
 		this.price = price;
 	}
 
+	/*
+	 * DEVUELVE EL TIPO DE TESORO
+	 */
 	public TreasureType getType() {
 		return type;
 	}
 
+	/*
+	 * DEVUELVE LA POSICION DEL TESORO
+	 */
 	public Coordinate getPosition() {
 		return position;
 	}
 
+	/*
+	 * DEVUELVE LA RAREZA DEL TESORO
+	 */
 	public int getRarity() {
 		return rarity;
 	}
 	
+	/*
+	 * DEVUELVE EL PESO DEL TESORO
+	 */
 	public int getWeight() {
 		return weight;
 	}
 
+	/*
+	 * DEVUELVE EL PRECIO DEL TESORO
+	 */
 	public float getPrice() {
 		return price;
 	}
 
+	/*
+	 * MODIFICA LA POSICION DEL TESORO CON LOS
+	 * VALORES RECIBIDOS POR PARAMETRO
+	 */
 	public void setPosition(int i, int j) {
 		position.setX(i);
 		position.setY(j);
