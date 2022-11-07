@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TreasureHunterGame {
+public class TreasureHunterGame extends Improvements implements ShowStats{
 
 	public static final int MAP_WIDTH = 300;
 	public static final int MAP_DEPTH = 500;
 	public static final int MAX_TREASURES = 25;
-		
+			
 	//opt
 	public static final String LEFT = "A";
 	public static final String RIGHT = "D";
@@ -28,22 +28,17 @@ public class TreasureHunterGame {
 		this.player = new Player(null);
 		this.hook = new Hook();
 		this.treasure = new ArrayList<>();	
+		
+		setPlayer(player);
+		setHook(hook);
 	}
 
 	public Player getPlayer() {
 		return player;
 	}
 	
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
-	
 	public Hook getHook() {
 		return hook;
-	}
-
-	public void setHook(Hook hook) {
-		this.hook = hook;
 	}
 	
 	public List<Treasure> getTreasure() {
@@ -66,19 +61,19 @@ public class TreasureHunterGame {
 		}
 	}
 	
+	public void showPlayerStats() {
+		screen.print(player + "\n");
+	}
+	
+	public void showHookStats() {
+		screen.print(hook  + "\n");
+	}
+	
 	public void showTreasures() {
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
-			System.out.println(it.next());
+			screen.print(it.next()+"\n");
 		}
-	}
-	
-	public String showPlayerStats() {
-		return (getPlayer().toString());
-	}
-	
-	public String showHookStats() {
-		return (getHook().toString());
 	}
 	
 	public boolean collisionTreasure() {
@@ -86,7 +81,7 @@ public class TreasureHunterGame {
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
 			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().equals(getHook().getPosition())) {
+			if(treasureAux.getPosition().equals(hook.getPosition()) && hook.getEngine().enoughPower(treasureAux.getWeight())) {					
 				player.accreditBalance(treasureAux.getPrice());
 				it.remove();
 				return true;
@@ -97,43 +92,23 @@ public class TreasureHunterGame {
 	
 	public void goDownHook() {
 		
-		for(int i = 1; !(collisionTreasure()) && getHook().thereIsFuel() && getHook().canKeepGoingDown(i); i++) {	//ORDEN DE PRIORI		
-			getHook().goDown(MAP_WIDTH, MAP_DEPTH);
+		for(int i = 1; !(collisionTreasure()) && hook.thereIsFuel() && hook.canKeepGoingDown(i); i++) {		
+			hook.goDown(MAP_WIDTH, MAP_DEPTH);
 		}
 	}
 
-	public void improveHook() {
-		if(player.canBuyUpgradeHook()) {
-			if(hook.noMaxLength()) {		
-				player.deductBalance(Player.COST_UPGRADE);
-				hook.increaseLenght();
-			}
-		}
-	}
-	
-	public void buyFuel() {
-		if(player.canBuyFuel()) {
-			player.deductBalance(Player.FUEL_COST);
-			getHook().accreditFuel(Hook.RECHARGE_FUEL);
-		}
-	}
-
-	public boolean inGame() {
-		return(getHook().thereIsFuel() || getPlayer().canBuyFuel());
-	}
-	
 	public void selectOption(String option) {
 			
 		switch(option) {
 			case LEFT:
-				getHook().moveLeft();
+				hook.moveLeft();
 				break;
 			case RIGHT:
-				getHook().moveRight(MAP_WIDTH);
+				hook.moveRight(MAP_WIDTH);
 				break;
 			case DOWN:
 				goDownHook();
-				getHook().goUp();
+				hook.goUp();
 				break;
 			case BUY_HOOK:
 				improveHook();
@@ -144,7 +119,11 @@ public class TreasureHunterGame {
 		}
 	}
 	
-	public void start(Snapshot memento) {
+	public boolean inGame() {
+		return(hook.thereIsFuel() || player.canBuyUpgrade(FUEL_COST));
+	}
+	
+	public void start(Snapshot snapshot) {
 
 		String option;
 		boolean end = false;
@@ -153,17 +132,17 @@ public class TreasureHunterGame {
 		
 		while (inGame() && !(end)) {
 			
-			memento.setPlayerState(getPlayer());
-			memento.setHookState(getHook());
-			memento.saveGame();
+			snapshot.setPlayerState(player);
+			snapshot.setHookState(hook);
+			snapshot.saveGame();
 			
 			showTreasures();
-			System.out.println(showPlayerStats());
-			System.out.println(showHookStats());
+			showPlayerStats();
+			showHookStats();
 			
-			System.out.println("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Player.COST_UPGRADE + "]) "
-					           + "|| G(Recargar combustible [$"+ Player.FUEL_COST + "]) F(Salir): ");
-			option = TreasureHunter.keyboard.nextLine();
+			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + COST_UPGRADE_HOOK + "]) " 
+										+ "|| G(Recargar combustible [$"+ FUEL_COST + "]) F(Salir): ");
+			option = keyboard.nextLine();
 			
 			switch(option){
 				case END:
@@ -173,14 +152,13 @@ public class TreasureHunterGame {
 					selectOption(option);
 			}						
 		}
-		
-		System.out.println(showPlayerStats());
-		System.out.println(showHookStats());
+		showPlayerStats();
+		showHookStats();
 		
 		if(inGame()) {
-			System.out.println("Partida guardada.\n");
+			screen.print("Partida guardada.\n");
 		}else {
-			System.out.println("GAME OVER: La mina se derrumbo\n");
+			screen.print("GAME OVER");
 		}
 	}
 }

@@ -10,16 +10,14 @@ public class TreasureHunter{
 	
 	public static void main(String[] args) {
 		
+		boolean correctOpt = false;	
 		Snapshot memento = new Snapshot(null,null);
-		TreasureHunterGame treasureHunterGame = new TreasureHunterGame();
-						
-		boolean correctOpt = false;
-			
+		TreasureHunterGame treasureHunterGame = new TreasureHunterGame();				
+		
 		screen.print("TREASURE HUNTER\n");
 		screen.print("Deseas continuar la partida? (S o N):");
 		String optContinue = keyboard.nextLine();
-			
-			
+				
 		while((!correctOpt)) {
 				
 			switch(optContinue) {
@@ -33,17 +31,13 @@ public class TreasureHunter{
 				treasureHunterGame.setPlayer(memento.loadPlayer());
 				treasureHunterGame.setHook(memento.loadHook());
 				correctOpt = true;
-				break;
-					
+				break;	
 			default:
 				screen.print("Opcion incorrecta\n");
 				screen.print("Deseas continuar la partida? (S o N):");
 				optContinue = keyboard.nextLine();
 			}
 		}
-		
-		treasureHunterGame.start(memento);
-						
+		treasureHunterGame.start(memento);						
 	}
-
 }
