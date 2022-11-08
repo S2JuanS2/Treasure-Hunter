@@ -13,7 +13,7 @@ public class TreasureHunter{
 	public static void main(String[] args) {
 		
 		boolean correctOpt = false;
-		Snapshot memento = new Snapshot(null,null);
+		Snapshot persistence = new Snapshot(null,null);
 		TreasureHunterGame treasureHunterGame = new TreasureHunterGame();
 			
 		screen.print("TREASURE HUNTER\n");
@@ -31,16 +31,18 @@ public class TreasureHunter{
 				correctOpt = true;
 				break;
 			case YES:
-				File archivo = new File("datosPlayer.txt");
-				if(!(archivo.exists())) {
+				File archivoP = new File("datosPlayer.txt");
+				File archivoH = new File("datosHook.txt");
+				File archivoT = new File("datosTreasure.txt");
+				if( !(archivoP.exists() && archivoH.exists() && archivoT.exists()) ) {
 					screen.print("Ninguna partida encontrada\n");
 					screen.print("Deseas continuar la partida? (S o N):");
 					optContinue = keyboard.nextLine();
 					break;
 				}
-				treasureHunterGame.setPlayer(memento.loadPlayer());
-				treasureHunterGame.setHook(memento.loadHook());
-				treasureHunterGame.setTreasure(memento.loadTreasures());
+				treasureHunterGame.setPlayer(persistence.loadPlayer());
+				treasureHunterGame.setHook(persistence.loadHook());
+				treasureHunterGame.setTreasure(persistence.loadTreasures());
 				correctOpt = true;
 				break;	
 			default:
@@ -49,6 +51,6 @@ public class TreasureHunter{
 				optContinue = keyboard.nextLine();
 			}
 		}
-		treasureHunterGame.start(memento);						
+		treasureHunterGame.start(persistence);						
 	}
 }

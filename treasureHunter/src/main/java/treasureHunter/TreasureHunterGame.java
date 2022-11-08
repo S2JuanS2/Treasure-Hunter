@@ -202,12 +202,13 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 					selectOption(option);
 			}
 		}
-		showPlayerStats();
-		showHookStats();
 		
 		if(inGame()) {
 			screen.print("Partida guardada.\n");
 		}else {
+			screen.print("\n");
+			showPlayerStats();
+			showHookStats();
 			screen.print("GAME OVER");
 		}
 	}
