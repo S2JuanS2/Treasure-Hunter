@@ -1,5 +1,6 @@
 package treasureHunter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -59,7 +60,6 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 	public List<Treasure> getTreasure() {
 		return treasure;
 	}
-
 
 	/*
 	 * AGREGA UN TESORO A LA LISTA DE TESOROS
@@ -174,17 +174,14 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 	 *  MUESTRA LOS TESOROS AL USUARIO Y SUS ESTADISTICAS
 	 * LE PIDE AL USUARIO QUE ELIJA UNA OPCION
 	 */
-	public void start(Snapshot snapshot) {
+	public void start(Snapshot snapshot) throws IOException {
 
 		String option;
 		boolean end = false;
 				
 		while (inGame() && !(end)) {
 			
-			snapshot.setPlayerState(player);
-			snapshot.setHookState(hook);
-			snapshot.setTreasureState(treasure);
-			snapshot.saveGame();
+			snapshot.saveGame(player, hook, treasure);
 			
 			showTreasures();
 			showPlayerStats();

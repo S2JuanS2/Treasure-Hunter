@@ -1,5 +1,6 @@
 package treasureHunter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Snapshot extends File{
@@ -43,11 +44,28 @@ public class Snapshot extends File{
 	}
 
 	/*
-	 * GUARDA EL ESTADO DEL GANCHO Y DEL JUGADOR
+	 * DEVUELVE LA LISTA DE TESOROS
+	 */
+	public ArrayList<Treasure> getTreasureState() {
+		return treasureState;
+	}
+
+	/*
+	 * ALMACENA LA LISTA DE TESOROS;
+	 */
+	public void setTreasureState(ArrayList<Treasure> treasureState) {
+		this.treasureState = treasureState;
+	}
+	
+	/*
+	 * GUARDA EL ESTADO DEL GANCHO, DEL JUGADOR Y DE LA LISTA DE LOS TESOROS
 	 * EN UN ARCHIVO DE TEXTO
 	 */
-	public void saveGame() {
+	public void saveGame(Player player, Hook hook, ArrayList<Treasure> treasure) throws IOException {
 		
+		setPlayerState(player);
+		setHookState(hook);
+		setTreasureState(treasure);
 		playerSave(playerState);
 		hookSave(hookState);
 		TreasureListSave(treasureState);
@@ -57,7 +75,7 @@ public class Snapshot extends File{
 	 * DEVUELVE UN JUGADOR RECIBIDO DESDE UN 
 	 * ARCHIVO DE TEXTO
 	 */
-	public Player loadPlayer() {
+	public Player loadPlayer() throws ClassNotFoundException, IOException {
 		return(playerUpload());
 	}
 	
@@ -65,20 +83,16 @@ public class Snapshot extends File{
 	 * DEVUELVE UN GANCHO RECIBIDO DESDE UN 
 	 * ARCHIVO DE TEXTO
 	 */
-	public Hook loadHook() {
+	public Hook loadHook() throws ClassNotFoundException, IOException {
 		return(hookUpload());
+
 	}
 	
-	public ArrayList<Treasure> loadTreasures(){
+	/*
+	 * DEVUELVE LA LISTA DE TESOROS RECIBIDA
+	 * DESDE UN ARCHIVO
+	 */
+	public ArrayList<Treasure> loadTreasures() throws ClassNotFoundException, IOException{
 		return(treasureListUpload());
 	}
-
-	public ArrayList<Treasure> getTreasureState() {
-		return treasureState;
-	}
-
-	public void setTreasureState(ArrayList<Treasure> treasureState) {
-		this.treasureState = treasureState;
-	}
-	
 }

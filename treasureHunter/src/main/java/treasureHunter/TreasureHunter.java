@@ -1,6 +1,7 @@
 package treasureHunter;
 
 import java.io.File;
+import java.io.IOException;
 
 public class TreasureHunter{
 
@@ -10,7 +11,7 @@ public class TreasureHunter{
 	public static final String YES = "S";
 	public static final String NO = "N";
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ClassNotFoundException, IOException {
 		
 		boolean correctOpt = false;
 		Snapshot persistence = new Snapshot(null,null);

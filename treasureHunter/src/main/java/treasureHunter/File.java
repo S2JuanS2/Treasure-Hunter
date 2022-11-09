@@ -1,7 +1,6 @@
 package treasureHunter;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,199 +16,73 @@ public abstract class File {
 	/*
 	 * DEVUELVE EL ESTADO DE UN JUGADOR LEIDO DESDE UN ARCHIVO DE TEXTO
 	 */
-	public static Player playerUpload() {
+	public static Player playerUpload() throws IOException, ClassNotFoundException {
+				
+		FileInputStream fichero = new FileInputStream(FILE_PLAYER);
+		ObjectInputStream objectInput = new ObjectInputStream(fichero);
+		Player playerState = (Player)objectInput.readObject();
+		objectInput.close();
 		
-		Player playerState = null;
-		FileInputStream fichero = null;
-		
-		try {
-			fichero = new FileInputStream(FILE_PLAYER);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectInputStream objectInput = null;
-		
-		try {
-			objectInput = new ObjectInputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			playerState = (Player)objectInput.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			objectInput.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return playerState;
 	}
 	
 	/*
 	 * RECIBE EL ESTADO DE UN JUGADOR Y LO GUARDA EN UN ARCHIVO DE TEXTO
 	 */
-	public static void playerSave(Player playerStateToSave) {
+	public static void playerSave(Player playerStateToSave) throws IOException {
 				
-		FileOutputStream fichero = null;
-		try {
-			fichero = new FileOutputStream(FILE_PLAYER);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectOutputStream tuberia = null;
-		try {
-			tuberia = new ObjectOutputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			tuberia.writeObject(playerStateToSave);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fichero.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileOutputStream fichero = new FileOutputStream(FILE_PLAYER);
+		ObjectOutputStream ous = new ObjectOutputStream(fichero);
+		ous.writeObject(playerStateToSave);
+		fichero.close();
 	}
 	
 	/*
 	 * DEVUELVE EL ESTADO DEL GANCHO LEIDO DESDE UN ARCHIVO DE TEXTO
 	 */
-	public static Hook hookUpload() {
+	public static Hook hookUpload() throws IOException, ClassNotFoundException {
 		
-		Hook hookState = null;
-		FileInputStream fichero = null;
+		FileInputStream fichero = new FileInputStream(FILE_HOOK);		
+		ObjectInputStream objectInput = new ObjectInputStream(fichero);	
+		Hook hookState = (Hook)objectInput.readObject();	
+		objectInput.close();
 		
-		try {
-			fichero = new FileInputStream(FILE_HOOK);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectInputStream objectInput = null;
-		
-		try {
-			objectInput = new ObjectInputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			hookState = (Hook)objectInput.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			objectInput.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		return hookState;
 	}
 	
 	/*
 	 * RECIBE EL ESTADO DE UN GANCHO Y LO GUARDA EN UN ARCHIVO DE TEXTO
 	 */
-	public static void hookSave(Hook hookStateToSave) {
+	public static void hookSave(Hook hookStateToSave) throws IOException {
 				
-		FileOutputStream fichero = null;
-		try {
-			fichero = new FileOutputStream(FILE_HOOK);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectOutputStream tuberia = null;
-		try {
-			tuberia = new ObjectOutputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			tuberia.writeObject(hookStateToSave);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fichero.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileOutputStream fichero = new FileOutputStream(FILE_HOOK);
+		ObjectOutputStream ous = new ObjectOutputStream(fichero);
+		ous.writeObject(hookStateToSave);
+		fichero.close();
 	}
 	
 	/*
 	 * DEVUELVE EL ESTADO DE UNA LISTA DE TESOROS LEIDO DESDE UN ARCHIVO DE TEXTO
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<Treasure> treasureListUpload() {
-		
-		ArrayList<Treasure> treasureState = null;
-		FileInputStream fichero = null;
-		
-		try {
-			fichero = new FileInputStream(FILE_TREASURE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectInputStream objectInput = null;
-		
-		try {
-			objectInput = new ObjectInputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			treasureState = (ArrayList<Treasure>)objectInput.readObject();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			objectInput.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public static ArrayList<Treasure> treasureListUpload() throws IOException, ClassNotFoundException {
+				
+		FileInputStream fichero = new FileInputStream(FILE_TREASURE);	
+		ObjectInputStream objectInput = new ObjectInputStream(fichero);	
+		ArrayList<Treasure> treasureState = (ArrayList<Treasure>)objectInput.readObject();	
+		objectInput.close();
+			
 		return treasureState;
 	}
 	
 	/*
 	 * RECIBE EL ESTADO DE UNA LISTA DE TESOROS Y LO GUARDA EN UN ARCHIVO DE TEXTO
 	 */
-	public static void TreasureListSave(ArrayList<Treasure> treasureState) {
+	public static void TreasureListSave(ArrayList<Treasure> treasureState) throws IOException {
 				
-		FileOutputStream fichero = null;
-		try {
-			fichero = new FileOutputStream(FILE_TREASURE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		ObjectOutputStream red = null;
-		try {
-			red = new ObjectOutputStream(fichero);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			red.writeObject(treasureState);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		try {
-			fichero.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		FileOutputStream fichero = new FileOutputStream(FILE_TREASURE);
+		ObjectOutputStream ous = new ObjectOutputStream(fichero);
+		ous.writeObject(treasureState);
+		fichero.close();
 	}
 }
