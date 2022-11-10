@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TreasureHunterGame extends Improvements implements ShowStats{
+public class TreasureHunterGame implements ShowStats{
 
 	public static final int MAP_WIDTH = 300;
 	public static final int MAP_DEPTH = 500;
@@ -17,9 +17,11 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 	public static final String DOWN = "E";
 	public static final String BUY_HOOK = "B";
 	public static final String BUY_FUEL = "G";
+	public static final String BUY_POWER = "P";
 	public static final String END = "F";
 	
 	//attributes
+	private Store store;
 	private Player player;
 	private Hook hook;
 	private ArrayList<Treasure> treasure;
@@ -29,11 +31,13 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 		this.player = new Player(null);
 		this.hook = new Hook();
 		this.treasure = new ArrayList<>();
-		
-		setState(this.player);
-		setState(this.hook);
+		this.store = new Store();
 	}
 	
+	public Store getStore() {
+		return store;
+	}
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -44,12 +48,10 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 	
 	public void setPlayer(Player player) {
 		this.player = player;
-		setState(this.player);
 	}
 	
 	public void setHook(Hook hook) {
 		this.hook = hook;
-		setState(this.hook);
 		this.hook.setState(this.hook.getPosition(), this.hook.getEngine());
 	}
 	
@@ -154,10 +156,13 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 				hook.goUp();
 				break;
 			case BUY_HOOK:
-				improveHook();
+				store.improveHook(player, hook);
 				break;
 			case BUY_FUEL:
-				buyFuel();
+				store.buyFuel(player, hook);
+				break;
+			case BUY_POWER:
+				store.improveEngine(player, hook);
 				break;
 		}
 	}
@@ -167,7 +172,7 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 	 * PUEDE COMPRAR EL MISMO.
 	 */
 	public boolean inGame() {
-		return(hook.thereIsFuel() || player.canBuyUpgrade(FUEL_COST));
+		return(hook.thereIsFuel() || player.canBuyUpgrade(Store.FUEL_COST));
 	}
 	
 	/*
@@ -187,8 +192,8 @@ public class TreasureHunterGame extends Improvements implements ShowStats{
 			showPlayerStats();
 			showHookStats();
 			
-			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + COST_UPGRADE_HOOK + "]) " 
-										+ "|| G(Recargar combustible [$"+ FUEL_COST + "]) F(Salir): ");
+			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Store.COST_UPGRADE_HOOK + "]) " 
+						+ "|| G(Recargar combustible [$"+ Store.FUEL_COST + "]) || P(Mejorar motor [$"+ Store.COST_UPGRADE_ENGINE + "]) || F(Salir): ");
 			option = keyboard.nextLine();
 			
 			switch(option){

@@ -36,19 +36,19 @@ public class Coordinate implements Serializable{
 		this.y = y;
 	}
 	
-	public void oneAddX() {
+	public void increaseX() {
 		x++;
 	}
 	
-	public void oneAddY() {
+	public void increaseY() {
 		y++;
 	}
 	
-	public void oneLessX() {
+	public void decreaseX() {
 		x--;
 	}
 	
-	public void oneLessY() {
+	public void decreaseY() {
 		y--;
 	}
 

@@ -103,7 +103,7 @@ public class TreasureHunterTest {
 				
 		treasureGame.getPlayer().accreditBalance(100);
 
-		treasureGame.improveHook();
+		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
 		assertEquals(90,treasureGame.getHook().getLenght());
 	}
@@ -113,7 +113,7 @@ public class TreasureHunterTest {
 				
 		treasureGame.getPlayer().accreditBalance(99);
 
-		treasureGame.improveHook();
+		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(99,0, treasureGame.getPlayer().getBalance());
 		assertEquals(80,treasureGame.getHook().getLenght());
 	}
@@ -123,7 +123,7 @@ public class TreasureHunterTest {
 		
 		treasureGame.getPlayer().accreditBalance(80);
 
-		treasureGame.buyFuel();
+		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
 		assertEquals(1200,0,treasureGame.getHook().getEngine().getFuel());
 	}
@@ -133,7 +133,7 @@ public class TreasureHunterTest {
 		
 		treasureGame.getPlayer().accreditBalance(79);
 
-		treasureGame.buyFuel();
+		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(79,0, treasureGame.getPlayer().getBalance());
 		assertEquals(1000,0,treasureGame.getHook().getEngine().getFuel());
 		

@@ -70,11 +70,4 @@ public class Treasure implements Serializable{
 		return "Treasure [type=" + type + ", position=" + position + ", rarity=" + rarity + ", weight=" + weight
 				+ ", price=" + price + "]";
 	}
-
-	
-	
-	
-
-
-
 }

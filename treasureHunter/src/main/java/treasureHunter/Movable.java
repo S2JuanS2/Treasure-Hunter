@@ -20,7 +20,7 @@ public abstract class Movable {
 	 */
 	public void moveLeft() {
 		if(position.getX()-1 > 0 && thereIsFuel()) {
-			position.oneLessX();
+			position.decreaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
@@ -30,7 +30,7 @@ public abstract class Movable {
 	 */
 	public void moveRight(int width) {
 		if(position.getX() < width && thereIsFuel()) {
-			position.oneAddX();
+			position.increaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
@@ -40,7 +40,7 @@ public abstract class Movable {
 	 */
 	public void goDown(int width, int depth) {
 		if( !(collisionBorderMap(width, depth)) && thereIsFuel() ){		
-			position.oneAddY();
+			position.increaseY();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
@@ -50,7 +50,7 @@ public abstract class Movable {
 	 */
 	public void goUp() {
 		while (position.getY() > INITIAL_POSITION_Y && thereIsFuel()) {
-			position.oneLessY();
+			position.decreaseY();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
