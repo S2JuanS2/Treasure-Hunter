@@ -8,9 +8,6 @@ public class Engine implements Serializable{
 
 	public static final int INITIAL_FUEL = 1000;
 	public static final int INITIAL_POWER = 1;
-	public static final int RECHARGE_FUEL = 200;
-	public static final int MAX_POWER = 3;
-	public static final int MAX_FUEL = 2000;
 	
 	//attributes
 	private float fuel;
@@ -45,8 +42,8 @@ public class Engine implements Serializable{
 	/*
 	 * AUMENTA EL COMBUSTIBLE
 	 */
-	public void accreditFuel() {
-		this.fuel += RECHARGE_FUEL;
+	public void accreditFuel(int rechargeFuel) {
+		this.fuel += rechargeFuel;
 	}
 
 	/*
@@ -58,37 +55,10 @@ public class Engine implements Serializable{
 	}
 	
 	/*
-	 * DEVUELVE TRUE SI LA EL MOTOR ALCANZO LA POTENCIA MAXIMA
-	 */
-	public boolean noMaxPower() {
-		if(power < MAX_POWER) {
-			return true;
-		}else {
-			System.out.println("Potencia maxima alcanzada");
-			return false;
-		}
-	}
-	
-	/*
 	 * DEVUELVE TRUE SI LA POTENCIA DEL MOTOR ES SUFICIENTE PARA LEVANTAR EL PESO
 	 */
 	public boolean enoughPower(int weight) {
-		if(power >= weight) {
-			return true;
-		}
-		return false;
-	}
-	
-	/*
-	 * DEVUELVE TRUE SI LA CAPACIDAD DEL TANQUE ES SUFICIENTE PARA RECARGAR COMBUSTIBLE
-	 */
-	public boolean noMaxFuel() {
-		if(fuel < (MAX_FUEL-RECHARGE_FUEL)) {
-			return true;
-		}else {
-			System.out.println("Tanque lleno");
-			return false;
-		}
+		return(power >= weight);
 	}
 	
 	@Override

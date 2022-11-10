@@ -34,6 +34,15 @@ public class TreasureHunterGame implements ShowStats{
 		this.store = new Store();
 	}
 	
+	public TreasureHunterGame(Snapshot persistence) throws ClassNotFoundException, IOException {
+		
+		this.player = persistence.loadPlayer();
+		this.hook = persistence.loadHook();
+		this.treasure = new ArrayList<>();
+		this.treasure = persistence.loadTreasures();
+		this.store = new Store();
+	}
+	
 	public Store getStore() {
 		return store;
 	}
@@ -89,14 +98,14 @@ public class TreasureHunterGame implements ShowStats{
 	 * MUESTRA LAS ESTADISTICAS EL JUGADOR
 	 */
 	public void showPlayerStats() {
-		screen.print(player + "\n");
+		TreasureHunter.screen.print(player + "\n");
 	}
 	
 	/*
 	 * MUESTRA LAS ESTADISTICAS DEL GANCHO
 	 */
 	public void showHookStats() {
-		screen.print(hook  + "\n");
+		TreasureHunter.screen.print(hook  + "\n");
 	}
 	
 	/*
@@ -105,7 +114,7 @@ public class TreasureHunterGame implements ShowStats{
 	public void showTreasures() {
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
-			screen.print(it.next()+"\n");
+			TreasureHunter.screen.print(it.next()+"\n");
 		}
 	}
 	
@@ -159,10 +168,10 @@ public class TreasureHunterGame implements ShowStats{
 				store.improveHook(player, hook);
 				break;
 			case BUY_FUEL:
-				store.buyFuel(player, hook);
+				store.buyFuel(player, hook.getEngine());
 				break;
 			case BUY_POWER:
-				store.improveEngine(player, hook);
+				store.improveEngine(player, hook.getEngine());
 				break;
 		}
 	}
@@ -172,7 +181,7 @@ public class TreasureHunterGame implements ShowStats{
 	 * PUEDE COMPRAR EL MISMO.
 	 */
 	public boolean inGame() {
-		return(hook.thereIsFuel() || player.canBuyUpgrade(Store.FUEL_COST));
+		return(hook.thereIsFuel() || store.canBuy(player.getBalance(),Store.FUEL_COST));
 	}
 	
 	/*
@@ -192,9 +201,9 @@ public class TreasureHunterGame implements ShowStats{
 			showPlayerStats();
 			showHookStats();
 			
-			screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Store.COST_UPGRADE_HOOK + "]) " 
+			TreasureHunter.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Store.COST_UPGRADE_HOOK + "]) " 
 						+ "|| G(Recargar combustible [$"+ Store.FUEL_COST + "]) || P(Mejorar motor [$"+ Store.COST_UPGRADE_ENGINE + "]) || F(Salir): ");
-			option = keyboard.nextLine();
+			option = TreasureHunter.keyboard.nextLine();
 			
 			switch(option){
 				case END:
@@ -206,12 +215,15 @@ public class TreasureHunterGame implements ShowStats{
 		}
 		
 		if(inGame()) {
-			screen.print("Partida guardada.\n");
+			TreasureHunter.screen.print("Partida guardada.\n");
+			snapshot.saveGame(player, hook, treasure);
 		}else {
-			screen.print("\n");
+			TreasureHunter.screen.print("\n");
 			showPlayerStats();
 			showHookStats();
-			screen.print("GAME OVER");
+			TreasureHunter.screen.print("GAME OVER");
+			snapshot.saveGame(player, hook, treasure);
 		}
+		
 	}
 }

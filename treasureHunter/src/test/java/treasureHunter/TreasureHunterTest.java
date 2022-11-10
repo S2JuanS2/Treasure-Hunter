@@ -19,7 +19,7 @@ public class TreasureHunterTest {
 	@Test
 	public void testInitialHook() {
 
-		assertEquals(80, treasureGame.getHook().getLenght());
+		assertEquals(80, treasureGame.getHook().getLength());
 		assertEquals((TreasureHunterGame.MAP_WIDTH)/2, treasureGame.getHook().getPosition().getX());
 		assertEquals(20, treasureGame.getHook().getPosition().getY());
 		assertEquals(1000,0, treasureGame.getHook().getEngine().getFuel());
@@ -65,7 +65,7 @@ public class TreasureHunterTest {
 	public void borderMapCollisionHookTest() {
 		
 		for(int i = 0; i < 40; i++) {
-			treasureGame.getHook().increaseLenght();			
+			treasureGame.getHook().increaseLength(10);			
 		}
 		treasureGame.goDownHook();
 		assertTrue(treasureGame.getHook().collisionBorderMap(TreasureHunterGame.MAP_WIDTH,TreasureHunterGame.MAP_DEPTH));		
@@ -105,7 +105,7 @@ public class TreasureHunterTest {
 
 		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
-		assertEquals(90,treasureGame.getHook().getLenght());
+		assertEquals(90,treasureGame.getHook().getLength());
 	}
 	
 	@Test
@@ -115,7 +115,7 @@ public class TreasureHunterTest {
 
 		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(99,0, treasureGame.getPlayer().getBalance());
-		assertEquals(80,treasureGame.getHook().getLenght());
+		assertEquals(80,treasureGame.getHook().getLength());
 	}
 	
 	@Test
@@ -123,7 +123,7 @@ public class TreasureHunterTest {
 		
 		treasureGame.getPlayer().accreditBalance(80);
 
-		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook());
+		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook().getEngine());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
 		assertEquals(1200,0,treasureGame.getHook().getEngine().getFuel());
 	}
@@ -133,7 +133,7 @@ public class TreasureHunterTest {
 		
 		treasureGame.getPlayer().accreditBalance(79);
 
-		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook());
+		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook().getEngine());
 		assertEquals(79,0, treasureGame.getPlayer().getBalance());
 		assertEquals(1000,0,treasureGame.getHook().getEngine().getFuel());
 		

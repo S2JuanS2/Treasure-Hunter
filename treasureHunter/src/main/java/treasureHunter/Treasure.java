@@ -10,9 +10,9 @@ public class Treasure implements Serializable{
 	private final Coordinate position;
 	private final int rarity;
 	private final int weight;
-	private final float price;
+	private final int price;
 	
-	public Treasure(TreasureType type, Coordinate position, int weight, int rarity, float price) {
+	public Treasure(TreasureType type, Coordinate position, int weight, int rarity, int price) {
 		super();
 		this.type = type;
 		this.position = position;
@@ -52,7 +52,7 @@ public class Treasure implements Serializable{
 	/*
 	 * DEVUELVE EL PRECIO DEL TESORO
 	 */
-	public float getPrice() {
+	public int getPrice() {
 		return price;
 	}
 

@@ -32,9 +32,9 @@ public class TreasureHunter{
 				correctOpt = true;
 				break;
 			case YES:
-				File archivoP = new File("datosPlayer.txt");
-				File archivoH = new File("datosHook.txt");
-				File archivoT = new File("datosTreasure.txt");
+				File archivoP = new File(Persistence.FILE_PLAYER);
+				File archivoH = new File(Persistence.FILE_HOOK);
+				File archivoT = new File(Persistence.FILE_TREASURE);
 				if( !(archivoP.exists() && archivoH.exists() && archivoT.exists()) ) {
 					screen.print("Ninguna partida encontrada\n");
 					screen.print("Deseas continuar la partida? (S o N):");

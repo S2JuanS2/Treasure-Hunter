@@ -6,7 +6,7 @@ public class TreasureBuilder implements Builder{
 	private Coordinate position;
 	private int rarity;
 	private int weight;
-	private float price;
+	private int price;
 	
 	@Override
 	public void setTreasureType(TreasureType type) {

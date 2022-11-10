@@ -6,20 +6,18 @@ public class Hook extends Movable implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int INITIAL_LENGHT = 80;
-	public static final int MAX_LENGHT = 280;
-	public static final int IMPROVE_LENGHT = 10;
+	public static final int INITIAL_LENGTH = 80;
 	public static final int INITIAL_POSITION_X = 150;
 	public static final int INITIAL_POSITION_Y = 20;
 	
 	private Coordinate position;
 	private Engine engine;
-	private int lenght;
+	private int length;
 	
 	public Hook() {
 		this.position = new Coordinate(INITIAL_POSITION_X,INITIAL_POSITION_Y);
 		this.engine = new Engine();
-		this.lenght = INITIAL_LENGHT;
+		this.length = INITIAL_LENGTH;
 		
 		setState(position, engine);
 	}
@@ -35,8 +33,8 @@ public class Hook extends Movable implements Serializable{
 	/*
 	 * DEVUELVE LA LONGITUD DEL GANCHO
 	 */
-	public int getLenght() {
-		return lenght;
+	public int getLength() {
+		return length;
 	}
 	
 	/*
@@ -54,22 +52,10 @@ public class Hook extends Movable implements Serializable{
 	}
 	
 	/*
-	 * AUMENTA EL LARGO DEL GANCHO DE FORMA CONSTANTE
+	 * AUMENTA LA LONGITUD DEL GANCHO DE FORMA CONSTANTE
 	 */
-	public void increaseLenght() {
-		this.lenght += IMPROVE_LENGHT;
-	}
-	
-	/*
-	 * DEVUELVE TRUE SI EL LARGO DEL GANCHO NO SUPERA LA LONGITUD MAXIMA
-	 */
-	public boolean noMaxLength() {
-		if(getLenght() < MAX_LENGHT) {
-			return true;
-		}else {
-			System.out.println("Longitud maxima alcanzada.\n");
-			return false;
-		}
+	public void increaseLength(int improveLength) {
+		this.length += improveLength;
 	}
 	
 	/*
@@ -78,12 +64,12 @@ public class Hook extends Movable implements Serializable{
 	 */
 	public boolean canKeepGoingDown(int loweredMeter) {
 		
-		return (loweredMeter <= getLenght());
+		return (loweredMeter <= getLength());
 	}
 
 	@Override
 	public String toString() {
-		return "Hook [position=" + position + ", engine=" + engine + ", lenght=" + lenght + "]";
+		return "Hook [position=" + position + ", engine=" + engine + ", length=" + length + "]";
 	}
 	
 

@@ -7,7 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public abstract class File {
+public abstract class Persistence {
 	
 	public static final String FILE_PLAYER = "datosPlayer.txt";
 	public static final String FILE_HOOK = "datosHook.txt";

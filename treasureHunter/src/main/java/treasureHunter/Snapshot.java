@@ -3,7 +3,7 @@ package treasureHunter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Snapshot extends File{
+public class Snapshot extends Persistence{
 
 	private Player playerState;
 	private Hook hookState;
