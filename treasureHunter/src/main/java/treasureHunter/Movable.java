@@ -16,10 +16,48 @@ public abstract class Movable {
 	}
 	
 	/*
+	 * DEVUELVE TRUE SI HAY COMBUSTIBLE
+	 */
+	public boolean thereIsFuel() {
+		if(engine.getFuel() > 0) {
+			return true;
+		}else{
+			System.out.println(NO_FUEL);
+			return false;
+		}
+	}
+	
+	/*
+	 * DEVUELVE TRUE SI COLISIONÓ CON EL BORDE DEL MAPA
+	 */
+	public boolean collisionBorderMap(int width, int depth){
+		
+		return(position.getX() <= 0 || position.getX() >= width || position.getY() >= depth);
+	}
+	
+	/*
+	 * DEVUELVE TRUE SI COLISIONÓ CON EL BORDE DEL MAPA
+	 */
+	public boolean collisionBorderMap() {
+		return ( (position.getX()-1) > 0 );
+	}
+	
+	/*
+	 * DEVUELVE TRUE SI COLISIONÓ CON EL BORDE DEL MAPA
+	 */
+	public boolean collisionBorderMap(int width) {
+		return (position.getX() < width);
+	}
+	
+	public boolean initialPosition() {
+		return(position.getY() == INITIAL_POSITION_Y);
+	}
+	
+	/*
 	 *  MUEVE UNA POSICION A LA IZQUIERDA EL GANCHO
 	 */
 	public void moveLeft() {
-		if(position.getX()-1 > 0 && thereIsFuel()) {
+		if( collisionBorderMap() && thereIsFuel()) {
 			position.decreaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
@@ -29,7 +67,7 @@ public abstract class Movable {
 	 * MUEVE UNA POSICION A LA DERECHA EL GANCHO
 	 */
 	public void moveRight(int width) {
-		if(position.getX() < width && thereIsFuel()) {
+		if(collisionBorderMap(width) && thereIsFuel()) {
 			position.increaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
@@ -49,29 +87,9 @@ public abstract class Movable {
 	 * VUELVE AL GANCHO A SU POSICION ORIGINAL
 	 */
 	public void goUp() {
-		while (position.getY() > INITIAL_POSITION_Y && thereIsFuel()) {
+		while ( (!initialPosition()) && thereIsFuel() ) {
 			position.decreaseY();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
-	}
-	
-	/*
-	 * DEVUELVE TRUE SI HAY COMBUSTIBLE
-	 */
-	public boolean thereIsFuel() {
-		if(engine.getFuel() > 0) {
-			return true;
-		}else{
-			System.out.println(NO_FUEL);
-			return false;
-		}
-	}
-	
-	/*
-	 * DEVUELVE TRUE SI COLISIONÓ CON EL BORDE DEL MAPA
-	 */
-	public boolean collisionBorderMap(int width, int depth){
-		
-		return(position.getX() <= 0 || position.getX() >= width || position.getY() >= depth);
 	}
 }

@@ -202,7 +202,9 @@ public class TreasureHunterGame implements ShowStats{
 			showHookStats();
 			
 			TreasureHunter.screen.print("A(Izquierda) || D(Derecha) || E(Bajar) || B(Alargar cadena 10m [$" + Store.COST_UPGRADE_HOOK + "]) " 
-						+ "|| G(Recargar combustible [$"+ Store.FUEL_COST + "]) || P(Mejorar motor [$"+ Store.COST_UPGRADE_ENGINE + "]) || F(Salir): ");
+										+ "|| G(Recargar combustible [$"+ Store.FUEL_COST + "]) || P(Mejorar motor [$"+ Store.COST_UPGRADE_ENGINE + "])"
+										+ " || F(Guardar y salir): ");
+			
 			option = TreasureHunter.keyboard.nextLine();
 			
 			switch(option){
@@ -216,14 +218,14 @@ public class TreasureHunterGame implements ShowStats{
 		
 		if(inGame()) {
 			TreasureHunter.screen.print("Partida guardada.\n");
-			snapshot.saveGame(player, hook, treasure);
+
 		}else {
 			TreasureHunter.screen.print("\n");
 			showPlayerStats();
 			showHookStats();
 			TreasureHunter.screen.print("GAME OVER");
-			snapshot.saveGame(player, hook, treasure);
 		}
+		snapshot.saveGame(player, hook, treasure);
 		
 	}
 }

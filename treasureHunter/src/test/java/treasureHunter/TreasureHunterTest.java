@@ -6,6 +6,9 @@ import org.junit.Test;
 
 public class TreasureHunterTest {
 	
+	public static final int TREASURE_COST = 200;
+	public static final int TREASURE_POSITION_Y = 80;
+	
 	private TreasureHunterGame treasureGame = new TreasureHunterGame();
 
 	@Test
@@ -32,9 +35,10 @@ public class TreasureHunterTest {
 	}
 	
 	@Test
-	public void addTreasureTest() {
+	public void addTreasureToListTest() {
 
-		Treasure treasureGranite = new Treasure(TreasureType.GRANITE, new Coordinate(150,40), 1, 1, 200);
+		Treasure treasureGranite = new Treasure(TreasureType.GRANITE, new Coordinate(Hook.INITIAL_POSITION_X,40),
+											1, DirectorTreasure.COMMON, TREASURE_COST);
 		treasureGame.addTreasure(treasureGranite);
 		
 		assertFalse(treasureGame.getTreasure().isEmpty());
@@ -42,122 +46,142 @@ public class TreasureHunterTest {
 	}
 	
 	@Test
-	public void treasureCollisionHookTest() {
+	public void whenTreasureCollisionwithHookThenStop() {
 		
-		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(150,100), 1, 1, 200);
+		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(Hook.INITIAL_POSITION_X,TREASURE_POSITION_Y),
+											1, DirectorTreasure.COMMON, TREASURE_COST);
 		treasureGame.addTreasure(treasure);
 		
 		treasureGame.goDownHook();
-		assertEquals(100, treasureGame.getHook().getPosition().getY());	
+		assertEquals(TREASURE_POSITION_Y, treasureGame.getHook().getPosition().getY());	
 	}
 	
 	@Test
-	public void treasureNoCollisionHookTest() {
+	public void whenItDoesNotReachTheLengthOfTheHookThenBrakesBefore() {
 		
-		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(150,101), 1, 1, 200);
+		Treasure treasure = new Treasure(TreasureType.GOLD, new Coordinate(Hook.INITIAL_POSITION_X,101), 
+											1, DirectorTreasure.COMMON, TREASURE_COST);
 		treasureGame.addTreasure(treasure);
 		
 		treasureGame.goDownHook();
-		assertEquals(100, treasureGame.getHook().getPosition().getY());	
+		assertEquals(Hook.INITIAL_POSITION_Y+Hook.INITIAL_LENGTH, treasureGame.getHook().getPosition().getY());	
 	}
 		
 	@Test
-	public void borderMapCollisionHookTest() {
+	public void whenItCollisionWithTheMapBoundaryShouldBrake() {
 		
 		for(int i = 0; i < 40; i++) {
-			treasureGame.getHook().increaseLength(10);			
+			treasureGame.getHook().increaseLength(Store.IMPROVE_LENGTH);			
 		}
 		treasureGame.goDownHook();
 		assertTrue(treasureGame.getHook().collisionBorderMap(TreasureHunterGame.MAP_WIDTH,TreasureHunterGame.MAP_DEPTH));		
 	}
 	
 	@Test
-	public void resetPositionHookTest() {
+	public void whenItReachesOriginalPositionShouldBrake() {
 	
 		treasureGame.goDownHook();
 		treasureGame.getHook().goUp();
-		assertEquals(20, treasureGame.getHook().getPosition().getY());
+		assertEquals(Hook.INITIAL_POSITION_Y, treasureGame.getHook().getPosition().getY());
 	}
 	
 	@Test
-	public void payTreasureCollectPlayerTest() {
+	public void whenCollectTreasureShouldPay() {
 		
-		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,100), 1, 1, 950);
+		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(Hook.INITIAL_POSITION_X,100), 
+											1, DirectorTreasure.COMMON, TREASURE_COST);
 		treasureGame.addTreasure(treasure);
 		treasureGame.goDownHook();
-		assertEquals(950,0, treasureGame.getPlayer().getBalance());
+		assertEquals(TREASURE_COST, treasureGame.getPlayer().getBalance());
 		
 	}
 	
 	@Test
-	public void notPaymentTreasureNotCollectTest() {
+	public void whenNotCollectTreasureNotShouldPay() {
 		
-		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(150,101), 1, 1, 950);
+		Treasure treasure = new Treasure(TreasureType.DIAMOND, new Coordinate(Hook.INITIAL_POSITION_X,101), 
+											1, DirectorTreasure.COMMON, TREASURE_COST);
 		treasureGame.addTreasure(treasure);
 		treasureGame.goDownHook();
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
 	}
 		
 	@Test
-	public void improveHookTest() {
+	public void whenThePlayerBuyUpgradesHookShouldDiscountTheCost() {
 				
-		treasureGame.getPlayer().accreditBalance(100);
+		treasureGame.getPlayer().accreditBalance(Store.COST_UPGRADE_HOOK);
 
 		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
-		assertEquals(90,treasureGame.getHook().getLength());
 	}
 	
 	@Test
-	public void noImproveHookTest() {
+	public void whenThePlayerBuyUpgradesHookShouldIncreaseTheLength() {
 				
-		treasureGame.getPlayer().accreditBalance(99);
+		treasureGame.getPlayer().accreditBalance(Store.COST_UPGRADE_HOOK);
 
 		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
-		assertEquals(99,0, treasureGame.getPlayer().getBalance());
-		assertEquals(80,treasureGame.getHook().getLength());
+		assertEquals(Hook.INITIAL_LENGTH+10,treasureGame.getHook().getLength());
 	}
 	
 	@Test
-	public void rechargeFuelTest() {
+	public void whenThePlayerNotBuyUpgradesHookNotShouldDiscountTheCost() {
+				
+		treasureGame.getPlayer().accreditBalance(Store.COST_UPGRADE_HOOK-1);
+
+		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
+		assertEquals(Store.COST_UPGRADE_HOOK-1, treasureGame.getPlayer().getBalance());
+	}
+	
+	@Test
+	public void whenThePlayerNotBuyUpgradesHookNotShouldIncreaseTheLength() {
+				
+		treasureGame.getPlayer().accreditBalance(Store.COST_UPGRADE_HOOK-1);
+
+		treasureGame.getStore().improveHook(treasureGame.getPlayer(), treasureGame.getHook());
+		assertEquals(Hook.INITIAL_LENGTH,treasureGame.getHook().getLength());
+	}
+	
+	@Test
+	public void whenThePlayerBuyFuelShouldDiscountTheCost() {
 		
-		treasureGame.getPlayer().accreditBalance(80);
+		treasureGame.getPlayer().accreditBalance(Store.FUEL_COST);
 
 		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook().getEngine());
 		assertEquals(0,0, treasureGame.getPlayer().getBalance());
-		assertEquals(1200,0,treasureGame.getHook().getEngine().getFuel());
+		assertEquals(Engine.INITIAL_FUEL+200,0,treasureGame.getHook().getEngine().getFuel());
 	}
 	
 	@Test
-	public void noRechargeFuelTest() {
+	public void whenThePlayerNotBuyFuelShouldDiscountTheCost() {
 		
-		treasureGame.getPlayer().accreditBalance(79);
+		treasureGame.getPlayer().accreditBalance(Store.FUEL_COST-1);
 
 		treasureGame.getStore().buyFuel(treasureGame.getPlayer(), treasureGame.getHook().getEngine());
-		assertEquals(79,0, treasureGame.getPlayer().getBalance());
-		assertEquals(1000,0,treasureGame.getHook().getEngine().getFuel());
+		assertEquals(Store.FUEL_COST-1, treasureGame.getPlayer().getBalance());
+		assertEquals(Engine.INITIAL_FUEL,0,treasureGame.getHook().getEngine().getFuel());
 		
 	}
 	
 	@Test
-	public void moveLeftHookTest() {
+	public void moveHookLeftTest() {
 
 		treasureGame.getHook().moveLeft();
 		
-		assertEquals(149,treasureGame.getHook().getPosition().getX());
+		assertEquals(Hook.INITIAL_POSITION_X-1,treasureGame.getHook().getPosition().getX());
 	}
 	
 	@Test
-	public void moveRightHookTest() {
+	public void moveHookRightTest() {
 
 		treasureGame.getHook().moveRight(TreasureHunterGame.MAP_WIDTH);
 		
-		assertEquals(151,treasureGame.getHook().getPosition().getX());
+		assertEquals(Hook.INITIAL_POSITION_X+1,treasureGame.getHook().getPosition().getX());
 	}
 	
 	@Test
-	public void noFuelTest() {
-		treasureGame.getPlayer().accreditBalance(80);
+	public void whenTryingToMoveHookAndThereIsNoFuelItShouldNotMove() {
+
 		for(int i = 0; i < 6; i++) {
 			treasureGame.goDownHook();
 			treasureGame.getHook().goUp();

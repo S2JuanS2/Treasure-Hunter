@@ -16,10 +16,7 @@ El tipo de tesoro puede ser un metál (oro, diamante, rubi, hierro, cobre) , un 
 
 Se definirá una clase directora para establecer el orden en el que se deben ejecutar los pasos en la construcción.
                      
--MEMENTO, para evitar el problema de la restricción de acceso, se lo utilizará para guardar y restaurar el estado del gancho y del personaje para poder continuar la partida en distintos momentos. El gancho tendrá ciertas propiedades al igual que el personaje, que se irán obteniendo con la compra de mejoras (atributos de fuerza, resistencia, etc).
-                     
-                     
--COMMAND, Se lo utilizará para configurar el uso del gancho, pausar el juego o reiniciar el juego mediante clicks en botones o asignación de teclas para así evitar la duplicación de código. 
+-MEMENTO, para evitar el problema de la restricción de acceso, se lo utilizará para guardar y restaurar el estado del gancho y del personaje para poder continuar la partida en distintos momentos. El gancho tendrá ciertas propiedades al igual que el personaje, que se irán obteniendo con la compra de mejoras (atributos de fuerza, resistencia, etc).                                   
                             
 El juego se desarrollará en Java.
 
