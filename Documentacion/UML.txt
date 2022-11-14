@@ -1,105 +1,116 @@
 @startuml
 skinparam classAttributeIconSize 0
 skinparam roundcorner 0
-
-class TreasureHunter{
- + main()
-}
+skinparam linetype ortho
+skinparam groupInheritance 4
 
 class TreasureHunterGame{
- - Player player
- - Hook hook
- - ArrayList<Treasure> treasure
- + TreasureHunterGame()
-
+-Store store;
+-Player player;
+-Hook hook;
+-ArrayList<Treasure> treasure;
 }
 
-class Coordinate{
- - int x
- - int y
- + Coordinate()
- + equals(Coordinate coords)
+class Store{
++pay(Player,int)
++improveHook(Player,Hook);
++improveEngine(Player,Engine);
 }
 
 class Player{
- - String name
- - double balance
- + Player(Sring)
+String name;
+int balance;
 }
 
 class Hook{
- - Coord position
- - int length
- - double fuel
- + Hook()
+-Coordinate position;
+-Engine engine;
+-int length;
 }
 
-abstract class File{
- + PlayerUpload()
- + HookUpload()
+abstract class Movable{
+-Coordinate position;
+-Engine engine;
++setState(Coordinate,Engine);
 }
 
-class Snapshot{
- - Player playerState
- - Hook hookState
- + Snapshot(Player, Hook)
+class Coordinate{
+-int x;
+-int y;
+}
+
+class Engine{
+-float fuel;
+-int power;
 }
 
 class Treasure{
- - Enum TreasureType type
- - Coord position
- - int rarity
- - int weight
- - float price
-}
-
-class TreasureBuilder{
- - Enum TreasureType type
- - Coord position
- - int rarity
- - int weight
- - float price
-
-}
-interface Builder{
- + void setType(TreasureType)
- + void setPosition(Coordinate)
- + void setRarity()
- + void setWeight()
- + void setPrice()
+-TreasureType type;
+-Coordinate position;
+-int rarity;
+-int weight;
 }
 
 enum TreasureType{
+}
 
+class Snapshot{
+-Player playerState;
+-Hook hookState;
+ArrayList<Treasure> treasureState;
++saveGame();
+}
+
+abstract class Persistence{
++Player playerUpload();
++Hook hookUpload();
++ArrayList<Treasure> treasureListUpload();
 }
 
 class DirectorTreasure{
-
++constructTreasure(Builder,TreasureType,int);
 }
 
+class TreasureBuilder{
+-TreasureType type;
+-Coordinate position;
+-int rarity;
+-int weight;
+int price;
++Treasure getResults();
+}
+
+interface Builder{
+}
+
+TreasureHunterGame *--> Store
 TreasureHunterGame *--> Player
 TreasureHunterGame *--> Hook
 TreasureHunterGame *--> Treasure
+TreasureHunterGame ..> Snapshot
 TreasureHunterGame ..> DirectorTreasure
 TreasureHunterGame ..> TreasureBuilder
-TreasureHunterGame ..> Snapshot
+
+Store ..> Player
+Store ..> Hook
+Store ..> Engine
 
 Hook *--> Coordinate
+Hook *--> Engine
+Hook --|> Movable
 
-Snapshot *--> Player
-Snapshot *--> Hook
-Snapshot --|> File
+Treasure ..> TreasureType
+Treasure o--> Coordinate
 
-Treasure --> TreasureType
-Treasure *--> Coordinate
+Snapshot o--> Player
+Snapshot o--> Hook
+Snapshot o--> Treasure
+Snapshot --|> Persistence
 
-TreasureBuilder ..|> Builder
-TreasureBuilder --> TreasureType
-TreasureBuilder *--> Coordinate
+DirectorTreasure ..> Builder
+DirectorTreasure ..> TreasureType
+
+TreasureBuilder ..> Builder
 TreasureBuilder --> Treasure
 
-TreasureHunter --> TreasureHunterGame
-TreasureHunter --> Snapshot 
-
-DirectorTreasure --> Builder
 @enduml
