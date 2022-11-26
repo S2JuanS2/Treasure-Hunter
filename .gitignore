@@ -1,10 +1,10 @@
 .metadata
-treasureHunter/target/
-treasureHunter/.classpath
-treasureHunter/.project
-treasureHunter/datosHook.txt
-treasureHunter/datosPlayer.txt
-treasureHunter/datosTreasure.txt
+treasureHunterApp/target/
+treasureHunterApp/.classpath
+treasureHunterApp/.project
+treasureHunterApp/datosHook.txt
+treasureHunterApp/datosPlayer.txt
+treasureHunterApp/datosTreasure.txt
 bin/
 tmp/
 *.tmp
