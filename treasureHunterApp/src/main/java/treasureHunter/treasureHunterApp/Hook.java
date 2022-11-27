@@ -2,24 +2,32 @@ package treasureHunter.treasureHunterApp;
 
 import java.io.Serializable;
 
+import javafx.scene.canvas.GraphicsContext;
+
 public class Hook extends Movable implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	public static final int INITIAL_LENGTH = 200;
 	public static final int INITIAL_POSITION_X = 320;
-	public static final int INITIAL_POSITION_Y = 70;
+	public static final int INITIAL_POSITION_Y = 75;
 	
 	private Coordinate position;
 	private Engine engine;
 	private int length;
+	private String nameImage;
 	
 	public Hook() {
 		this.position = new Coordinate(INITIAL_POSITION_X,INITIAL_POSITION_Y);
 		this.engine = new Engine();
 		this.length = INITIAL_LENGTH;
+		this.nameImage = "hook";
 		
 		setState(position, engine);
+	}
+	
+	public void setNameImage(String nameImage) {
+		this.nameImage = nameImage;
 	}
 
 	public void setPosition(Coordinate position) {
@@ -64,7 +72,7 @@ public class Hook extends Movable implements Serializable{
 	 */
 	public boolean canKeepGoingDown() {
 		
-		return (getLoweredMeter()*VELOCITY < getLength());
+		return (getLoweredMeter()*Engine.INITIAL_VELOCITY < getLength());
 	}
 
 	@Override
@@ -72,6 +80,9 @@ public class Hook extends Movable implements Serializable{
 		return "Hook [position=" + position + ", engine=" + engine + ", length=" + length + "]";
 	}
 	
+	public void draw(GraphicsContext graphics) {
+		graphics.drawImage(View.images.get(nameImage), getPosition().getX(), getPosition().getY());
+	}
 
 }
 

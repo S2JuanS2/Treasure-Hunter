@@ -8,11 +8,12 @@ public class Player implements Serializable{
 		
 	private String name;
 	private int balance;
-	//private Item item;
+	private Treasure treasure;
 	
 	public Player(String name) {
 		this.name = name;
 		this.balance = 0;
+		this.treasure = null;
 	}
 
 	/*
@@ -33,6 +34,14 @@ public class Player implements Serializable{
 		return balance;
 	}
 
+	public Treasure getTreasure() {
+		return treasure;
+	}
+
+	public void setTreasure(Treasure treasure) {
+		this.treasure = treasure;
+	}
+	
 	/*
 	 * REDUCE EL BALANCE DEL JUGADOR CON LA CANTIDAD RECIBIDA
 	 * POR PARAMETRO
@@ -47,11 +56,6 @@ public class Player implements Serializable{
 	 */
 	public void accreditBalance(int price) {
 		this.balance += price;
-	}
-			
-	@Override
-	public String toString() {
-		return "Player [name=" + name + ", balance=" + balance + "]";
 	}
 	
 }

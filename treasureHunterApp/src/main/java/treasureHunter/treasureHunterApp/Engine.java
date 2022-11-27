@@ -6,16 +6,19 @@ public class Engine implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final int INITIAL_FUEL = 1000;
+	public static final int INITIAL_FUEL = 1500;
 	public static final int INITIAL_POWER = 1;
+	public static final int INITIAL_VELOCITY = 2;
 	
 	//attributes
 	private float fuel;
 	private int power;
-	
+	private int velocity;
+
 	public Engine() {
 		this.fuel = INITIAL_FUEL;
 		this.power = INITIAL_POWER;
+		this.velocity = INITIAL_VELOCITY;
 	}
 	
 	/*
@@ -32,6 +35,14 @@ public class Engine implements Serializable{
 		return power;
 	}
 
+	public int getVelocity() {
+		return velocity;
+	}
+
+	public void resetVelocity() {
+		this.velocity = INITIAL_VELOCITY;
+	}
+	
 	/*
 	 * REDUCE EL COMBUSTIBLE CON LA CANTIDAD RECIBIDA POR PARAMETRO
 	 */
@@ -57,8 +68,10 @@ public class Engine implements Serializable{
 	/*
 	 * DEVUELVE TRUE SI LA POTENCIA DEL MOTOR ES SUFICIENTE PARA LEVANTAR EL PESO
 	 */
-	public boolean enoughPower(int weight) {
-		return(power >= weight);
+	public void enoughPower(int weight) {	
+		if(weight > this.power) {
+			this.velocity--;			
+		}
 	}
 	
 	@Override

@@ -7,12 +7,6 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 	
-	public static final java.util.Scanner keyboard = new java.util.Scanner(System.in);
-	public static final java.io.PrintStream screen = new java.io.PrintStream(System.out);
-	
-	public static final String YES = "S";
-	public static final String NO = "N";
-	
     @Override
     public void start(Stage stage) throws ClassNotFoundException, IOException {
 

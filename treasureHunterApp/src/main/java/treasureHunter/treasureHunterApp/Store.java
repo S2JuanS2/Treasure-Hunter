@@ -3,10 +3,10 @@ package treasureHunter.treasureHunterApp;
 public class Store {
 
 	public static final int COST_UPGRADE_HOOK = 100;
-	public static final int MAX_LENGTH = 280;
+	public static final int MAX_LENGTH = 370;
 	public static final int IMPROVE_LENGTH = 10;
 	
-	public static final int COST_UPGRADE_ENGINE = 200;
+	public static final int COST_UPGRADE_ENGINE = 120;
 	public static final int MAX_POWER = 3;
 	
 	public static final int FUEL_COST = 80;
@@ -69,10 +69,16 @@ public class Store {
 	 * INCREMENTA LA POTENCIA DEL MOTOR DESCONTANDOLE AL JUGADOR
 	 * EL COSTO DE LA MEJORA
 	 */
-	public void improveEngine(Player player, Engine engine) {
+	public void improveEngine(Player player, Hook hook) {
 		
-		if(noMaxPower(engine.getPower()) && pay(player, COST_UPGRADE_ENGINE)) {
-			engine.improvePower();
+		if(noMaxPower(hook.getEngine().getPower()) && pay(player, COST_UPGRADE_ENGINE)) {
+			hook.getEngine().improvePower();
+		}
+		if(hook.getEngine().getPower() == 2) {
+			hook.setNameImage("hook2");
+			
+		}else if(hook.getEngine().getPower() == 3) {
+			hook.setNameImage("hook3");
 		}
 	}
 	

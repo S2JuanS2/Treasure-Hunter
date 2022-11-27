@@ -2,9 +2,8 @@ package treasureHunter.treasureHunterApp;
 
 public abstract class Movable {
 	
-	public static final float MOVE_FUEL_COST = (float) 0.5;
-	public static final int INITIAL_POSITION_Y = 70;
-	public static final int VELOCITY = 2;
+	public static final float MOVE_FUEL_COST = 1;
+	public static final int INITIAL_POSITION_Y = 75;
 		
 	private Coordinate position;
 	private Engine engine;
@@ -19,8 +18,8 @@ public abstract class Movable {
 		return loweredMeter;
 	}
 
-	public void setLoweredMeter(int loweredMeter) {
-		this.loweredMeter = loweredMeter;
+	public void resetLoweredMeter() {
+		this.loweredMeter = 0;
 	}
 	
 	public void addLoweredMeter() {
@@ -57,7 +56,12 @@ public abstract class Movable {
 	}
 	
 	public boolean initialPosition() {
-		return(position.getY() == INITIAL_POSITION_Y);
+		if(position.getY() == INITIAL_POSITION_Y) {
+			engine.resetVelocity();
+			resetLoweredMeter();
+			return true;
+		}
+		return false;
 	}
 	
 	/*
@@ -65,6 +69,7 @@ public abstract class Movable {
 	 */
 	public void moveLeft() {
 		if( collisionBorderMap() && thereIsFuel()) {
+			position.decreaseX();
 			position.decreaseX();
 			position.decreaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
@@ -78,6 +83,7 @@ public abstract class Movable {
 		if(collisionBorderMap(width) && thereIsFuel()) {
 			position.increaseX();
 			position.increaseX();
+			position.increaseX();
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
@@ -87,8 +93,8 @@ public abstract class Movable {
 	 */
 	public void goDown(int width, int depth) {
 		if( !(collisionBorderMap(width, depth)) && thereIsFuel() ){	
-			position.increaseY(VELOCITY);
-			loweredMeter++;
+			position.increaseY(engine.getVelocity());
+			loweredMeter++;			
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
 	}
@@ -98,9 +104,8 @@ public abstract class Movable {
 	 */
 	public void goUp() {
 		if ( (!initialPosition()) && thereIsFuel() ) {
-			position.decreaseY(VELOCITY);
-			engine.deductFuel(MOVE_FUEL_COST);
-			loweredMeter--;
+			position.decreaseY(engine.getVelocity());
+			engine.deductFuel(MOVE_FUEL_COST);	
 		}
 	}
 }

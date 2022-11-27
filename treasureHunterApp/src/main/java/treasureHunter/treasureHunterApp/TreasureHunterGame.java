@@ -9,7 +9,7 @@ public class TreasureHunterGame{
 
 	public static final int MAP_WIDTH = 640;
 	public static final int MAP_DEPTH = 480;
-	public static final int MAX_TREASURES = 25;
+	public static final int MAX_TREASURES = 40;
 				
 	//attributes
 	private Store store;
@@ -93,14 +93,23 @@ public class TreasureHunterGame{
 		Iterator<Treasure> it = treasure.iterator();
 		while(it.hasNext()) {
 			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().equals(hook.getPosition()) && hook.getEngine().enoughPower(treasureAux.getWeight())) {					
-				player.accreditBalance(treasureAux.getPrice());
+			if(treasureAux.getPosition().equals(hook.getPosition())) {
+				hook.getEngine().enoughPower(treasureAux.getWeight());
+				player.setTreasure(treasureAux);
 				it.remove();
 				return true;
 			}
 		}
 		return false;
 	}
+	
+	public void collect() {
+		if(hook.initialPosition() && player.getTreasure() != null) {
+			player.accreditBalance(player.getTreasure().getPrice());
+			player.setTreasure(null);
+		}
+	}
+	
 	
 	/*
 	 * SOLICITA AL GANCHO QUE DESCIENDA
@@ -128,5 +137,14 @@ public class TreasureHunterGame{
 
 		snapshot.saveGame(player, hook, treasure);
 
+	}
+
+	public void reset() {
+		this.player = new Player(null);
+		this.hook = new Hook();
+		this.treasure = new ArrayList<>();
+		this.store = new Store();
+		this.snapshot = new Snapshot(null,null);
+		this.getHook().getEngine().resetVelocity();
 	}
 }
