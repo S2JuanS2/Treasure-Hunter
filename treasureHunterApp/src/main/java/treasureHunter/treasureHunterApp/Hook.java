@@ -72,7 +72,7 @@ public class Hook extends Movable implements Serializable{
 	 */
 	public boolean canKeepGoingDown() {
 		
-		return (getLoweredMeter()*Engine.INITIAL_VELOCITY < getLength());
+		return (getLoweredMeter()*(engine.getPower()+1) < getLength());
 	}
 
 	@Override

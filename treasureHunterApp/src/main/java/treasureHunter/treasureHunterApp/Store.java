@@ -2,11 +2,11 @@ package treasureHunter.treasureHunterApp;
 
 public class Store {
 
-	public static final int COST_UPGRADE_HOOK = 100;
+	public static final int COST_UPGRADE_HOOK = 120;
 	public static final int MAX_LENGTH = 370;
 	public static final int IMPROVE_LENGTH = 10;
 	
-	public static final int COST_UPGRADE_ENGINE = 120;
+	public static final int COST_UPGRADE_ENGINE = 250;
 	public static final int MAX_POWER = 3;
 	
 	public static final int FUEL_COST = 80;

@@ -93,7 +93,7 @@ public abstract class Movable {
 	 */
 	public void goDown(int width, int depth) {
 		if( !(collisionBorderMap(width, depth)) && thereIsFuel() ){	
-			position.increaseY(engine.getVelocity());
+			position.increaseY(engine.getPower()+1);
 			loweredMeter++;			
 			engine.deductFuel(MOVE_FUEL_COST);
 		}
@@ -103,9 +103,11 @@ public abstract class Movable {
 	 * VUELVE AL GANCHO A SU POSICION ORIGINAL
 	 */
 	public void goUp() {
-		if ( (!initialPosition()) && thereIsFuel() ) {
-			position.decreaseY(engine.getVelocity());
-			engine.deductFuel(MOVE_FUEL_COST);	
+		for(int i = 0; i < engine.getVelocity()*engine.getPower(); i++) {
+			if ( (!initialPosition()) && thereIsFuel() ) {
+				position.decreaseY(1);
+			}
 		}
+		engine.deductFuel(MOVE_FUEL_COST);	
 	}
 }

@@ -65,6 +65,7 @@ public class View {
 	private boolean goDown = false;
 	private boolean goUp = false;
 	private boolean stop = false;
+	private boolean musicPause = false;
 	
 	public View() {
 		
@@ -77,6 +78,7 @@ public class View {
 	}
 	
 	public void loadImages() {
+	
 		images.put("oro", new Image(getClass().getResource("/res/oro.png").toExternalForm()));
 		images.put("fondo",new Image(getClass().getResource("/res/fondo.png").toExternalForm()));
 		images.put("hook", new Image(getClass().getResource("/res/hook.png").toExternalForm()));
@@ -116,6 +118,7 @@ public class View {
 		images.put("musicPause", new Image(getClass().getResource("/res/musicPause.png").toExternalForm()));
 		images.put("pergaminoName", new Image(getClass().getResource("/res/pergaminoName.png").toExternalForm()));
 		images.put("play", new Image(getClass().getResource("/res/play.png").toExternalForm()));
+		images.put("pluma", new Image(getClass().getResource("/res/pluma.png").toExternalForm()));
 		
 	}
 	
@@ -130,6 +133,7 @@ public class View {
 		sounds.put("soundCollision", new AudioClip(getClass().getResource("/res/collision.wav").toExternalForm()));
 		sounds.put("soundCollect", new AudioClip(getClass().getResource("/res/collect.wav").toExternalForm()));
 		sounds.put("soundSave", new AudioClip(getClass().getResource("/res/save.wav").toExternalForm()));
+		sounds.put("ambiencePlay", new AudioClip(getClass().getResource("/res/ambiencePlay.wav").toExternalForm()));
 	}
 	
 	
@@ -153,13 +157,21 @@ public class View {
 		graphicsGame.setFill(Color.GRAY);
 		graphicsGame.fillRect(20, 9, 2000/5, 11);
 		graphicsGame.setFill(Color.DARKRED);
+		graphicsGame.setFont(Font.font(12));
 		graphicsGame.fillRect(20, 9, game.getHook().getEngine().getFuel()/5, 11);
 		graphicsGame.setFill(Color.WHITE);
 		graphicsGame.fillText(String.valueOf(game.getHook().getEngine().getFuel()), 20, 19);
-		graphicsGame.setFill(Color.WHITE);
+		graphicsGame.setFill(Color.BLACK);
 		graphicsGame.setFont(Font.font(14));
-		graphicsGame.fillText("Player: " + game.getPlayer().getName(), 450, 18);
-		graphicsGame.fillText("Balance: $" + String.valueOf(game.getPlayer().getBalance()) + ",00", 450, 33);
+		graphicsGame.fillText(game.getPlayer().getName(), 460, 18);
+		graphicsGame.setFill(Color.GREEN);
+		graphicsGame.fillText("$" + String.valueOf(game.getPlayer().getBalance()) + ",00", 460, 33);
+		graphicsGame.setFont(Font.font(10));
+		graphicsGame.setFill(Color.BLACK);
+		graphicsGame.fillText(String.valueOf("$" +Store.FUEL_COST), 30,70);
+		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_HOOK), 107,70);
+		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_ENGINE), 148,70);
+		graphicsGame.fillText("Save", 67,70);
 		graphicsGame.setFill(Color.BURLYWOOD);
 		graphicsGame.fillRect(game.getHook().getPosition().getX()+14, 76, 3, game.getHook().getPosition().getY()-75);
 		graphicsGame.fillRect(0, 77, 640, 2);
@@ -188,11 +200,7 @@ public class View {
 		BackgroundImage backgroundImageImproveEngine = new BackgroundImage(images.get("llave"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		Background backgroundImproveEngine = new Background(backgroundImageImproveEngine);
-		
-		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundVolver = new Background(backgroundImageVolver);
-	
+			
 		BackgroundImage backgroundImageMusicPause = new BackgroundImage(images.get("musicPause"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		Background backgroundMusicPause = new Background(backgroundImageMusicPause);
@@ -204,10 +212,14 @@ public class View {
 		BackgroundImage backgroundImagePlay = new BackgroundImage(images.get("play"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		Background backgroundPlay = new Background(backgroundImagePlay);
+		
+		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		Background backgroundVolver = new Background(backgroundImageVolver);
 
 		btnBuyFuel.setLayoutX(20);
 		btnBuyFuel.setLayoutY(30);
-		btnBuyFuel.setPrefSize(28, 32);
+		btnBuyFuel.setPrefSize(27, 32);
 		btnBuyFuel.setBackground(backgroundGas);
 		btnBuyFuel.setCursor(new ImageCursor(images.get("handHover")));
 		
@@ -246,10 +258,10 @@ public class View {
 		btnMusicPause.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBack.setLayoutX(600);
-		btnBack.setLayoutY(32);
-		btnBack.setPrefSize(32,32);
+		btnBack.setLayoutY(35);
 		btnBack.setScaleX(0.8);
 		btnBack.setScaleY(0.8);
+		btnBack.setPrefSize(32, 32);
 		btnBack.setBackground(backgroundVolver);
 		btnBack.setCursor(new ImageCursor(images.get("handHover")));
 		
@@ -268,14 +280,18 @@ public class View {
 	
 	public void playGame(Stage stage, TreasureHunterGame game) {
 		
+	
+		sounds.get("soundAmbience").stop();
+		sounds.get("ambiencePlay").play();
+		
 		group = new Group();
 		btnBuyFuel = new Button();
 		btnSave = new Button();
 		btnBuyImproveHook = new Button();
 		btnBuyImprovePower = new Button();
 		btnPause = new Button();
-		btnMusicPause = new Button();
 		btnBack = new Button();
+		btnMusicPause = new Button();
 		btnPlayGame = new Button();
 		
 		lbPause = new Label("PAUSA");
@@ -328,7 +344,9 @@ public class View {
 					if(goDown) {
 						game.goDownHook();
 						if(!game.getHook().canKeepGoingDown() || game.collisionTreasure()) {
-							sounds.get("soundCollision").play();
+							if(game.getHook().canKeepGoingDown()) {
+								sounds.get("soundCollision").play();								
+							}
 							goDown = false;
 							goUp = true;
 						}
@@ -386,9 +404,10 @@ public class View {
 					btnBuyImprovePower.setDisable(true);
 				}
 				
-				if(game.getTreasure().isEmpty() && game.getHook().initialPosition()) {
+				if(game.getTreasure().isEmpty() && game.getHook().initialPosition() && game.getPlayer().getTreasure() == null) {
 				
-					sounds.get("soundAmbience").stop();
+					refreshCanvas(game);
+					sounds.get("ambiencePlay").stop();
 					sounds.get("soundChain").stop();
 					sounds.get("soundWin").play();
 					this.stop();
@@ -396,6 +415,7 @@ public class View {
 					btnBuyImproveHook.setDisable(true);
 					btnBuyImprovePower.setDisable(true);
 					btnSave.setDisable(true);
+					btnPause.setDisable(true);
 					graphicsGame.drawImage(images.get("pergamino"), 160, 160);
 					graphicsGame.drawImage(images.get("victoria"), 200, 240);
 					endScene(stage, game);
@@ -510,7 +530,7 @@ public class View {
 			public void handle(ActionEvent event) {
 					t.stop();
 					sounds.get("soundChain").stop();
-					sounds.get("soundAmbience").stop();
+					sounds.get("ambiencePlay").stop();
 					goDown = false;
 					goUp = false;
 					stop = false;
@@ -545,7 +565,14 @@ public class View {
 			
 			@Override
 			public void handle(ActionEvent event) {
-					sounds.get("soundAmbience").stop();
+				if(!musicPause) {
+					sounds.get("ambiencePlay").stop();		
+					musicPause = true;
+				}else {
+					sounds.get("ambiencePlay").play();	
+					musicPause = false;
+				}
+				
 			}
 		});
 	}
@@ -579,7 +606,7 @@ public class View {
 		btnHelp = new Button();
 		btnAbout = new Button();
 		
-		btnNewGame.setPrefSize(190, 22);
+		btnNewGame.setPrefSize(155, 22);
 		btnNewGame.setBackground(backgroundNewGame);
 		btnNewGame.setCursor(new ImageCursor(images.get("handHover")));
 		btnContinueGame.setPrefSize(190, 22);
@@ -588,10 +615,10 @@ public class View {
 		btnExitGame.setPrefSize(60, 22);
 		btnExitGame.setBackground(backgroundExit);
 		btnExitGame.setCursor(new ImageCursor(images.get("handHover")));
-		btnHelp.setPrefSize(120, 22);
+		btnHelp.setPrefSize(75, 22);
 		btnHelp.setBackground(backgroundHelp);
 		btnHelp.setCursor(new ImageCursor(images.get("handHover")));
-		btnAbout.setPrefSize(120, 22);
+		btnAbout.setPrefSize(100, 22);
 		btnAbout.setBackground(backgroundAbout);
 		btnAbout.setCursor(new ImageCursor(images.get("handHover")));
 		
@@ -737,7 +764,7 @@ public class View {
 		lbAbout.setBackground(backgroundAboutText);
 		lbAbout.setLayoutX(150);
 		lbAbout.setLayoutY(300);
-		lbAbout.setPrefSize(310, 300);
+		lbAbout.setPrefSize(350, 300);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
 		btnContinue.setPrefSize(28,32);
@@ -780,7 +807,7 @@ public class View {
 		lbHelp.setBackground(backgroundHelpText);
 		lbHelp.setLayoutX(100);
 		lbHelp.setLayoutY(300);
-		lbHelp.setPrefSize(500, 110);
+		lbHelp.setPrefSize(550, 110);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
 		btnContinue.setPrefSize(28,32);
@@ -813,35 +840,64 @@ public class View {
 		BackgroundImage backgroundImagePergaminoName = new BackgroundImage(images.get("pergaminoName"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		Background backgroundPergaminoName = new Background(backgroundImagePergaminoName);
+		
+		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		Background backgroundVolver = new Background(backgroundImageVolver);
 			
-		name = new TextField("Nombre");
-	
+		btnBack = new Button();
+		
+		btnBack.setLayoutX(562);
+		btnBack.setLayoutY(410);
+		btnBack.setPrefSize(32,32);
+		btnBack.setBackground(backgroundVolver);
+		btnBack.setCursor(new ImageCursor(images.get("handHover")));
+			
+		Label lbError = new Label();
+		lbError.setLayoutX(135);
+		lbError.setLayoutY(420);
+		lbError.setFont(Font.font(14));
+		lbError.setTextFill(Color.DARKRED);
+		name = new TextField();
+		name.setFont(new Font(28));
 		btnContinue = new Button();
 		group.getChildren().add(btnContinue);
 		group.getChildren().add(name);
+		group.getChildren().add(btnBack);
+		group.getChildren().add(lbError);
 		name.setLayoutX(150);
 		name.setLayoutY(280);
 		name.setBackground(backgroundPergaminoName);
-		name.setPrefSize(300,150);
+		name.setPrefSize(300,140);
 		name.setAlignment(Pos.CENTER);
+		name.setCursor(new ImageCursor(images.get("pluma")));
 		btnContinue.setBackground(backgroundContinue);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
 		btnContinue.setPrefSize(28,32);
 		btnContinue.setCursor(new ImageCursor(images.get("handHover")));
-		
-
-		
+				
 		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				game.getPlayer().setName(name.getText());
-				sounds.get("soundClick").play();
-				playGame(stage, game);
-				
+				if(name.getText() != "" && name.getLength() <= 8) {
+					game.getPlayer().setName(name.getText());
+					sounds.get("soundClick").play();
+					playGame(stage, game);					
+				}else{
+					lbError.setText("*El nombre no puede estar vacío o tener mas de 8 digitos.");
+				}
 			}
 			
+		});
+		
+		btnBack.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+					mainMenu(stage, game);
+			}
 		});
 		
 	}
