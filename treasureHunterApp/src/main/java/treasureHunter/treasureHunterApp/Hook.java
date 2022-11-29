@@ -10,7 +10,7 @@ public class Hook extends Movable implements Serializable{
 	
 	public static final int INITIAL_LENGTH = 200;
 	public static final int INITIAL_POSITION_X = 320;
-	public static final int INITIAL_POSITION_Y = 75;
+	public static final int INITIAL_POSITION_Y = 90;
 	
 	private Coordinate position;
 	private Engine engine;
@@ -26,6 +26,10 @@ public class Hook extends Movable implements Serializable{
 		setState(position, engine);
 	}
 	
+	public String getNameImage() {
+		return nameImage;
+	}
+
 	public void setNameImage(String nameImage) {
 		this.nameImage = nameImage;
 	}

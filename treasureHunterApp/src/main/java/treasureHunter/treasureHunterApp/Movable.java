@@ -2,8 +2,8 @@ package treasureHunter.treasureHunterApp;
 
 public abstract class Movable {
 	
-	public static final float MOVE_FUEL_COST = 1;
-	public static final int INITIAL_POSITION_Y = 75;
+	public static final double MOVE_FUEL_COST = 1;
+	public static final int INITIAL_POSITION_Y = 90;
 		
 	private Coordinate position;
 	private Engine engine;

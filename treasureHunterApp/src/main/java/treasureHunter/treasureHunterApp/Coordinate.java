@@ -13,6 +13,7 @@ public class Coordinate implements Serializable{
 		
 		this.x = (int)(Math.random()*570+20);
 		this.y = (int)(Math.random()*260+180);
+		
 	}
 	
 	public Coordinate(int x, int y) {

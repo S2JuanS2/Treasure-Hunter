@@ -3,6 +3,7 @@ package treasureHunter.treasureHunterApp;
 import java.io.Serializable;
 
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 public class Treasure implements Serializable{
 
@@ -66,6 +67,8 @@ public class Treasure implements Serializable{
 	
 	public void draw(GraphicsContext graphics) {
 		graphics.drawImage(View.images.get(nameImage), getPosition().getX(), getPosition().getY());
+		graphics.setFill(Color.WHITE);
+		graphics.fillText("$"+String.valueOf(getPrice()),getPosition().getX()+16, getPosition().getY()+32);			
 	}
 	
 	/*

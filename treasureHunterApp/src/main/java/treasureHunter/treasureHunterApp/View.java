@@ -55,6 +55,7 @@ public class View {
 	private static Button btnAbout;
 	private static Button btnContinue; 
 	private static Button btnPlayGame;
+	private static Button btnGoDown;
 	private static Label lbHelp;
 	private static Label lbAbout;
 	private static Label lbPause;
@@ -119,6 +120,7 @@ public class View {
 		images.put("pergaminoName", new Image(getClass().getResource("/res/pergaminoName.png").toExternalForm()));
 		images.put("play", new Image(getClass().getResource("/res/play.png").toExternalForm()));
 		images.put("pluma", new Image(getClass().getResource("/res/pluma.png").toExternalForm()));
+		images.put("goDown", new Image(getClass().getResource("/res/goDown.png").toExternalForm()));
 		
 	}
 	
@@ -168,17 +170,24 @@ public class View {
 		graphicsGame.fillText("$" + String.valueOf(game.getPlayer().getBalance()) + ",00", 460, 33);
 		graphicsGame.setFont(Font.font(10));
 		graphicsGame.setFill(Color.BLACK);
-		graphicsGame.fillText(String.valueOf("$" +Store.FUEL_COST), 30,70);
-		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_HOOK), 107,70);
-		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_ENGINE), 148,70);
-		graphicsGame.fillText("Save", 67,70);
+		graphicsGame.fillText(String.valueOf("$" +Store.FUEL_COST), 30,68);
+		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_HOOK), 107,68);
+		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_ENGINE), 148,68);
+		graphicsGame.fillText("Save", 67,68);
+		graphicsGame.fillText("Down", 185,68);
+		graphicsGame.fillText("Back", 605,71);
+		graphicsGame.fillText("Pause", 575,37);
+		graphicsGame.fillText("Music", 605,37);
 		graphicsGame.setFill(Color.BURLYWOOD);
-		graphicsGame.fillRect(game.getHook().getPosition().getX()+14, 76, 3, game.getHook().getPosition().getY()-75);
-		graphicsGame.fillRect(0, 77, 640, 2);
+		graphicsGame.fillRect(game.getHook().getPosition().getX()+14, 76, 3, game.getHook().getPosition().getY()-73);
+		graphicsGame.fillRect(10, 76, 2, 2);
+		graphicsGame.fillRect(10, 78, 2, 2);
+		graphicsGame.fillRect(10, 77, 620, 2);
+		graphicsGame.fillRect(628, 76, 2, 2);
+		graphicsGame.fillRect(628, 78, 2, 2);
 
-		graphicsGame.setFill(Color.DARKRED);
 		for (int i = 10; i < 640; i = i + 40) {
-			graphicsGame.fillRect(i, game.getHook().getLength()+105, 20, 2);				
+			graphicsGame.fillRect(i, game.getHook().getLength()+120, 20, 2);				
 		}
 		
 	}
@@ -216,32 +225,36 @@ public class View {
 		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		Background backgroundVolver = new Background(backgroundImageVolver);
-
+		
+		BackgroundImage backgroundImagegoDown = new BackgroundImage(images.get("goDown"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		Background backgroundGoDown = new Background(backgroundImagegoDown);
+		
 		btnBuyFuel.setLayoutX(20);
-		btnBuyFuel.setLayoutY(30);
+		btnBuyFuel.setLayoutY(28);
 		btnBuyFuel.setPrefSize(27, 32);
 		btnBuyFuel.setBackground(backgroundGas);
 		btnBuyFuel.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnSave.setLayoutX(60);
-		btnSave.setLayoutY(30);
+		btnSave.setLayoutY(28);
 		btnSave.setPrefSize(28, 32);
 		btnSave.setBackground(backgroundSave);
 		btnSave.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBuyImproveHook.setLayoutX(100);
-		btnBuyImproveHook.setLayoutY(30);
+		btnBuyImproveHook.setLayoutY(28);
 		btnBuyImproveHook.setPrefSize(32, 32);
 		btnBuyImproveHook.setBackground(backgroundImproveHook);
 		btnBuyImproveHook.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBuyImprovePower.setLayoutX(140);
-		btnBuyImprovePower.setLayoutY(30);
+		btnBuyImprovePower.setLayoutY(28);
 		btnBuyImprovePower.setPrefSize(32, 32);
 		btnBuyImprovePower.setBackground(backgroundImproveEngine);
 		btnBuyImprovePower.setCursor(new ImageCursor(images.get("handHover")));
 		
-		btnPause.setLayoutX(570);
+		btnPause.setLayoutX(573);
 		btnPause.setLayoutY(3);
 		btnPause.setPrefSize(32, 32);
 		btnPause.setScaleX(0.7);
@@ -252,8 +265,8 @@ public class View {
 		btnMusicPause.setLayoutX(600);
 		btnMusicPause.setLayoutY(3);
 		btnMusicPause.setPrefSize(32, 32);
-		btnMusicPause.setScaleX(0.7);
-		btnMusicPause.setScaleY(0.7);
+		btnMusicPause.setScaleX(0.6);
+		btnMusicPause.setScaleY(0.6);
 		btnMusicPause.setBackground(backgroundMusicPause);
 		btnMusicPause.setCursor(new ImageCursor(images.get("handHover")));
 		
@@ -273,14 +286,25 @@ public class View {
 		btnPlayGame.setBackground(backgroundPlay);
 		btnPlayGame.setCursor(new ImageCursor(images.get("handHover")));
 		
+		btnGoDown.setLayoutX(180);
+		btnGoDown.setLayoutY(28);
+		btnGoDown.setPrefSize(32,32);
+		btnGoDown.setBackground(backgroundGoDown);
+		btnGoDown.setCursor(new ImageCursor(images.get("handHover")));
+		
 		lbPause.setLayoutX(320);
 		lbPause.setLayoutY(90);
 		
 	}
 	
 	public void playGame(Stage stage, TreasureHunterGame game) {
+				
+		try {
+			game.saveGame();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
-	
 		sounds.get("soundAmbience").stop();
 		sounds.get("ambiencePlay").play();
 		
@@ -293,8 +317,9 @@ public class View {
 		btnBack = new Button();
 		btnMusicPause = new Button();
 		btnPlayGame = new Button();
-		
+		btnGoDown = new Button();
 		lbPause = new Label("PAUSA");
+		lbPause.setTextFill(Color.WHITE);
 		
 		sceneGame = new Scene(group, 640, 480);
 		canvasGame = new Canvas(640, 480);
@@ -307,6 +332,7 @@ public class View {
 		group.getChildren().add(btnMusicPause);
 		group.getChildren().add(btnBack);
 		group.getChildren().add(btnPlayGame);
+		group.getChildren().add(btnGoDown);
 	
 		graphicsGame = canvasGame.getGraphicsContext2D();
 		stage.setScene(sceneGame);
@@ -320,9 +346,11 @@ public class View {
 		
 		var t = new AnimationTimer() {
 			
+			int n = 0;
 			@Override
 			public void handle(long now) {
 				
+				n++;
 				refreshCanvas(game);
 				
 				if(game.getHook().thereIsFuel()){
@@ -350,7 +378,7 @@ public class View {
 							goDown = false;
 							goUp = true;
 						}
-					}if((!game.collisionTreasure()) && goUp && (!game.getHook().initialPosition())) {
+					}if((!game.collisionTreasure()) && (goUp) && (!game.getHook().initialPosition()) ) {
 						game.getHook().goUp();
 					}else if(game.getHook().initialPosition()){
 						if(game.getPlayer().getTreasure() != null) {
@@ -395,13 +423,16 @@ public class View {
 				}
 				if(action) {
 					btnSave.setDisable(true);
+					btnGoDown.setDisable(true);
 				}else {
 					btnSave.setDisable(false);
+					btnGoDown.setDisable(false);
 				}
 				
 				if(!game.getHook().thereIsFuel()) {
 					btnBuyImproveHook.setDisable(true);
 					btnBuyImprovePower.setDisable(true);
+					btnGoDown.setDisable(true);
 				}
 				
 				if(game.getTreasure().isEmpty() && game.getHook().initialPosition() && game.getPlayer().getTreasure() == null) {
@@ -428,6 +459,11 @@ public class View {
 					btnSave.setDisable(true);
 					btnPause.setDisable(true);
 				}
+				
+				if(n%2500 == 0 && !musicPause) {
+					sounds.get("ambiencePlay").stop();
+					sounds.get("ambiencePlay").play();
+				}					
 			}	
 		};
 		
@@ -435,6 +471,7 @@ public class View {
 		btnBuyImproveHook.setDisable(true);
 		btnBuyImprovePower.setDisable(true);
 		btnPause.setDisable(true);
+		btnGoDown.setDisable(true);
 		refreshCanvas(game);
 		
 		btnPlayGame.setOnAction(new EventHandler<ActionEvent>() {
@@ -443,15 +480,12 @@ public class View {
 			public void handle(ActionEvent event) {
 				group.getChildren().remove(btnPlayGame);
 				btnPause.setDisable(false);
-				t.start();
-					
-					
+				sounds.get("soundSave").play();
+				t.start();				
 			}
-			
-			
+
 		});
-		
-		
+			
 		sceneGame.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			
 			@Override
@@ -462,6 +496,21 @@ public class View {
 					action = true;
 				}
 			}
+		});
+		
+		btnGoDown.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+				if(!action && !stop && game.getHook().thereIsFuel() && !group.getChildren().contains(btnPlayGame)) {
+					sounds.get("soundSave").play();
+					sounds.get("soundChain").play();
+					goDown = true;
+					action = true;
+				}
+			}
+			
+			
 		});
 		
 		btnBuyFuel.setOnAction(new EventHandler<ActionEvent>() {
@@ -531,6 +580,8 @@ public class View {
 					t.stop();
 					sounds.get("soundChain").stop();
 					sounds.get("ambiencePlay").stop();
+					sounds.get("soundSave").play();
+					action = false;
 					goDown = false;
 					goUp = false;
 					stop = false;
@@ -544,13 +595,16 @@ public class View {
 			public void handle(ActionEvent event) {
 					if(!stop) {
 						sounds.get("soundChain").stop();
+						sounds.get("soundSave").play();
 						group.getChildren().add(lbPause);
 						btnBuyFuel.setDisable(true);
 						btnBuyImproveHook.setDisable(true);
 						btnBuyImprovePower.setDisable(true);
+						btnGoDown.setDisable(true);
 						stop = true;
 						t.stop();
 					}else {
+						sounds.get("soundSave").play();
 						group.getChildren().remove(lbPause);
 						btnBuyFuel.setDisable(false);
 						btnBuyImproveHook.setDisable(false);
@@ -566,10 +620,12 @@ public class View {
 			@Override
 			public void handle(ActionEvent event) {
 				if(!musicPause) {
-					sounds.get("ambiencePlay").stop();		
+					sounds.get("ambiencePlay").stop();
+					sounds.get("soundSave").play();	
 					musicPause = true;
 				}else {
-					sounds.get("ambiencePlay").play();	
+					sounds.get("soundSave").play();
+					sounds.get("ambiencePlay").play();
 					musicPause = false;
 				}
 				
@@ -578,6 +634,8 @@ public class View {
 	}
 	
 	public void mainMenu(Stage stage, TreasureHunterGame game) {
+		
+		stage.getIcons().add(images.get("cofre"));
 		
 		BackgroundImage backgroundImageNewGame = new BackgroundImage(images.get("nuevaPartida"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
 															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
@@ -651,7 +709,9 @@ public class View {
 		btnExitGame.setLayoutX(240);
 		btnExitGame.setLayoutY(420);
 		
-		sounds.get("soundAmbience").play();
+		if(!sounds.get("soundAmbience").isPlaying()) {
+			sounds.get("soundAmbience").play();			
+		}
 		
 		btnNewGame.setOnAction(new EventHandler<ActionEvent>() {
 			
@@ -767,14 +827,14 @@ public class View {
 		lbAbout.setPrefSize(350, 300);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
-		btnContinue.setPrefSize(28,32);
+		btnContinue.setPrefSize(32,32);
 		btnContinue.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				sounds.get("soundClick").play();
+				sounds.get("soundSave").play();
 				group.getChildren().remove(btnContinue);
 				group.getChildren().remove(lbAbout);
 				group.getChildren().add(btnNewGame);
@@ -810,14 +870,14 @@ public class View {
 		lbHelp.setPrefSize(550, 110);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
-		btnContinue.setPrefSize(28,32);
+		btnContinue.setPrefSize(32,32);
 		btnContinue.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				sounds.get("soundClick").play();
+				sounds.get("soundSave").play();
 				group.getChildren().remove(btnContinue);
 				group.getChildren().remove(lbHelp);
 				group.getChildren().add(btnNewGame);
@@ -874,7 +934,7 @@ public class View {
 		btnContinue.setBackground(backgroundContinue);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
-		btnContinue.setPrefSize(28,32);
+		btnContinue.setPrefSize(32,32);
 		btnContinue.setCursor(new ImageCursor(images.get("handHover")));
 				
 		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
@@ -882,10 +942,12 @@ public class View {
 			@Override
 			public void handle(ActionEvent event) {
 				if(name.getText() != "" && name.getLength() <= 8) {
+					sounds.get("soundSave").play();
 					game.getPlayer().setName(name.getText());
 					sounds.get("soundClick").play();
 					playGame(stage, game);					
 				}else{
+					sounds.get("soundSave").play();
 					lbError.setText("*El nombre no puede estar vacío o tener mas de 8 digitos.");
 				}
 			}
@@ -896,6 +958,7 @@ public class View {
 			
 			@Override
 			public void handle(ActionEvent event) {
+					sounds.get("soundSave").play();
 					mainMenu(stage, game);
 			}
 		});
@@ -913,14 +976,14 @@ public class View {
 		btnContinue.setBackground(backgroundContinue);
 		btnContinue.setLayoutX(420);
 		btnContinue.setLayoutY(340);
-		btnContinue.setPrefSize(28,32);
+		btnContinue.setPrefSize(32,32);
 		btnContinue.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
 			public void handle(ActionEvent event) {
-				sounds.get("soundClick").play();
+				sounds.get("soundSave").play();
 				mainMenu(stage, game);
 				
 			}
