@@ -84,8 +84,8 @@ public class Hook extends Movable implements Serializable{
 		return "Hook [position=" + position + ", engine=" + engine + ", length=" + length + "]";
 	}
 	
-	public void draw(GraphicsContext graphics) {
-		graphics.drawImage(View.images.get(nameImage), getPosition().getX(), getPosition().getY());
+	public void draw(GraphicsContext graphics, Resources resource) {
+		graphics.drawImage(resource.getImages().get(nameImage), getPosition().getX(), getPosition().getY());
 	}
 
 }

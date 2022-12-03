@@ -10,10 +10,10 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws ClassNotFoundException, IOException {
 
-    	TreasureHunterGame game = new TreasureHunterGame();
-    	//TreasureHunter treasureHunter = new TreasureHunter(game);
-    	View vista = new View();
-    	vista.mainMenu(stage, game);
+    	TreasureHunterGame game = new TreasureHunterGame();  //modelo
+    	View view = new View(stage); //vista
+    	TreasureHunter treasureHunter = new TreasureHunter(game, view);  //controlador
+    	treasureHunter.start();
         
     }
 

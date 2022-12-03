@@ -65,8 +65,8 @@ public class Treasure implements Serializable{
 		return nameImage;
 	}
 	
-	public void draw(GraphicsContext graphics) {
-		graphics.drawImage(View.images.get(nameImage), getPosition().getX(), getPosition().getY());
+	public void draw(GraphicsContext graphics, Resources resources) {
+		graphics.drawImage(resources.getImages().get(nameImage), getPosition().getX(), getPosition().getY());
 		graphics.setFill(Color.WHITE);
 		graphics.fillText("$"+String.valueOf(getPrice()),getPosition().getX()+16, getPosition().getY()+32);			
 	}
