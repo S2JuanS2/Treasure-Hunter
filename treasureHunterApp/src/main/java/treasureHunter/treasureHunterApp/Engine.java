@@ -6,7 +6,7 @@ public class Engine implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	public static final int INITIAL_FUEL = 2000;
+	public static final int INITIAL_FUEL = 1500;
 	public static final int INITIAL_POWER = 1;
 	public static final int INITIAL_VELOCITY = 2;
 	

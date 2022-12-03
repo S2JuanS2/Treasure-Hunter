@@ -35,7 +35,7 @@ public class TreasureBuilder implements Builder{
 	@Override
 	public void setPrice() {
 		
-		int calculatePrice = (this.rarity * this.weight *100)/2;
+		int calculatePrice = (this.rarity * this.weight *10);
 		this.price = calculatePrice;
 	}
 	

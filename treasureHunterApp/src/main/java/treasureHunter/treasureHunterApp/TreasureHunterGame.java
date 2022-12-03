@@ -90,15 +90,17 @@ public class TreasureHunterGame{
 	 */
 	public boolean collisionTreasure() {
 		
-		Iterator<Treasure> it = treasure.iterator();
-		while(it.hasNext()) {
-			Treasure treasureAux = it.next();
-			if(treasureAux.getPosition().equals(hook.getPosition())) {
-				hook.getEngine().enoughPower(treasureAux.getWeight());
-				player.setTreasure(treasureAux);
-				it.remove();
-				return true;
-			}
+		if(player.getTreasure() == null) {
+			Iterator<Treasure> it = treasure.iterator();
+			while(it.hasNext()) {
+				Treasure treasureAux = it.next();
+				if(treasureAux.getPosition().equals(hook.getPosition())) {
+					hook.getEngine().enoughPower(treasureAux.getWeight());
+					player.setTreasure(treasureAux);
+					it.remove();
+					return true;
+				}
+			}		
 		}
 		return false;
 	}

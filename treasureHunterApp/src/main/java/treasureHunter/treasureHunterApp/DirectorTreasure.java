@@ -3,11 +3,11 @@ package treasureHunter.treasureHunterApp;
 public class DirectorTreasure {
 	
 	public static final int COMMON = 1;
-	public static final int LITTLE_COMMON = 2;
-	public static final int RARE = 3;
-	public static final int EPIC = 4;
-	public static final int LEGENDARY = 5;
-	public static final int MYTHICAL = 6;
+	public static final int LITTLE_COMMON = 4;
+	public static final int RARE = 6;
+	public static final int EPIC = 8;
+	public static final int LEGENDARY = 9;
+	public static final int MYTHICAL = 10;
 
 	/*
 	 * PASOS DE CONSTRUCCION DE UN TESORO

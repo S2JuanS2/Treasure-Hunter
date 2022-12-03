@@ -10,7 +10,7 @@ public class Store {
 	public static final int MAX_POWER = 3;
 	
 	public static final int FUEL_COST = 80;
-	public static final int RECHARGE_FUEL = 200;
+	public static final int RECHARGE_FUEL = 500;
 	public static final int MAX_FUEL = 2000;
 	
 	/*

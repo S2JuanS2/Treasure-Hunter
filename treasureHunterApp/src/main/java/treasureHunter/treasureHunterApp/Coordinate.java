@@ -57,7 +57,7 @@ public class Coordinate implements Serializable{
 	 * DEVUELVE TRUE SI LAS POSICIONES SON IGUALES
 	 */
 	public boolean equals(Coordinate coords) { 
-		return(Math.abs(this.x - coords.getX()) <= 16 && Math.abs(this.y - coords.getY()) <= 16);
+		return(Math.abs(this.x - coords.getX()) <= 16 && Math.abs(this.y - coords.getY()) <= 10);
 	}
 	
 	@Override

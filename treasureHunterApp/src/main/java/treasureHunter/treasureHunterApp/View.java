@@ -31,9 +31,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class View {
-	
+
 	public static HashMap<String, Image> images;
 	public static HashMap<String, AudioClip> sounds;
+	public static HashMap<String, Background> background;
 	private static Group group;
 	private static Scene sceneGame;
 	private static Scene sceneMenu;
@@ -68,14 +69,76 @@ public class View {
 	private boolean stop = false;
 	private boolean musicPause = false;
 	
+	private float price;
+	
 	public View() {
 		
 		
 		images = new HashMap<String,Image>();
 		sounds = new HashMap<String,AudioClip>();
+		background = new HashMap<String, Background>();
 		loadImages();
+		loadBackground();
 		loadSounds();
 		
+	}
+	
+	public void loadBackground() {
+		
+		background.put("gas", new Background(new BackgroundImage(images.get("gas"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+		
+		background.put("save", new Background(new BackgroundImage(images.get("save"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("improveHook", new Background(new BackgroundImage(images.get("cadena"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("improveEngine", new Background(new BackgroundImage(images.get("llave"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("musicPause", new Background(new BackgroundImage(images.get("musicPause"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("pause", new Background(new BackgroundImage(images.get("pause"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("play", new Background(new BackgroundImage(images.get("play"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("back", new Background(new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("goDown", new Background(new BackgroundImage(images.get("goDown"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("newGame", new Background(new BackgroundImage(images.get("nuevaPartida"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("continueGame", new Background(new BackgroundImage(images.get("continuarPartida"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("exit", new Background(new BackgroundImage(images.get("salir"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("help", new Background(new BackgroundImage(images.get("help"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("about", new Background(new BackgroundImage(images.get("about"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("continue", new Background(new BackgroundImage(images.get("accept"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("aboutText", new Background(new BackgroundImage(images.get("aboutText"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
+		background.put("helpText", new Background(new BackgroundImage(images.get("helpText"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+		
+		background.put("pergaminoName", new Background(new BackgroundImage(images.get("pergaminoName"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
+				BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT)));
+
 	}
 	
 	public void loadImages() {
@@ -141,6 +204,7 @@ public class View {
 	
 	public void refreshCanvas(TreasureHunterGame game) {
 		
+		graphicsGame.setFont(Font.font(10));
 		graphicsGame.clearRect(0,0,canvasGame.getWidth(),canvasGame.getHeight());
 		graphicsGame.drawImage(images.get("fondo"), 0, 0);
 		game.getHook().draw(graphicsGame);
@@ -174,10 +238,10 @@ public class View {
 		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_HOOK), 107,68);
 		graphicsGame.fillText(String.valueOf("$" +Store.COST_UPGRADE_ENGINE), 148,68);
 		graphicsGame.fillText("Save", 67,68);
-		graphicsGame.fillText("Down", 185,68);
+		graphicsGame.fillText("Down", 204,68);
 		graphicsGame.fillText("Back", 605,71);
-		graphicsGame.fillText("Pause", 575,37);
-		graphicsGame.fillText("Music", 605,37);
+		graphicsGame.fillText("Pause", 575,34);
+		graphicsGame.fillText("Mute", 605,34);
 		graphicsGame.setFill(Color.BURLYWOOD);
 		graphicsGame.fillRect(game.getHook().getPosition().getX()+14, 76, 3, game.getHook().getPosition().getY()-73);
 		graphicsGame.fillRect(10, 76, 2, 2);
@@ -194,80 +258,46 @@ public class View {
 
 	public void generateButtons() {
 		
-		BackgroundImage backgroundImageGas = new BackgroundImage(images.get("gas"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundGas = new Background(backgroundImageGas);
-		
-		BackgroundImage backgroundImageSave = new BackgroundImage(images.get("save"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundSave = new Background(backgroundImageSave);
-		
-		BackgroundImage backgroundImageImproveHook = new BackgroundImage(images.get("cadena"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundImproveHook = new Background(backgroundImageImproveHook);
-		
-		BackgroundImage backgroundImageImproveEngine = new BackgroundImage(images.get("llave"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundImproveEngine = new Background(backgroundImageImproveEngine);
-			
-		BackgroundImage backgroundImageMusicPause = new BackgroundImage(images.get("musicPause"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundMusicPause = new Background(backgroundImageMusicPause);
-	
-		BackgroundImage backgroundImagePause = new BackgroundImage(images.get("pause"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundPause = new Background(backgroundImagePause);
-		
-		BackgroundImage backgroundImagePlay = new BackgroundImage(images.get("play"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundPlay = new Background(backgroundImagePlay);
-		
-		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundVolver = new Background(backgroundImageVolver);
-		
-		BackgroundImage backgroundImagegoDown = new BackgroundImage(images.get("goDown"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-																	BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundGoDown = new Background(backgroundImagegoDown);
+
 		
 		btnBuyFuel.setLayoutX(20);
 		btnBuyFuel.setLayoutY(28);
 		btnBuyFuel.setPrefSize(27, 32);
-		btnBuyFuel.setBackground(backgroundGas);
+		btnBuyFuel.setBackground(background.get("gas"));
 		btnBuyFuel.setCursor(new ImageCursor(images.get("handHover")));
-		
+				
 		btnSave.setLayoutX(60);
 		btnSave.setLayoutY(28);
 		btnSave.setPrefSize(28, 32);
-		btnSave.setBackground(backgroundSave);
+		btnSave.setBackground(background.get("save"));
 		btnSave.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBuyImproveHook.setLayoutX(100);
 		btnBuyImproveHook.setLayoutY(28);
 		btnBuyImproveHook.setPrefSize(32, 32);
-		btnBuyImproveHook.setBackground(backgroundImproveHook);
+		btnBuyImproveHook.setBackground(background.get("improveHook"));
 		btnBuyImproveHook.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBuyImprovePower.setLayoutX(140);
 		btnBuyImprovePower.setLayoutY(28);
 		btnBuyImprovePower.setPrefSize(32, 32);
-		btnBuyImprovePower.setBackground(backgroundImproveEngine);
+		btnBuyImprovePower.setBackground(background.get("improveEngine"));
 		btnBuyImprovePower.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnPause.setLayoutX(573);
-		btnPause.setLayoutY(3);
+		btnPause.setLayoutY(0);
 		btnPause.setPrefSize(32, 32);
 		btnPause.setScaleX(0.7);
 		btnPause.setScaleY(0.7);
-		btnPause.setBackground(backgroundPause);
+		btnPause.setBackground(background.get("pause"));
 		btnPause.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnMusicPause.setLayoutX(600);
-		btnMusicPause.setLayoutY(3);
+		btnMusicPause.setLayoutY(0);
 		btnMusicPause.setPrefSize(32, 32);
 		btnMusicPause.setScaleX(0.6);
 		btnMusicPause.setScaleY(0.6);
-		btnMusicPause.setBackground(backgroundMusicPause);
+		btnMusicPause.setBackground(background.get("musicPause"));
 		btnMusicPause.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnBack.setLayoutX(600);
@@ -275,7 +305,7 @@ public class View {
 		btnBack.setScaleX(0.8);
 		btnBack.setScaleY(0.8);
 		btnBack.setPrefSize(32, 32);
-		btnBack.setBackground(backgroundVolver);
+		btnBack.setBackground(background.get("back"));
 		btnBack.setCursor(new ImageCursor(images.get("handHover")));
 		
 		btnPlayGame.setLayoutX(270);
@@ -283,13 +313,13 @@ public class View {
 		btnPlayGame.setPrefSize(120,50);
 		btnPlayGame.setScaleX(0.8);
 		btnPlayGame.setScaleY(0.8);
-		btnPlayGame.setBackground(backgroundPlay);
+		btnPlayGame.setBackground(background.get("play"));
 		btnPlayGame.setCursor(new ImageCursor(images.get("handHover")));
 		
-		btnGoDown.setLayoutX(180);
+		btnGoDown.setLayoutX(200);
 		btnGoDown.setLayoutY(28);
 		btnGoDown.setPrefSize(32,32);
-		btnGoDown.setBackground(backgroundGoDown);
+		btnGoDown.setBackground(background.get("goDown"));
 		btnGoDown.setCursor(new ImageCursor(images.get("handHover")));
 		
 		lbPause.setLayoutX(320);
@@ -320,7 +350,7 @@ public class View {
 		btnGoDown = new Button();
 		lbPause = new Label("PAUSA");
 		lbPause.setTextFill(Color.WHITE);
-		
+			
 		sceneGame = new Scene(group, 640, 480);
 		canvasGame = new Canvas(640, 480);
 		group.getChildren().add(canvasGame);
@@ -333,7 +363,7 @@ public class View {
 		group.getChildren().add(btnBack);
 		group.getChildren().add(btnPlayGame);
 		group.getChildren().add(btnGoDown);
-	
+					
 		graphicsGame = canvasGame.getGraphicsContext2D();
 		stage.setScene(sceneGame);
 		stage.setTitle("Treasure Hunter");
@@ -350,6 +380,26 @@ public class View {
 			@Override
 			public void handle(long now) {
 				
+				
+				var particle = new AnimationTimer() {
+					
+					double n = 0;
+					@Override
+					public void handle(long now) {
+						if(!stop && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
+							graphicsGame.setFill(Color.GREEN);	
+							graphicsGame.setFont(Font.font(14));
+							graphicsGame.fillText("+ $" + String.valueOf(price), game.getHook().getPosition().getX()+32,game.getHook().getPosition().getY()+50-n);
+							n = n + 0.5;
+							if(n == 25) {
+								n = 0;
+								this.stop();
+							}						
+						}
+						
+					}
+				};
+						
 				n++;
 				refreshCanvas(game);
 				
@@ -383,6 +433,8 @@ public class View {
 					}else if(game.getHook().initialPosition()){
 						if(game.getPlayer().getTreasure() != null) {
 							sounds.get("soundCollect").play();
+							price = game.getPlayer().getTreasure().getPrice();
+							particle.start();
 							game.collect();							
 						}
 						sounds.get("soundChain").stop();
@@ -392,9 +444,13 @@ public class View {
 				}else {
 					sounds.get("soundNoFuel").play();
 					sounds.get("soundChain").stop();
+					graphicsGame.setFill(Color.RED);	
+					graphicsGame.setFont(Font.font(12));
+					graphicsGame.fillText("Sin combustible", game.getHook().getPosition().getX()-32,game.getHook().getPosition().getY()+45);
 					this.stop();
 					if(btnBuyFuel.isDisable()) {
-						sounds.get("soundAmbience").stop();
+						sounds.get("soundNoFuel").stop();
+						sounds.get("ambiencePlay").stop();
 						sounds.get("soundDefeat").play();
 						this.stop();
 						btnBuyFuel.setDisable(true);
@@ -463,7 +519,8 @@ public class View {
 				if(n%2500 == 0 && !musicPause) {
 					sounds.get("ambiencePlay").stop();
 					sounds.get("ambiencePlay").play();
-				}					
+				}	
+				
 			}	
 		};
 		
@@ -630,32 +687,12 @@ public class View {
 				}
 				
 			}
-		});
+		});		
 	}
 	
 	public void mainMenu(Stage stage, TreasureHunterGame game) {
 		
 		stage.getIcons().add(images.get("cofre"));
-		
-		BackgroundImage backgroundImageNewGame = new BackgroundImage(images.get("nuevaPartida"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundNewGame = new Background(backgroundImageNewGame);
-
-		BackgroundImage backgroundImageContinueGame = new BackgroundImage(images.get("continuarPartida"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundContinueGame = new Background(backgroundImageContinueGame);
-		
-		BackgroundImage backgroundImageExit = new BackgroundImage(images.get("salir"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundExit = new Background(backgroundImageExit);
-		
-		BackgroundImage backgroundImageHelp = new BackgroundImage(images.get("help"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundHelp = new Background(backgroundImageHelp);
-
-		BackgroundImage backgroundImageAbout = new BackgroundImage(images.get("about"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundAbout = new Background(backgroundImageAbout);
 		
 		group = new Group();
 		btnNewGame = new Button();
@@ -665,19 +702,19 @@ public class View {
 		btnAbout = new Button();
 		
 		btnNewGame.setPrefSize(155, 22);
-		btnNewGame.setBackground(backgroundNewGame);
+		btnNewGame.setBackground(background.get("newGame"));
 		btnNewGame.setCursor(new ImageCursor(images.get("handHover")));
 		btnContinueGame.setPrefSize(190, 22);
-		btnContinueGame.setBackground(backgroundContinueGame);
+		btnContinueGame.setBackground(background.get("continueGame"));
 		btnContinueGame.setCursor(new ImageCursor(images.get("handHover")));
 		btnExitGame.setPrefSize(60, 22);
-		btnExitGame.setBackground(backgroundExit);
+		btnExitGame.setBackground(background.get("exit"));
 		btnExitGame.setCursor(new ImageCursor(images.get("handHover")));
 		btnHelp.setPrefSize(75, 22);
-		btnHelp.setBackground(backgroundHelp);
+		btnHelp.setBackground(background.get("help"));
 		btnHelp.setCursor(new ImageCursor(images.get("handHover")));
 		btnAbout.setPrefSize(100, 22);
-		btnAbout.setBackground(backgroundAbout);
+		btnAbout.setBackground(background.get("about"));
 		btnAbout.setCursor(new ImageCursor(images.get("handHover")));
 		
 		sceneMenu = new Scene(group, 640, 480);
@@ -808,20 +845,13 @@ public class View {
 	
 	public void aboutScene() {
 		
-		BackgroundImage backgroundImageContinue = new BackgroundImage(images.get("accept"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundContinue = new Background(backgroundImageContinue);
-		
-		BackgroundImage backgroundImageAboutText = new BackgroundImage(images.get("aboutText"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundAboutText = new Background(backgroundImageAboutText);
-		
+
 		lbAbout = new Label();
 		btnContinue = new Button();
 		group.getChildren().add(btnContinue);
 		group.getChildren().add(lbAbout);
-		btnContinue.setBackground(backgroundContinue);
-		lbAbout.setBackground(backgroundAboutText);
+		btnContinue.setBackground(background.get("continue"));
+		lbAbout.setBackground(background.get("aboutText"));
 		lbAbout.setLayoutX(150);
 		lbAbout.setLayoutY(300);
 		lbAbout.setPrefSize(350, 300);
@@ -851,20 +881,14 @@ public class View {
 	
 	public void helpScene() {
 		
-		BackgroundImage backgroundImageContinue = new BackgroundImage(images.get("accept"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundContinue = new Background(backgroundImageContinue);
-		
-		BackgroundImage backgroundImageHelpText = new BackgroundImage(images.get("helpText"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-														BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundHelpText = new Background(backgroundImageHelpText);
+
 		
 		lbHelp = new Label();
 		btnContinue = new Button();
 		group.getChildren().add(btnContinue);
 		group.getChildren().add(lbHelp);
-		btnContinue.setBackground(backgroundContinue);
-		lbHelp.setBackground(backgroundHelpText);
+		btnContinue.setBackground(background.get("continue"));
+		lbHelp.setBackground(background.get("helpText"));
 		lbHelp.setLayoutX(100);
 		lbHelp.setLayoutY(300);
 		lbHelp.setPrefSize(550, 110);
@@ -893,24 +917,14 @@ public class View {
 	
 	public void nameScene(Stage stage, TreasureHunterGame game) {
 		
-		BackgroundImage backgroundImageContinue = new BackgroundImage(images.get("accept"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundContinue = new Background(backgroundImageContinue);
-		
-		BackgroundImage backgroundImagePergaminoName = new BackgroundImage(images.get("pergaminoName"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundPergaminoName = new Background(backgroundImagePergaminoName);
-		
-		BackgroundImage backgroundImageVolver = new BackgroundImage(images.get("back"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-															BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundVolver = new Background(backgroundImageVolver);
+
 			
 		btnBack = new Button();
 		
 		btnBack.setLayoutX(562);
 		btnBack.setLayoutY(410);
 		btnBack.setPrefSize(32,32);
-		btnBack.setBackground(backgroundVolver);
+		btnBack.setBackground(background.get("back"));
 		btnBack.setCursor(new ImageCursor(images.get("handHover")));
 			
 		Label lbError = new Label();
@@ -927,11 +941,11 @@ public class View {
 		group.getChildren().add(lbError);
 		name.setLayoutX(150);
 		name.setLayoutY(280);
-		name.setBackground(backgroundPergaminoName);
+		name.setBackground(background.get("pergaminoName"));
 		name.setPrefSize(300,140);
 		name.setAlignment(Pos.CENTER);
 		name.setCursor(new ImageCursor(images.get("pluma")));
-		btnContinue.setBackground(backgroundContinue);
+		btnContinue.setBackground(background.get("continue"));
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
 		btnContinue.setPrefSize(32,32);
@@ -967,13 +981,10 @@ public class View {
 	
 	public void endScene(Stage stage, TreasureHunterGame game) {
 		
-		BackgroundImage backgroundImageContinue = new BackgroundImage(images.get("accept"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
-														BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		Background backgroundContinue = new Background(backgroundImageContinue);
 		
 		btnContinue = new Button();
 		group.getChildren().add(btnContinue);
-		btnContinue.setBackground(backgroundContinue);
+		btnContinue.setBackground(background.get("continue"));
 		btnContinue.setLayoutX(420);
 		btnContinue.setLayoutY(340);
 		btnContinue.setPrefSize(32,32);
