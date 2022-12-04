@@ -1,10 +1,7 @@
 package treasureHunter.treasureHunterApp;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 
-import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -16,8 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -26,47 +21,43 @@ public class View {
 
 	private Resources resources;
 	private Stage stage;
-	private static Group group;
-	private static Scene sceneGame;
-	private static Scene sceneMenu;
-	private static Canvas canvasMenu;
-	private static Canvas canvasGame;
-	private static GraphicsContext graphicsGame;
-	private static GraphicsContext graphicsMenu;
-	private static Button btnBuyFuel;
-	private static Button btnBuyImproveHook;
-	private static Button btnBuyImprovePower;
-	private static Button btnSave;
-	private static Button btnPause;
-	private static Button btnBack;
-	private static Button btnMusicPause;
-	private static Button btnNewGame;
-	private static Button btnContinueGame;
-	private static Button btnExitGame;
-	private static Button btnHelp;
-	private static Button btnAbout;
-	private static Button btnContinue; 
-	private static Button btnPlayGame;
-	private static Button btnGoDown;
-	private static Label lbHelp;
-	private static Label lbAbout;
-	private static Label lbPause;
-	private static Label lbError;
-	private static TextField name;
-	private boolean moveLeft = false;
-	private boolean moveRight = true;
-	private boolean action = false;
-	private boolean goDown = false;
-	private boolean goUp = false;
-	private boolean stop = false;
-	private boolean musicPause = false;
-	
-	private float price;
+	private Group group;
+	private Scene sceneGame;
+	private Scene sceneMenu;
+	private Canvas canvasMenu;
+	private Canvas canvasGame;
+	private GraphicsContext graphicsGame;
+	private GraphicsContext graphicsMenu;
+	private Button btnBuyFuel;
+	private Button btnBuyImproveHook;
+	private Button btnBuyImprovePower;
+	private Button btnSave;
+	private Button btnPause;
+	private Button btnBack;
+	private Button btnBackGame;
+	private Button btnMusicPause;
+	private Button btnNewGame;
+	private Button btnContinueGame;
+	private Button btnExitGame;
+	private Button btnHelp;
+	private Button btnAbout;
+	private Button btnContinue; 
+	private Button btnPlayGame;
+	private Button btnGoDown;
+	private Button btnStart;
+	private Button btnFinish;
+	private Label lbHelp;
+	private Label lbAbout;
+	private Label lbPause;
+	private Label lbError;
+	private TextField name;
 	
 	public View(Stage stage) {
 			
-		resources = new Resources();
 		this.stage = stage;
+		
+		resources = new Resources();
+		
 		group = new Group();
 		btnNewGame = new Button();
 		btnContinueGame = new Button();
@@ -74,6 +65,8 @@ public class View {
 		btnHelp = new Button();
 		btnAbout = new Button();
 		btnContinue = new Button();
+		btnStart = new Button();
+		btnFinish = new Button();
 		
 		lbAbout = new Label();
 		lbHelp = new Label();
@@ -86,12 +79,228 @@ public class View {
 		btnBuyImprovePower = new Button();
 		btnPause = new Button();
 		btnBack = new Button();
+		btnBackGame = new Button();
 		btnMusicPause = new Button();
 		btnPlayGame = new Button();
 		btnGoDown = new Button();
 		lbPause = new Label("PAUSA");
 		
+		generateGameButtonStyle();
+		generateMenuButtonStyle();
+		
 	}
+	
+	public Resources getResources() {
+		return resources;
+	}
+	
+	public String getTextField() {
+		return(name.getText());
+	}
+	
+	
+	
+	public Button getBtnBuyFuel() {
+		return btnBuyFuel;
+	}
+
+	public Button getBtnBuyImproveHook() {
+		return btnBuyImproveHook;
+	}
+
+	public Button getBtnBuyImprovePower() {
+		return btnBuyImprovePower;
+	}
+
+	public Button getBtnSave() {
+		return btnSave;
+	}
+
+	public Button getBtnPause() {
+		return btnPause;
+	}
+
+	public Button getBtnGoDown() {
+		return btnGoDown;
+	}
+
+	public boolean maxLengthTextField() {
+		return (name.getLength() > 8);
+	}
+	
+	public void actionPlayGame() {
+		group.getChildren().remove(btnPlayGame);
+		btnPause.setDisable(false);
+		resources.getSounds().get("soundSave").play();
+
+	}
+	
+	public void actionGoDown() {
+		if(!group.getChildren().contains(btnPlayGame)) {
+			resources.getSounds().get("soundSave").play();
+			resources.getSounds().get("soundChain").play();
+		}
+	}
+	
+	public void actionBuyFuel() {
+		resources.getSounds().get("soundBuy").play();
+	}
+	
+	public void actionPause(boolean stop) {
+		if(!stop) {
+			resources.getSounds().get("soundChain").stop();
+			resources.getSounds().get("soundSave").play();
+			group.getChildren().add(lbPause);
+			btnBuyFuel.setDisable(true);
+			btnBuyImproveHook.setDisable(true);
+			btnBuyImprovePower.setDisable(true);
+			btnGoDown.setDisable(true);
+
+		}else {
+			resources.getSounds().get("soundSave").play();
+			group.getChildren().remove(lbPause);
+			btnBuyFuel.setDisable(false);
+			btnBuyImproveHook.setDisable(false);
+			btnBuyImprovePower.setDisable(false);
+
+		}
+	}
+	
+	public void actionMusicPause(boolean musicPause) {
+		if(!musicPause) {
+			resources.getSounds().get("ambiencePlay").stop();
+			resources.getSounds().get("soundSave").play();	
+		}else {
+			resources.getSounds().get("soundSave").play();
+			resources.getSounds().get("ambiencePlay").play();
+		}
+	}
+	
+	public void actionBackGame() {
+		resources.getSounds().get("soundChain").stop();
+		resources.getSounds().get("ambiencePlay").stop();
+		resources.getSounds().get("soundSave").play();
+	}
+	
+	public void actionNewGame() {
+		resources.getSounds().get("soundClick").play();
+		group.getChildren().remove(btnNewGame);
+		group.getChildren().remove(btnContinueGame);
+		group.getChildren().remove(btnHelp);
+		group.getChildren().remove(btnAbout);
+		group.getChildren().remove(btnExitGame);
+	}
+	
+	public void actionHelp() {
+		resources.getSounds().get("soundClick").play();
+		btnNewGame.setDisable(false);
+		group.getChildren().remove(btnNewGame);
+		group.getChildren().remove(btnContinueGame);
+		group.getChildren().remove(btnHelp);
+		group.getChildren().remove(btnAbout);
+		group.getChildren().remove(btnExitGame);
+		helpScene();
+	}
+	
+	public void actionAbout() {
+		resources.getSounds().get("soundClick").play();
+		group.getChildren().remove(btnNewGame);
+		group.getChildren().remove(btnContinueGame);
+		group.getChildren().remove(btnHelp);
+		group.getChildren().remove(btnAbout);
+		group.getChildren().remove(btnExitGame);
+		aboutScene();
+	}
+	
+	public void actionContinue() {
+		resources.getSounds().get("soundSave").play();
+		group.getChildren().remove(btnContinue);
+		group.getChildren().remove(lbAbout);
+		group.getChildren().remove(lbHelp);
+		group.getChildren().add(btnNewGame);
+		group.getChildren().add(btnContinueGame);
+		group.getChildren().add(btnHelp);
+		group.getChildren().add(btnAbout);
+		group.getChildren().add(btnExitGame);
+	}
+	
+	public void actionStart() {
+		resources.getSounds().get("soundSave").play();
+		lbError.setText("*El nombre no puede estar vacío o tener mas de 8 digitos.");
+	}
+	
+	public void recordListenPlayGame(EventHandler<ActionEvent> eventHandler) {
+		btnPlayGame.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenGoDown(EventHandler<ActionEvent> eventHandler) {
+		btnGoDown.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenBuyFuel(EventHandler<ActionEvent> eventHandler) {
+		btnBuyFuel.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenImproveHook(EventHandler<ActionEvent> eventHandler) {
+		btnBuyImproveHook.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenImprovePower(EventHandler<ActionEvent> eventHandler) {
+		btnBuyImprovePower.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenSave(EventHandler<ActionEvent> eventHandler) {
+		btnSave.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenPause(EventHandler<ActionEvent> eventHandler) {
+		btnPause.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenMusicPause(EventHandler<ActionEvent> eventHandler) {
+		btnMusicPause.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenBackGame(EventHandler<ActionEvent> eventHandler) {
+		btnBackGame.setOnAction(eventHandler);
+	}	
+	
+	public void recordListenNewGame(EventHandler<ActionEvent> eventHandler) {
+		btnNewGame.setOnAction(eventHandler);
+	}
+	
+	public void recordListenContinueGame(EventHandler<ActionEvent> eventHandler) {
+		btnContinueGame.setOnAction(eventHandler);
+	}
+	
+	public void recordListenExitGame(EventHandler<ActionEvent> eventHandler) {
+		btnExitGame.setOnAction(eventHandler);
+	}
+	
+	public void recordListenHelp(EventHandler<ActionEvent> eventHandler) {
+		btnHelp.setOnAction(eventHandler);
+	}
+	
+	public void recordListenAbout(EventHandler<ActionEvent> eventHandler) {
+		btnAbout.setOnAction(eventHandler);
+	}
+	
+	public void recordListenContinue(EventHandler<ActionEvent> eventHandler) {
+		btnContinue.setOnAction(eventHandler);
+	}
+	
+	public void recordListenStart(EventHandler<ActionEvent> eventHandler) {
+		btnStart.setOnAction(eventHandler);
+	}
+	
+
+	public void recordListenBack(EventHandler<ActionEvent> eventHandler) {
+		btnBack.setOnAction(eventHandler);
+	}
+	
+	public void recordListenFinish(EventHandler<ActionEvent> eventHandler) {
+		btnFinish.setOnAction(eventHandler);
+	}	
 	
 	public void refreshCanvas(TreasureHunterGame game) {
 		
@@ -144,7 +353,6 @@ public class View {
 		for (int i = 10; i < 640; i = i + 40) {
 			graphicsGame.fillRect(i, game.getHook().getLength()+120, 20, 2);				
 		}
-		
 	}
 
 	public void generateGameButtonStyle() {
@@ -189,13 +397,13 @@ public class View {
 		btnMusicPause.setBackground(resources.getBackground().get("musicPause"));
 		btnMusicPause.setCursor(new ImageCursor(resources.getImages().get("handHover")));
 		
-		btnBack.setLayoutX(600);
-		btnBack.setLayoutY(35);
-		btnBack.setScaleX(0.8);
-		btnBack.setScaleY(0.8);
-		btnBack.setPrefSize(32, 32);
-		btnBack.setBackground(resources.getBackground().get("back"));
-		btnBack.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBackGame.setLayoutX(600);
+		btnBackGame.setLayoutY(35);
+		btnBackGame.setScaleX(0.8);
+		btnBackGame.setScaleY(0.8);
+		btnBackGame.setPrefSize(32, 32);
+		btnBackGame.setBackground(resources.getBackground().get("back"));
+		btnBackGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
 		
 		btnPlayGame.setLayoutX(270);
 		btnPlayGame.setLayoutY(20);
@@ -213,6 +421,7 @@ public class View {
 		
 		lbPause.setLayoutX(320);
 		lbPause.setLayoutY(90);
+		lbPause.setTextFill(Color.WHITE);
 		
 	}
 	
@@ -248,23 +457,58 @@ public class View {
 		btnAbout.setLayoutX(240);
 		btnAbout.setLayoutY(380);
 		
+		btnContinue.setBackground(resources.getBackground().get("continue"));
+		btnContinue.setPrefSize(32,32);
+		btnContinue.setLayoutX(520);
+		btnContinue.setLayoutY(410);
+		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover"))); //general
+		
+		btnFinish.setBackground(resources.getBackground().get("continue"));
+		btnFinish.setPrefSize(32,32);
+		btnFinish.setLayoutX(420);
+		btnFinish.setLayoutY(340);
+		btnFinish.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		
+		btnStart.setBackground(resources.getBackground().get("continue"));
+		btnStart.setLayoutX(520);
+		btnStart.setLayoutY(410);
+		btnStart.setPrefSize(32,32);
+		btnStart.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		
+		btnBack.setLayoutX(562);
+		btnBack.setLayoutY(410);
+		btnBack.setPrefSize(32,32);
+		btnBack.setBackground(resources.getBackground().get("back"));
+		btnBack.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		
+		lbAbout.setBackground(resources.getBackground().get("aboutText"));
+		lbAbout.setPrefSize(350, 300);
+		lbAbout.setLayoutX(150);
+		lbAbout.setLayoutY(300);
+		
+		lbHelp.setBackground(resources.getBackground().get("helpText"));
+		lbHelp.setPrefSize(550, 110);
+		lbHelp.setLayoutX(100);
+		lbHelp.setLayoutY(300);
+		
+		lbError.setLayoutX(135);
+		lbError.setLayoutY(420);
+		lbError.setFont(Font.font(14));
+		lbError.setTextFill(Color.DARKRED);
+		
+		name.setBackground(resources.getBackground().get("pergaminoName"));
+		name.setPrefSize(300,140);
+		name.setLayoutX(150);
+		name.setLayoutY(280);
+		name.setFont(new Font(28));
+		name.setAlignment(Pos.CENTER);
+		name.setCursor(new ImageCursor(resources.getImages().get("pluma")));
+
 	}
 	
-	public void playGame(TreasureHunterGame game) {
-				
-		group = new Group();
+	public void loadStageGame() {
 		
-		try {
-			game.saveGame();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		resources.getSounds().get("soundAmbience").stop();
-		resources.getSounds().get("ambiencePlay").play();
-		
-		lbPause.setTextFill(Color.WHITE);
-			
+		group = new Group();	
 		sceneGame = new Scene(group, 640, 480);
 		sceneGame.setCursor(new ImageCursor(resources.getImages().get("hand")));
 		
@@ -278,7 +522,7 @@ public class View {
 		group.getChildren().add(btnBuyImprovePower);
 		group.getChildren().add(btnPause);
 		group.getChildren().add(btnMusicPause);
-		group.getChildren().add(btnBack);
+		group.getChildren().add(btnBackGame);
 		group.getChildren().add(btnPlayGame);
 		group.getChildren().add(btnGoDown);
 					
@@ -286,326 +530,12 @@ public class View {
 		stage.setTitle("Treasure Hunter");
 		stage.setResizable(false);
 		stage.show();
-	
-		generateGameButtonStyle();
 		
-		var t = new AnimationTimer() {
-			
-			int n = 0;
-			@Override
-			public void handle(long now) {
-				
-				
-				var particle = new AnimationTimer() {
-					
-					double n = 0;
-					@Override
-					public void handle(long now) {
-						if(!stop && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
-							graphicsGame.setFill(Color.GREEN);	
-							graphicsGame.setFont(Font.font(14));
-							graphicsGame.fillText("+ $" + String.valueOf(price), game.getHook().getPosition().getX()+32,game.getHook().getPosition().getY()+50-n);
-							n = n + 0.5;
-							if(n == 25) {
-								n = 0;
-								this.stop();
-							}						
-						}
-						
-					}
-				};
-						
-				n++;
-				refreshCanvas(game);
-				
-				if(game.getHook().thereIsFuel()){
-					
-					if(moveLeft && !action) {
-						game.getHook().moveLeft();
-						if(!game.getHook().collisionBorderMap()) {
-							moveLeft = false;
-							moveRight = true;
-						}
-					}
-					if(moveRight && !action) {
-						game.getHook().moveRight(610);
-						if(!game.getHook().collisionBorderMap(610)) {
-							moveLeft = true;
-							moveRight = false;
-						}
-					}
-					if(goDown) {
-						game.goDownHook();
-						if(!game.getHook().canKeepGoingDown() || game.collisionTreasure()) {
-							if(game.getHook().canKeepGoingDown()) {
-								resources.getSounds().get("soundCollision").play();								
-							}
-							goDown = false;
-							goUp = true;
-						}
-					}if((!game.collisionTreasure()) && (goUp) && (!game.getHook().initialPosition()) ) {
-						game.getHook().goUp();
-					}else if(game.getHook().initialPosition()){
-						if(game.getPlayer().getTreasure() != null) {
-							resources.getSounds().get("soundCollect").play();
-							price = game.getPlayer().getTreasure().getPrice();
-							particle.start();
-							game.collect();							
-						}
-						resources.getSounds().get("soundChain").stop();
-						action = false;
-						goUp = false;
-					}
-				}else {
-					resources.getSounds().get("soundNoFuel").play();
-					resources.getSounds().get("soundChain").stop();
-					graphicsGame.setFill(Color.RED);	
-					graphicsGame.setFont(Font.font(12));
-					graphicsGame.fillText("Sin combustible", game.getHook().getPosition().getX()-32,game.getHook().getPosition().getY()+45);
-					this.stop();
-					if(btnBuyFuel.isDisable()) {
-						resources.getSounds().get("soundNoFuel").stop();
-						resources.getSounds().get("ambiencePlay").stop();
-						resources.getSounds().get("soundDefeat").play();
-						this.stop();
-						btnBuyFuel.setDisable(true);
-						btnBuyImproveHook.setDisable(true);
-						btnBuyImprovePower.setDisable(true);
-						btnSave.setDisable(true);
-						graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
-						graphicsGame.drawImage(resources.getImages().get("derrota"), 200, 240);
-						endScene(stage, game);
-					}
-				}
-				if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST) || !game.getStore().noMaxFuel(game.getHook().getEngine().getFuel())) {
-					btnBuyFuel.setDisable(true);
-				}else {
-					btnBuyFuel.setDisable(false);
-				}
-				if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) || !game.getStore().noMaxLength(game.getHook().getLength())) {
-					btnBuyImproveHook.setDisable(true);
-				}else {
-					btnBuyImproveHook.setDisable(false);
-				}
-				if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) || !game.getStore().noMaxPower(game.getHook().getEngine().getPower())) {
-					btnBuyImprovePower.setDisable(true);
-				}else {
-					btnBuyImprovePower.setDisable(false);
-				}
-				if(action) {
-					btnSave.setDisable(true);
-					btnGoDown.setDisable(true);
-				}else {
-					btnSave.setDisable(false);
-					btnGoDown.setDisable(false);
-				}
-				
-				if(!game.getHook().thereIsFuel()) {
-					btnBuyImproveHook.setDisable(true);
-					btnBuyImprovePower.setDisable(true);
-					btnGoDown.setDisable(true);
-				}
-				
-				if(game.getTreasure().isEmpty() && game.getHook().initialPosition() && game.getPlayer().getTreasure() == null) {
-				
-					refreshCanvas(game);
-					resources.getSounds().get("ambiencePlay").stop();
-					resources.getSounds().get("soundChain").stop();
-					resources.getSounds().get("soundWin").play();
-					this.stop();
-					btnBuyFuel.setDisable(true);
-					btnBuyImproveHook.setDisable(true);
-					btnBuyImprovePower.setDisable(true);
-					btnSave.setDisable(true);
-					btnPause.setDisable(true);
-					graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
-					graphicsGame.drawImage(resources.getImages().get("victoria"), 200, 240);
-					endScene(stage, game);
-				}
-				
-				if(!game.inGame()) {
-					btnBuyFuel.setDisable(true);
-					btnBuyImproveHook.setDisable(true);
-					btnBuyImprovePower.setDisable(true);
-					btnSave.setDisable(true);
-					btnPause.setDisable(true);
-				}
-				
-				if(n%2500 == 0 && !musicPause) {
-					resources.getSounds().get("ambiencePlay").stop();
-					resources.getSounds().get("ambiencePlay").play();
-				}	
-				
-			}	
-		};
-		
-		btnBuyFuel.setDisable(true);
-		btnBuyImproveHook.setDisable(true);
-		btnBuyImprovePower.setDisable(true);
-		btnPause.setDisable(true);
-		btnGoDown.setDisable(true);
-		refreshCanvas(game);
-		
-		btnPlayGame.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				group.getChildren().remove(btnPlayGame);
-				btnPause.setDisable(false);
-				resources.getSounds().get("soundSave").play();
-				t.start();				
-			}
-
-		});
-			
-		sceneGame.setOnKeyPressed(new EventHandler<KeyEvent>() {
-			
-			@Override
-			public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.E && !action && !stop && game.getHook().thereIsFuel() && !group.getChildren().contains(btnPlayGame)) {
-					resources.getSounds().get("soundChain").play();
-					goDown = true;
-					action = true;
-				}
-			}
-		});
-		
-		btnGoDown.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(!action && !stop && game.getHook().thereIsFuel() && !group.getChildren().contains(btnPlayGame)) {
-					resources.getSounds().get("soundSave").play();
-					resources.getSounds().get("soundChain").play();
-					goDown = true;
-					action = true;
-				}
-			}
-			
-			
-		});
-		
-		btnBuyFuel.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					resources.getSounds().get("soundBuy").play();
-					t.start();
-					game.getStore().buyFuel(game.getPlayer(), game.getHook().getEngine());
-					refreshCanvas(game);
-				}
-			}
-			
-			
-		});
-		
-		btnBuyImproveHook.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					resources.getSounds().get("soundBuy").play();
-					game.getStore().improveHook(game.getPlayer(), game.getHook());
-					refreshCanvas(game);
-				}
-			}
-			
-			
-		});
-		
-		btnBuyImprovePower.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					resources.getSounds().get("soundBuy").play();
-					game.getStore().improveEngine(game.getPlayer(), game.getHook());
-					refreshCanvas(game);
-				}
-			}
-			
-			
-		});
-		
-		btnSave.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-					if(!action) {
-						
-						try {
-							resources.getSounds().get("soundSave").play();
-							game.saveGame();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						refreshCanvas(game);
-					}
-			}
-		});
-		
-		btnBack.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-					t.stop();
-					resources.getSounds().get("soundChain").stop();
-					resources.getSounds().get("ambiencePlay").stop();
-					resources.getSounds().get("soundSave").play();
-					action = false;
-					goDown = false;
-					goUp = false;
-					stop = false;
-					mainMenu(game);
-			}
-		});
-		
-		btnPause.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-					if(!stop) {
-						resources.getSounds().get("soundChain").stop();
-						resources.getSounds().get("soundSave").play();
-						group.getChildren().add(lbPause);
-						btnBuyFuel.setDisable(true);
-						btnBuyImproveHook.setDisable(true);
-						btnBuyImprovePower.setDisable(true);
-						btnGoDown.setDisable(true);
-						stop = true;
-						t.stop();
-					}else {
-						resources.getSounds().get("soundSave").play();
-						group.getChildren().remove(lbPause);
-						btnBuyFuel.setDisable(false);
-						btnBuyImproveHook.setDisable(false);
-						btnBuyImprovePower.setDisable(false);
-						stop = false;
-						t.start();
-					}
-			}
-		});
-		
-		btnMusicPause.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(!musicPause) {
-					resources.getSounds().get("ambiencePlay").stop();
-					resources.getSounds().get("soundSave").play();	
-					musicPause = true;
-				}else {
-					resources.getSounds().get("soundSave").play();
-					resources.getSounds().get("ambiencePlay").play();
-					musicPause = false;
-				}
-				
-			}
-		});		
+		resources.getSounds().get("soundAmbience").stop();
+		resources.getSounds().get("ambiencePlay").play();
 	}
 	
-	public void mainMenu(TreasureHunterGame game) {
+	public void loadStageMenu() {
 		
 		group = new Group();
 		
@@ -631,253 +561,92 @@ public class View {
 		stage.setTitle("Treasure Hunter");
 		stage.setResizable(false);
 		stage.show();
+	}
+	
+	public void gameScene() {
+				
+		loadStageGame();								
+	}
+	
+	public void menuScene(boolean existFile) {
 		
-		generateMenuButtonStyle();
+		loadStageMenu();
 		
 		if(!resources.getSounds().get("soundAmbience").isPlaying()) {
 			resources.getSounds().get("soundAmbience").play();			
-		}
-		
-		btnNewGame.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				game.reset();
-				resources.getSounds().get("soundClick").play();
-				game.generateTreasures();
-				group.getChildren().remove(btnNewGame);
-				group.getChildren().remove(btnContinueGame);
-				group.getChildren().remove(btnHelp);
-				group.getChildren().remove(btnAbout);
-				group.getChildren().remove(btnExitGame);
-				nameScene(stage, game);
-			}
-			
-		});
-		
-		File archivoP = new File(Persistence.FILE_PLAYER);
-		File archivoH = new File(Persistence.FILE_HOOK);
-		File archivoT = new File(Persistence.FILE_TREASURE);
-		if( !(archivoP.exists() && archivoH.exists() && archivoT.exists()) ) {
+		}			
+		if(existFile) {
 			btnContinueGame.setDisable(true);
 			btnNewGame.setDisable(true);
 		}else {
 			btnContinueGame.setDisable(false);
-		}
-		
-		btnContinueGame.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-
-				try {
-					game.setTreasure(game.getSnapshot().loadTreasures());
-					game.setPlayer(game.getSnapshot().loadPlayer());
-					game.setHook(game.getSnapshot().loadHook());
-				} catch (ClassNotFoundException | IOException e) {
-					e.printStackTrace();
-				}
-				resources.getSounds().get("soundClick").play();
-				playGame(game);
-				
-			}
-			
-		});
-		
-		btnExitGame.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				resources.getSounds().get("soundClick").play();
-				System.exit(0);
-				
-			}
-			
-		});
-		
-		btnHelp.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				btnNewGame.setDisable(false);
-				group.getChildren().remove(btnNewGame);
-				group.getChildren().remove(btnContinueGame);
-				group.getChildren().remove(btnHelp);
-				group.getChildren().remove(btnAbout);
-				group.getChildren().remove(btnExitGame);
-				resources.getSounds().get("soundClick").play();
-				helpScene();
-				
-			}
-			
-		});
-		
-		btnAbout.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				group.getChildren().removeAll();
-				resources.getSounds().get("soundClick").play();
-				group.getChildren().remove(btnNewGame);
-				group.getChildren().remove(btnContinueGame);
-				group.getChildren().remove(btnHelp);
-				group.getChildren().remove(btnAbout);
-				group.getChildren().remove(btnExitGame);
-				aboutScene();
-				
-			}
-			
-		});
-		
+		}					
 	}
 	
 	public void aboutScene() {
-			
+				
 		group.getChildren().add(btnContinue);
 		group.getChildren().add(lbAbout);
-		
-		btnContinue.setBackground(resources.getBackground().get("continue"));
-		btnContinue.setPrefSize(32,32);
-		btnContinue.setLayoutX(520);
-		btnContinue.setLayoutY(410);
-		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover")));
-		lbAbout.setBackground(resources.getBackground().get("aboutText"));
-		lbAbout.setPrefSize(350, 300);
-		lbAbout.setLayoutX(150);
-		lbAbout.setLayoutY(300);
-
-		
-		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				resources.getSounds().get("soundSave").play();
-				group.getChildren().remove(btnContinue);
-				group.getChildren().remove(lbAbout);
-				group.getChildren().add(btnNewGame);
-				group.getChildren().add(btnContinueGame);
-				group.getChildren().add(btnHelp);
-				group.getChildren().add(btnAbout);
-				group.getChildren().add(btnExitGame);
-				
-			}
-			
-		});
-		
 	}
 	
 	public void helpScene() {
-			
+					
 		group.getChildren().add(btnContinue);
 		group.getChildren().add(lbHelp);
-		lbHelp.setBackground(resources.getBackground().get("helpText"));
-		lbHelp.setPrefSize(550, 110);
-		lbHelp.setLayoutX(100);
-		lbHelp.setLayoutY(300);
-		btnContinue.setBackground(resources.getBackground().get("continue"));
-		btnContinue.setPrefSize(32,32);
-		btnContinue.setLayoutX(520);
-		btnContinue.setLayoutY(410);
-		
-		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover")));
-		
-		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				resources.getSounds().get("soundSave").play();
-				group.getChildren().remove(btnContinue);
-				group.getChildren().remove(lbHelp);
-				group.getChildren().add(btnNewGame);
-				group.getChildren().add(btnContinueGame);
-				group.getChildren().add(btnHelp);
-				group.getChildren().add(btnAbout);
-				group.getChildren().add(btnExitGame);
-			}
-			
-		});
 		
 	}
 	
-	public void nameScene(Stage stage, TreasureHunterGame game) {
+	public void nameScene() {
 		
-		btnBack.setLayoutX(562);
-		btnBack.setLayoutY(410);
-		btnBack.setPrefSize(32,32);
-		btnBack.setBackground(resources.getBackground().get("back"));
-		btnBack.setCursor(new ImageCursor(resources.getImages().get("handHover")));
-		btnContinue.setBackground(resources.getBackground().get("continue"));
-		btnContinue.setLayoutX(520);
-		btnContinue.setLayoutY(410);
-		btnContinue.setPrefSize(32,32);
-		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover")));
-			
-		lbError.setLayoutX(135);
-		lbError.setLayoutY(420);
-		lbError.setFont(Font.font(14));
-		lbError.setTextFill(Color.DARKRED);
-		
-		name.setBackground(resources.getBackground().get("pergaminoName"));
-		name.setPrefSize(300,140);
-		name.setLayoutX(150);
-		name.setLayoutY(280);
-		name.setFont(new Font(28));
-		name.setAlignment(Pos.CENTER);
-		name.setCursor(new ImageCursor(resources.getImages().get("pluma")));
-
-		group.getChildren().add(btnContinue);
+		group.getChildren().add(btnStart);
 		group.getChildren().add(name);
 		group.getChildren().add(btnBack);
-		group.getChildren().add(lbError);
-
-	
-		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(name.getText() != "" && name.getLength() <= 8) {
-					resources.getSounds().get("soundSave").play();
-					game.getPlayer().setName(name.getText());
-					resources.getSounds().get("soundClick").play();
-					playGame(game);					
-				}else{
-					resources.getSounds().get("soundSave").play();
-					lbError.setText("*El nombre no puede estar vacío o tener mas de 8 digitos.");
-				}
-			}
-			
-		});
-		
-		btnBack.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				resources.getSounds().get("soundSave").play();
-					mainMenu(game);
-			}
-		});
-		
+		group.getChildren().add(lbError);		
 	}
 	
-	public void endScene(Stage stage, TreasureHunterGame game) {
+	public void endScene() {
 		
-		btnContinue.setBackground(resources.getBackground().get("continue"));
-		btnContinue.setPrefSize(32,32);
-		btnContinue.setLayoutX(420);
-		btnContinue.setLayoutY(340);
-		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		group.getChildren().add(btnFinish);
 		
-		group.getChildren().add(btnContinue);
-		
-		btnContinue.setOnAction(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				resources.getSounds().get("soundSave").play();
-				mainMenu(game);
-				
-			}
-			
-		});
 	}	
+	
+	public void disableButtons() {
+		btnGoDown.setDisable(true);
+		btnBuyFuel.setDisable(true);
+		btnBuyImproveHook.setDisable(true);
+		btnBuyImprovePower.setDisable(true);
+		btnSave.setDisable(true);
+		btnPause.setDisable(true);
+	}
+	
+	public void drawParticlePrice(float price, int x, double y) {
+		graphicsGame.setFill(Color.GREEN);	
+		graphicsGame.setFont(Font.font(14));
+		graphicsGame.fillText("+ $" + price, x, y);
+	}
+	
+	public void drawWithoutFuel(int x, int y) {
+		graphicsGame.setFill(Color.RED);	
+		graphicsGame.setFont(Font.font(12));
+		graphicsGame.fillText("Sin combustible", x, y);
+	}
+	
+	public void drawDefeat() {
+		resources.getSounds().get("soundNoFuel").stop();
+		resources.getSounds().get("ambiencePlay").stop();
+		resources.getSounds().get("soundDefeat").play();
+		disableButtons();
+		graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
+		graphicsGame.drawImage(resources.getImages().get("derrota"), 200, 240);
+	}
+	
+	public void drawVictory() {
+		getResources().getSounds().get("ambiencePlay").stop();
+		getResources().getSounds().get("soundChain").stop();
+		getResources().getSounds().get("soundWin").play();
+		disableButtons();
+		graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
+		graphicsGame.drawImage(resources.getImages().get("victoria"), 200, 240);
+	}
+		
 }
