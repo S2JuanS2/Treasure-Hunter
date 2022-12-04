@@ -14,6 +14,7 @@ public class TreasureHunter{
 	private View view;
 	
 	AnimationTimer timer;
+	AnimationTimer priceEffect;
 	private boolean moveLeft = false;
 	private boolean moveRight = true;
 	private boolean action = false;
@@ -34,12 +35,12 @@ public class TreasureHunter{
 		File archivoP = new File(Persistence.FILE_PLAYER);
 		File archivoH = new File(Persistence.FILE_HOOK);
 		File archivoT = new File(Persistence.FILE_TREASURE);
-		return (!(archivoP.exists() && archivoH.exists() && archivoT.exists()));
+		return ((archivoP.exists() && archivoH.exists() && archivoT.exists()));
 	}
 	
 	public void start() {
 					
-		view.menuScene(checkFiles());
+		view.menuScene(!checkFiles());
 			
 		view.recordListenNewGame(new EventHandler<ActionEvent>() {
 			@Override
@@ -61,8 +62,8 @@ public class TreasureHunter{
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
-				view.getResources().getSounds().get("soundClick").play();
-				view.gameScene();
+				view.getResources().getSounds().get(Resources.SOUND_CLICK).play();
+				view.loadStageGame();
 				timeStart();
 			}
 		});
@@ -70,7 +71,7 @@ public class TreasureHunter{
 		view.recordListenExitGame(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get("soundClick").play();
+				view.getResources().getSounds().get(Resources.SOUND_CLICK).play();
 				System.exit(0);
 			}	
 		});
@@ -107,9 +108,9 @@ public class TreasureHunter{
 			@Override
 			public void handle(ActionEvent event) {
 				if(view.getTextField() != "" && !view.maxLengthTextField()) {
-					view.getResources().getSounds().get("soundSave").play();
+					view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
 					game.getPlayer().setName(view.getTextField());
-					view.gameScene();
+					view.loadStageGame();
 					timeStart();
 				}else{
 					view.actionStart();
@@ -122,8 +123,8 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get("soundSave").play();
-				view.menuScene(checkFiles());
+				view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				view.menuScene(!checkFiles());
 			}
 			
 		});
@@ -132,8 +133,8 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get("soundSave").play();
-				view.menuScene(checkFiles());
+				view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				view.menuScene(!checkFiles());
 			}
 			
 		});	
@@ -176,7 +177,7 @@ public class TreasureHunter{
 			@Override
 			public void handle(ActionEvent event) {
 				if(game.inGame()) {
-					view.getResources().getSounds().get("soundBuy").play();
+					view.getResources().getSounds().get(Resources.SOUND_BUY).play();
 					game.getStore().improveHook(game.getPlayer(), game.getHook());
 				}
 			}
@@ -187,7 +188,7 @@ public class TreasureHunter{
 			@Override
 			public void handle(ActionEvent event) {
 				if(game.inGame()) {
-					view.getResources().getSounds().get("soundBuy").play();
+					view.getResources().getSounds().get(Resources.SOUND_BUY).play();
 					game.getStore().improveEngine(game.getPlayer(), game.getHook());
 				}
 			}
@@ -197,7 +198,7 @@ public class TreasureHunter{
 			@Override
 			public void handle(ActionEvent event) {
 				try {
-					view.getResources().getSounds().get("soundSave").play();
+					view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
 					game.saveGame();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -241,12 +242,39 @@ public class TreasureHunter{
 				goUp = false;
 				stop = false;
 				start = false;
-				view.menuScene(checkFiles());
+				view.menuScene(!checkFiles());
 			}
 		});	
 	}
 	
 	public void timeStart() {
+		
+		start = false;
+		
+		if(!checkFiles()) {
+			try {
+				game.saveGame();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		priceEffect = new AnimationTimer() {
+			
+			double n = 0;
+			@Override
+			public void handle(long now) {
+				if(!stop && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
+					view.drawEffectPrice(price, game.getHook().getPosition().getX()+32,game.getHook().getPosition().getY()+50-n);
+					n = n + 0.5;
+					if(n == 25) {
+						n = 0;
+						this.stop();
+					}						
+				}
+			}
+		};
+		
 		timer = new AnimationTimer() {
 					
 					int n = 0;
@@ -254,36 +282,12 @@ public class TreasureHunter{
 					public void handle(long now) {
 						
 						if(start) {
-							
-							var particle = new AnimationTimer() {
-								
-								double n = 0;
-								@Override
-								public void handle(long now) {
-									if(!stop && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
-										view.drawParticlePrice(price, game.getHook().getPosition().getX()+32,game.getHook().getPosition().getY()+50-n);
-										n = n + 0.5;
-										if(n == 25) {
-											n = 0;
-											this.stop();
-										}						
-									}
-									
-								}
-							};
-							
+													
 							n++;
 							view.refreshCanvas(game);
 							
 							if(game.getHook().thereIsFuel()){
 								
-								if(moveLeft && !action) {
-									game.getHook().moveLeft();
-									if(!game.getHook().collisionBorderMap()) {
-										moveLeft = false;
-										moveRight = true;
-									}
-								}
 								if(moveRight && !action) {
 									game.getHook().moveRight(610);
 									if(!game.getHook().collisionBorderMap(610)) {
@@ -291,31 +295,40 @@ public class TreasureHunter{
 										moveRight = false;
 									}
 								}
+								if(moveLeft && !action) {
+									game.getHook().moveLeft();
+									if(!game.getHook().collisionBorderMap()) {
+										moveLeft = false;
+										moveRight = true;
+									}
+								}
 								if(goDown) {
 									game.goDownHook();
 									if(!game.getHook().canKeepGoingDown() || game.collisionTreasure()) {
-										if(game.getHook().canKeepGoingDown()) {
-											view.getResources().getSounds().get("soundCollision").play();								
-										}
 										goDown = false;
 										goUp = true;
+										if(game.getHook().canKeepGoingDown()) {
+											view.getResources().getSounds().get(Resources.SOUND_COLLISION).play();								
+										}
 									}
-								}if((!game.collisionTreasure()) && (goUp) && (!game.getHook().initialPosition()) ) {
+								}
+								if((!game.collisionTreasure()) && (goUp) && (!game.getHook().initialPosition()) ) {
 									game.getHook().goUp();
-								}else if(game.getHook().initialPosition()){
+								}
+								else if(game.getHook().initialPosition()){
 									if(game.getPlayer().getTreasure() != null) {
-										view.getResources().getSounds().get("soundCollect").play();
+										view.getResources().getSounds().get(Resources.SOUND_COLLECT).play();
 										price = game.getPlayer().getTreasure().getPrice();
-										particle.start();
+										priceEffect.start();
 										game.collect();							
 									}
-									view.getResources().getSounds().get("soundChain").stop();
+									view.getResources().getSounds().get(Resources.SOUND_CHAIN).stop();
 									action = false;
 									goUp = false;
 								}
 							}else {
-								view.getResources().getSounds().get("soundNoFuel").play();
-								view.getResources().getSounds().get("soundChain").stop();
+								view.getResources().getSounds().get(Resources.SOUND_NO_FUEL).play();
+								view.getResources().getSounds().get(Resources.SOUND_CHAIN).stop();
 								view.drawWithoutFuel(game.getHook().getPosition().getX()-32,game.getHook().getPosition().getY()+45);
 								start = false;
 								if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST)) {
@@ -324,21 +337,27 @@ public class TreasureHunter{
 									view.endScene();
 								}
 							}
-							if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST) || !game.getStore().noMaxFuel(game.getHook().getEngine().getFuel())) {
+							if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST) || 
+								!game.getStore().noMaxFuel(game.getHook().getEngine().getFuel())) {
 								view.getBtnBuyFuel().setDisable(true);
 							}else {
 								view.getBtnBuyFuel().setDisable(false);
 							}
-							if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) || !game.getStore().noMaxLength(game.getHook().getLength())) {
+							
+							if((!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) || 
+								!game.getStore().noMaxLength(game.getHook().getLength())) || !game.getHook().thereIsFuel()) {
 								view.getBtnBuyImproveHook().setDisable(true);
 							}else {
 								view.getBtnBuyImproveHook().setDisable(false);
 							}
-							if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) || !game.getStore().noMaxPower(game.getHook().getEngine().getPower())) {
+							
+							if((!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) || 
+								!game.getStore().noMaxPower(game.getHook().getEngine().getPower())) || !game.getHook().thereIsFuel()) {
 								view.getBtnBuyImprovePower().setDisable(true);
 							}else {
 								view.getBtnBuyImprovePower().setDisable(false);
 							}
+							
 							if(action) {
 								view.getBtnSave().setDisable(true);
 								view.getBtnGoDown().setDisable(true);
@@ -346,28 +365,20 @@ public class TreasureHunter{
 								view.getBtnSave().setDisable(false);
 								view.getBtnGoDown().setDisable(false);
 							}
-							
-							if(!game.getHook().thereIsFuel()) {
-								view.getBtnBuyImproveHook().setDisable(true);
-								view.getBtnBuyImprovePower().setDisable(true);
-								view.getBtnGoDown().setDisable(true);
-							}
-							
+													
 							if(game.getTreasure().isEmpty() && game.getHook().initialPosition() && game.getPlayer().getTreasure() == null) {
 								
 								view.drawVictory();
 								view.refreshCanvas(game);
 								this.stop();
-								start = false;
 								view.endScene();
 							}
 							
-							if(n%2500 == 0 && !musicPause) {
+							if(n%2500 == 0) {
 								view.getResources().getSounds().get("ambiencePlay").stop();
 								view.getResources().getSounds().get("ambiencePlay").play();
 							}	
-						}
-						
+						}			
 					}	
 				};
 				

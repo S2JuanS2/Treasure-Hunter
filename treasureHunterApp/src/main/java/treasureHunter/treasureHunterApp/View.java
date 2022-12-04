@@ -19,6 +19,14 @@ import javafx.stage.Stage;
 
 public class View {
 
+	private static final int MAX_LENGTH = 8;
+	private static final int btnActionsX = 20;
+	private static final int btnActionsY = 28;
+	private static final int btnSize = 32;
+	private static final int btnSettingsX = 600;
+	
+	private static final String TITLE = "Treasure Hunter";
+	
 	private Resources resources;
 	private Stage stage;
 	private Group group;
@@ -28,6 +36,7 @@ public class View {
 	private Canvas canvasGame;
 	private GraphicsContext graphicsGame;
 	private GraphicsContext graphicsMenu;
+	
 	private Button btnBuyFuel;
 	private Button btnBuyImproveHook;
 	private Button btnBuyImprovePower;
@@ -83,7 +92,7 @@ public class View {
 		btnMusicPause = new Button();
 		btnPlayGame = new Button();
 		btnGoDown = new Button();
-		lbPause = new Label("PAUSA");
+		lbPause = new Label(Resources.PAUSA);
 		
 		generateGameButtonStyle();
 		generateMenuButtonStyle();
@@ -97,8 +106,6 @@ public class View {
 	public String getTextField() {
 		return(name.getText());
 	}
-	
-	
 	
 	public Button getBtnBuyFuel() {
 		return btnBuyFuel;
@@ -125,31 +132,31 @@ public class View {
 	}
 
 	public boolean maxLengthTextField() {
-		return (name.getLength() > 8);
+		return (name.getLength() > MAX_LENGTH);
 	}
 	
 	public void actionPlayGame() {
 		group.getChildren().remove(btnPlayGame);
 		btnPause.setDisable(false);
-		resources.getSounds().get("soundSave").play();
+		resources.getSounds().get(Resources.SOUND_SAVE).play();
 
 	}
 	
 	public void actionGoDown() {
 		if(!group.getChildren().contains(btnPlayGame)) {
-			resources.getSounds().get("soundSave").play();
-			resources.getSounds().get("soundChain").play();
+			resources.getSounds().get(Resources.SOUND_SAVE).play();
+			resources.getSounds().get(Resources.SOUND_CHAIN).play();
 		}
 	}
 	
 	public void actionBuyFuel() {
-		resources.getSounds().get("soundBuy").play();
+		resources.getSounds().get(Resources.SOUND_BUY).play();
 	}
 	
 	public void actionPause(boolean stop) {
 		if(!stop) {
-			resources.getSounds().get("soundChain").stop();
-			resources.getSounds().get("soundSave").play();
+			resources.getSounds().get(Resources.SOUND_CHAIN).stop();
+			resources.getSounds().get(Resources.SOUND_SAVE).play();
 			group.getChildren().add(lbPause);
 			btnBuyFuel.setDisable(true);
 			btnBuyImproveHook.setDisable(true);
@@ -157,7 +164,7 @@ public class View {
 			btnGoDown.setDisable(true);
 
 		}else {
-			resources.getSounds().get("soundSave").play();
+			resources.getSounds().get(Resources.SOUND_SAVE).play();
 			group.getChildren().remove(lbPause);
 			btnBuyFuel.setDisable(false);
 			btnBuyImproveHook.setDisable(false);
@@ -167,53 +174,49 @@ public class View {
 	}
 	
 	public void actionMusicPause(boolean musicPause) {
+		
+		resources.getSounds().get(Resources.SOUND_SAVE).play();	
 		if(!musicPause) {
-			resources.getSounds().get("ambiencePlay").stop();
-			resources.getSounds().get("soundSave").play();	
+			resources.getSounds().get(Resources.SOUND_AMBIENCE).stop();
 		}else {
-			resources.getSounds().get("soundSave").play();
-			resources.getSounds().get("ambiencePlay").play();
+			resources.getSounds().get(Resources.SOUND_AMBIENCE).play();
 		}
 	}
 	
 	public void actionBackGame() {
-		resources.getSounds().get("soundChain").stop();
-		resources.getSounds().get("ambiencePlay").stop();
-		resources.getSounds().get("soundSave").play();
+		resources.getSounds().get(Resources.SOUND_CHAIN).stop();
+		resources.getSounds().get(Resources.SOUND_AMBIENCE).stop();
+		resources.getSounds().get(Resources.SOUND_SAVE).play();
+	}
+	
+	public void removeBtn() {
+		group.getChildren().remove(btnNewGame);
+		group.getChildren().remove(btnContinueGame);
+		group.getChildren().remove(btnHelp);
+		group.getChildren().remove(btnAbout);
+		group.getChildren().remove(btnExitGame);
 	}
 	
 	public void actionNewGame() {
-		resources.getSounds().get("soundClick").play();
-		group.getChildren().remove(btnNewGame);
-		group.getChildren().remove(btnContinueGame);
-		group.getChildren().remove(btnHelp);
-		group.getChildren().remove(btnAbout);
-		group.getChildren().remove(btnExitGame);
+		resources.getSounds().get(Resources.SOUND_CLICK).play();
+		removeBtn();
 	}
 	
 	public void actionHelp() {
-		resources.getSounds().get("soundClick").play();
+		resources.getSounds().get(Resources.SOUND_CLICK).play();
 		btnNewGame.setDisable(false);
-		group.getChildren().remove(btnNewGame);
-		group.getChildren().remove(btnContinueGame);
-		group.getChildren().remove(btnHelp);
-		group.getChildren().remove(btnAbout);
-		group.getChildren().remove(btnExitGame);
+		removeBtn();
 		helpScene();
 	}
 	
 	public void actionAbout() {
-		resources.getSounds().get("soundClick").play();
-		group.getChildren().remove(btnNewGame);
-		group.getChildren().remove(btnContinueGame);
-		group.getChildren().remove(btnHelp);
-		group.getChildren().remove(btnAbout);
-		group.getChildren().remove(btnExitGame);
+		resources.getSounds().get(Resources.SOUND_CLICK).play();
+		removeBtn();
 		aboutScene();
 	}
 	
 	public void actionContinue() {
-		resources.getSounds().get("soundSave").play();
+		resources.getSounds().get(Resources.SOUND_SAVE).play();
 		group.getChildren().remove(btnContinue);
 		group.getChildren().remove(lbAbout);
 		group.getChildren().remove(lbHelp);
@@ -225,7 +228,7 @@ public class View {
 	}
 	
 	public void actionStart() {
-		resources.getSounds().get("soundSave").play();
+		resources.getSounds().get(Resources.SOUND_SAVE).play();
 		lbError.setText("*El nombre no puede estar vacío o tener mas de 8 digitos.");
 	}
 	
@@ -293,7 +296,6 @@ public class View {
 		btnStart.setOnAction(eventHandler);
 	}
 	
-
 	public void recordListenBack(EventHandler<ActionEvent> eventHandler) {
 		btnBack.setOnAction(eventHandler);
 	}
@@ -306,7 +308,7 @@ public class View {
 		
 		graphicsGame.setFont(Font.font(10));
 		graphicsGame.clearRect(0,0,canvasGame.getWidth(),canvasGame.getHeight());
-		graphicsGame.drawImage(resources.getImages().get("fondo"), 0, 0);
+		graphicsGame.drawImage(resources.getImages().get(Resources.FONDO), 0, 0);
 		game.getHook().draw(graphicsGame, resources);
 		
 		if(!game.getTreasure().isEmpty()) {
@@ -357,67 +359,67 @@ public class View {
 
 	public void generateGameButtonStyle() {
 		
-		btnBuyFuel.setLayoutX(20);
-		btnBuyFuel.setLayoutY(28);
-		btnBuyFuel.setPrefSize(27, 32);
-		btnBuyFuel.setBackground(resources.getBackground().get("gas"));
-		btnBuyFuel.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBuyFuel.setLayoutX(btnActionsX);
+		btnBuyFuel.setLayoutY(btnActionsY);
+		btnBuyFuel.setPrefSize(btnSize-5, btnSize);
+		btnBuyFuel.setBackground(resources.getBackground().get(Resources.BACKGROUND_GAS));
+		btnBuyFuel.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 				
-		btnSave.setLayoutX(60);
-		btnSave.setLayoutY(28);
-		btnSave.setPrefSize(28, 32);
-		btnSave.setBackground(resources.getBackground().get("save"));
-		btnSave.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnSave.setLayoutX(btnActionsX+40);
+		btnSave.setLayoutY(btnActionsY);
+		btnSave.setPrefSize(btnSize-4, btnSize);
+		btnSave.setBackground(resources.getBackground().get(Resources.BACKGROUND_SAVE));
+		btnSave.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		btnBuyImproveHook.setLayoutX(100);
-		btnBuyImproveHook.setLayoutY(28);
-		btnBuyImproveHook.setPrefSize(32, 32);
-		btnBuyImproveHook.setBackground(resources.getBackground().get("improveHook"));
-		btnBuyImproveHook.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBuyImproveHook.setLayoutX(btnActionsX+80);
+		btnBuyImproveHook.setLayoutY(btnActionsY);
+		btnBuyImproveHook.setPrefSize(btnSize, btnSize);
+		btnBuyImproveHook.setBackground(resources.getBackground().get(Resources.BACKGROUND_IMPROVE_HOOK));
+		btnBuyImproveHook.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		btnBuyImprovePower.setLayoutX(140);
-		btnBuyImprovePower.setLayoutY(28);
-		btnBuyImprovePower.setPrefSize(32, 32);
-		btnBuyImprovePower.setBackground(resources.getBackground().get("improveEngine"));
-		btnBuyImprovePower.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBuyImprovePower.setLayoutX(btnActionsX+120);
+		btnBuyImprovePower.setLayoutY(btnActionsY);
+		btnBuyImprovePower.setPrefSize(btnSize, btnSize);
+		btnBuyImprovePower.setBackground(resources.getBackground().get(Resources.BACKGROUND_IMPROVE_ENGINE));
+		btnBuyImprovePower.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
 		btnPause.setLayoutX(573);
 		btnPause.setLayoutY(0);
-		btnPause.setPrefSize(32, 32);
+		btnPause.setPrefSize(btnSize, btnSize);
 		btnPause.setScaleX(0.7);
 		btnPause.setScaleY(0.7);
-		btnPause.setBackground(resources.getBackground().get("pause"));
-		btnPause.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnPause.setBackground(resources.getBackground().get(Resources.BACKGROUND_PAUSE));
+		btnPause.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		btnMusicPause.setLayoutX(600);
+		btnMusicPause.setLayoutX(btnSettingsX);
 		btnMusicPause.setLayoutY(0);
-		btnMusicPause.setPrefSize(32, 32);
+		btnMusicPause.setPrefSize(btnSize, btnSize);
 		btnMusicPause.setScaleX(0.6);
 		btnMusicPause.setScaleY(0.6);
-		btnMusicPause.setBackground(resources.getBackground().get("musicPause"));
-		btnMusicPause.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnMusicPause.setBackground(resources.getBackground().get(Resources.BACKGROUND_MUSIC_PAUSE));
+		btnMusicPause.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		btnBackGame.setLayoutX(600);
+		btnBackGame.setLayoutX(btnSettingsX);
 		btnBackGame.setLayoutY(35);
 		btnBackGame.setScaleX(0.8);
 		btnBackGame.setScaleY(0.8);
-		btnBackGame.setPrefSize(32, 32);
-		btnBackGame.setBackground(resources.getBackground().get("back"));
-		btnBackGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBackGame.setPrefSize(btnSize, btnSize);
+		btnBackGame.setBackground(resources.getBackground().get(Resources.BACKGROUND_BACK));
+		btnBackGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
 		btnPlayGame.setLayoutX(270);
 		btnPlayGame.setLayoutY(20);
 		btnPlayGame.setPrefSize(120,50);
 		btnPlayGame.setScaleX(0.8);
 		btnPlayGame.setScaleY(0.8);
-		btnPlayGame.setBackground(resources.getBackground().get("play"));
-		btnPlayGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnPlayGame.setBackground(resources.getBackground().get(Resources.BACKGROUND_PLAY));
+		btnPlayGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
 		btnGoDown.setLayoutX(200);
 		btnGoDown.setLayoutY(28);
-		btnGoDown.setPrefSize(32,32);
-		btnGoDown.setBackground(resources.getBackground().get("goDown"));
-		btnGoDown.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnGoDown.setPrefSize(btnSize,btnSize);
+		btnGoDown.setBackground(resources.getBackground().get(Resources.BACKGROUND_GO_DOWN));
+		btnGoDown.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
 		lbPause.setLayoutX(320);
 		lbPause.setLayoutY(90);
@@ -428,65 +430,65 @@ public class View {
 	public void generateMenuButtonStyle() {
 		
 		btnNewGame.setPrefSize(155, 22);
-		btnNewGame.setBackground(resources.getBackground().get("newGame"));
-		btnNewGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnNewGame.setBackground(resources.getBackground().get(Resources.BACKGROUND_NEW_GAME));
+		btnNewGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		btnNewGame.setLayoutX(240);
 		btnNewGame.setLayoutY(260);
 		
 		btnContinueGame.setPrefSize(190, 22);
-		btnContinueGame.setBackground(resources.getBackground().get("continueGame"));
-		btnContinueGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnContinueGame.setBackground(resources.getBackground().get(Resources.BACKGROUND_CONTINUE_GAME));
+		btnContinueGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		btnContinueGame.setLayoutX(240);
 		btnContinueGame.setLayoutY(300);
 		
 		btnExitGame.setPrefSize(60, 22);
-		btnExitGame.setBackground(resources.getBackground().get("exit"));
-		btnExitGame.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnExitGame.setBackground(resources.getBackground().get(Resources.BACKGROUND_EXIT));
+		btnExitGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		btnExitGame.setLayoutX(240);
 		btnExitGame.setLayoutY(420);
 		
 		btnHelp.setPrefSize(75, 22);
-		btnHelp.setBackground(resources.getBackground().get("help"));
-		btnHelp.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnHelp.setBackground(resources.getBackground().get(Resources.BACKGROUND_HELP));
+		btnHelp.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		btnHelp.setLayoutX(240);
 		btnHelp.setLayoutY(340);
 		
 		btnAbout.setPrefSize(100, 22);
-		btnAbout.setBackground(resources.getBackground().get("about"));
-		btnAbout.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnAbout.setBackground(resources.getBackground().get(Resources.BACKGROUND_ABOUT));
+		btnAbout.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		btnAbout.setLayoutX(240);
 		btnAbout.setLayoutY(380);
 		
-		btnContinue.setBackground(resources.getBackground().get("continue"));
 		btnContinue.setPrefSize(32,32);
 		btnContinue.setLayoutX(520);
 		btnContinue.setLayoutY(410);
-		btnContinue.setCursor(new ImageCursor(resources.getImages().get("handHover"))); //general
+		btnContinue.setBackground(resources.getBackground().get(Resources.BACKGROUND_CONTINUE));
+		btnContinue.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER))); //general
 		
-		btnFinish.setBackground(resources.getBackground().get("continue"));
 		btnFinish.setPrefSize(32,32);
 		btnFinish.setLayoutX(420);
 		btnFinish.setLayoutY(340);
-		btnFinish.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnFinish.setBackground(resources.getBackground().get(Resources.BACKGROUND_CONTINUE));
+		btnFinish.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		btnStart.setBackground(resources.getBackground().get("continue"));
 		btnStart.setLayoutX(520);
 		btnStart.setLayoutY(410);
 		btnStart.setPrefSize(32,32);
-		btnStart.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnStart.setBackground(resources.getBackground().get(Resources.BACKGROUND_CONTINUE));
+		btnStart.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
 		btnBack.setLayoutX(562);
 		btnBack.setLayoutY(410);
 		btnBack.setPrefSize(32,32);
-		btnBack.setBackground(resources.getBackground().get("back"));
-		btnBack.setCursor(new ImageCursor(resources.getImages().get("handHover")));
+		btnBack.setBackground(resources.getBackground().get(Resources.BACKGROUND_BACK));
+		btnBack.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND_HOVER)));
 		
-		lbAbout.setBackground(resources.getBackground().get("aboutText"));
+		lbAbout.setBackground(resources.getBackground().get(Resources.BACKGROUND_ABOUT_TEXT));
 		lbAbout.setPrefSize(350, 300);
 		lbAbout.setLayoutX(150);
 		lbAbout.setLayoutY(300);
 		
-		lbHelp.setBackground(resources.getBackground().get("helpText"));
+		lbHelp.setBackground(resources.getBackground().get(Resources.BACKGROUND_HELP_TEXT));
 		lbHelp.setPrefSize(550, 110);
 		lbHelp.setLayoutX(100);
 		lbHelp.setLayoutY(300);
@@ -496,23 +498,23 @@ public class View {
 		lbError.setFont(Font.font(14));
 		lbError.setTextFill(Color.DARKRED);
 		
-		name.setBackground(resources.getBackground().get("pergaminoName"));
+		name.setBackground(resources.getBackground().get(Resources.BACKGROUND_PARCHMENT));
 		name.setPrefSize(300,140);
 		name.setLayoutX(150);
 		name.setLayoutY(280);
 		name.setFont(new Font(28));
 		name.setAlignment(Pos.CENTER);
-		name.setCursor(new ImageCursor(resources.getImages().get("pluma")));
+		name.setCursor(new ImageCursor(resources.getImages().get(Resources.BACKGROUND_PEN)));
 
 	}
 	
 	public void loadStageGame() {
 		
 		group = new Group();	
-		sceneGame = new Scene(group, 640, 480);
-		sceneGame.setCursor(new ImageCursor(resources.getImages().get("hand")));
+		sceneGame = new Scene(group, TreasureHunterGame.MAP_WIDTH, TreasureHunterGame.MAP_DEPTH);
+		sceneGame.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND)));
 		
-		canvasGame = new Canvas(640, 480);
+		canvasGame = new Canvas(TreasureHunterGame.MAP_WIDTH, TreasureHunterGame.MAP_DEPTH);
 		graphicsGame = canvasGame.getGraphicsContext2D();
 		
 		group.getChildren().add(canvasGame);
@@ -527,24 +529,24 @@ public class View {
 		group.getChildren().add(btnGoDown);
 					
 		stage.setScene(sceneGame);
-		stage.setTitle("Treasure Hunter");
+		stage.setTitle(TITLE);
 		stage.setResizable(false);
 		stage.show();
 		
-		resources.getSounds().get("soundAmbience").stop();
-		resources.getSounds().get("ambiencePlay").play();
+		resources.getSounds().get(Resources.SOUND_AMBIENCE_MENU).stop();
+		resources.getSounds().get(Resources.SOUND_AMBIENCE).play();
 	}
 	
 	public void loadStageMenu() {
 		
 		group = new Group();
 		
-		stage.getIcons().add(resources.getImages().get("cofre"));
+		stage.getIcons().add(resources.getImages().get(Resources.ICON_CHEST));
 				
-		sceneMenu = new Scene(group, 640, 480);
-		sceneMenu.setCursor(new ImageCursor(resources.getImages().get("hand")));
+		sceneMenu = new Scene(group, TreasureHunterGame.MAP_WIDTH, TreasureHunterGame.MAP_DEPTH);
+		sceneMenu.setCursor(new ImageCursor(resources.getImages().get(Resources.HAND)));
 		
-		canvasMenu = new Canvas(640, 480);
+		canvasMenu = new Canvas(TreasureHunterGame.MAP_WIDTH, TreasureHunterGame.MAP_DEPTH);
 		
 		group.getChildren().add(canvasMenu);
 		group.getChildren().add(btnNewGame);
@@ -554,26 +556,21 @@ public class View {
 		group.getChildren().add(btnAbout);
 		
 		graphicsMenu = canvasMenu.getGraphicsContext2D();
-		graphicsMenu.drawImage(resources.getImages().get("fondoMenu"), 0, 0);
-		graphicsMenu.drawImage(resources.getImages().get("logo"), 50, 30);
+		graphicsMenu.drawImage(resources.getImages().get(Resources.FONDO_MENU), 0, 0);
+		graphicsMenu.drawImage(resources.getImages().get(Resources.LOGO), 50, 30);
 		
 		stage.setScene(sceneMenu);
-		stage.setTitle("Treasure Hunter");
+		stage.setTitle(TITLE);
 		stage.setResizable(false);
 		stage.show();
-	}
-	
-	public void gameScene() {
-				
-		loadStageGame();								
 	}
 	
 	public void menuScene(boolean existFile) {
 		
 		loadStageMenu();
 		
-		if(!resources.getSounds().get("soundAmbience").isPlaying()) {
-			resources.getSounds().get("soundAmbience").play();			
+		if(!resources.getSounds().get(Resources.SOUND_AMBIENCE_MENU).isPlaying()) {
+			resources.getSounds().get(Resources.SOUND_AMBIENCE_MENU).play();			
 		}			
 		if(existFile) {
 			btnContinueGame.setDisable(true);
@@ -619,7 +616,7 @@ public class View {
 		btnPause.setDisable(true);
 	}
 	
-	public void drawParticlePrice(float price, int x, double y) {
+	public void drawEffectPrice(float price, int x, double y) {
 		graphicsGame.setFill(Color.GREEN);	
 		graphicsGame.setFont(Font.font(14));
 		graphicsGame.fillText("+ $" + price, x, y);
@@ -629,24 +626,27 @@ public class View {
 		graphicsGame.setFill(Color.RED);	
 		graphicsGame.setFont(Font.font(12));
 		graphicsGame.fillText("Sin combustible", x, y);
+		btnBuyImproveHook.setDisable(true);
+		btnBuyImprovePower.setDisable(true);
+		btnGoDown.setDisable(true);
 	}
 	
 	public void drawDefeat() {
-		resources.getSounds().get("soundNoFuel").stop();
-		resources.getSounds().get("ambiencePlay").stop();
-		resources.getSounds().get("soundDefeat").play();
+		resources.getSounds().get(Resources.SOUND_NO_FUEL).stop();
+		resources.getSounds().get(Resources.SOUND_AMBIENCE).stop();
+		resources.getSounds().get(Resources.SOUND_DEFEAT).play();
 		disableButtons();
-		graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
-		graphicsGame.drawImage(resources.getImages().get("derrota"), 200, 240);
+		graphicsGame.drawImage(resources.getImages().get(Resources.PARCHMENT), 160, 160);
+		graphicsGame.drawImage(resources.getImages().get(Resources.DEFEAT), 200, 240);
 	}
 	
 	public void drawVictory() {
-		getResources().getSounds().get("ambiencePlay").stop();
-		getResources().getSounds().get("soundChain").stop();
-		getResources().getSounds().get("soundWin").play();
+		getResources().getSounds().get(Resources.SOUND_AMBIENCE).stop();
+		getResources().getSounds().get(Resources.SOUND_CHAIN).stop();
+		getResources().getSounds().get(Resources.SOUND_WIN).play();
 		disableButtons();
-		graphicsGame.drawImage(resources.getImages().get("pergamino"), 160, 160);
-		graphicsGame.drawImage(resources.getImages().get("victoria"), 200, 240);
+		graphicsGame.drawImage(resources.getImages().get(Resources.PARCHMENT), 160, 160);
+		graphicsGame.drawImage(resources.getImages().get(Resources.VICTORY), 200, 240);
 	}
 		
 }
