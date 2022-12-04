@@ -15,6 +15,7 @@ public class TreasureHunter{
 	
 	AnimationTimer timer;
 	AnimationTimer priceEffect;
+	
 	private boolean start = false;
 	private boolean action = false;
 	private boolean goDown = false;
@@ -39,6 +40,9 @@ public class TreasureHunter{
 		return ((archivoP.exists() && archivoH.exists() && archivoT.exists()));
 	}
 	
+	/*
+	 * REGISTRA ESCUCHAS DE LA VISTA, INICIA LA ESCENA PRINCIPAL
+	 */
 	public void start() {
 					
 		view.menuScene(!checkFiles());
@@ -249,6 +253,9 @@ public class TreasureHunter{
 		});	
 	}
 	
+	/*
+	 * ARRANCA EL TIEMPO DEL JUEGO
+	 */
 	public void timeStart() {
 		
 		start = false;

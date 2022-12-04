@@ -23,6 +23,9 @@ public class Player implements Serializable{
 		return name;
 	}
 
+	/*
+	 * MODIFICA EL NOMBRE DEL JUGADOR
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

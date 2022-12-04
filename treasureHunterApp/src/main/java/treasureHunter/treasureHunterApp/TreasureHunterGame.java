@@ -86,7 +86,7 @@ public class TreasureHunterGame{
 	/*
 	 * DEVUELVE TRUE SI EL GANCHO COLISIONA CON UN TESORO, 
 	 * ELIMINA DE LA LISTA EL TESORO CON EL CUAL COLISONÓ
-	 * SE LE ACREDITA AL JUGADOR EL PRECIO DEL MISMO
+	 * SE GUARDARÁ EL TESORO EN EL JUGADOR
 	 */
 	public boolean collisionTreasure() {
 		
@@ -105,6 +105,11 @@ public class TreasureHunterGame{
 		return false;
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI EL JUGADOR TIENE UN TESORO Y EL GANCHO ESTA EN LA
+	 * POSICION INICIAL.
+	 * LE ACREDITA EL PRECIO DEL TESORO AL JUGADOR
+	 */
 	public boolean collect() {
 		if(hook.initialPosition() && player.getTreasure() != null) {
 			player.accreditBalance(player.getTreasure().getPrice());
@@ -117,7 +122,7 @@ public class TreasureHunterGame{
 	
 	
 	/*
-	 * SOLICITA AL GANCHO QUE DESCIENDA
+	 * SOLICITA AL GANCHO QUE DESCIENDA MIENTRAS DE EL LARGO DEL MISMO
 	 */
 	public void goDownHook() {
 		
@@ -126,16 +131,25 @@ public class TreasureHunterGame{
 		}
 	}
 
+	/*
+	 * DEVUELVE TRUE SI PUEDE COMPRAR COMBUSTIBLE
+	 */
 	public boolean canBuyFuel() {
 		return(getStore().canBuy(getPlayer().getBalance(), Store.FUEL_COST) && 
 			   getStore().noMaxFuel(getHook().getEngine().getFuel()));
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI PUEDE COMPRAR UNA MEJORA DEL GANCHO
+	 */
 	public boolean canBuyImproveHook() {
 		return(getStore().canBuy(getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) && 
 				getStore().noMaxLength(getHook().getLength()));
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI PUEDE COMPRAR UNA MEJORA DEL MOTOR 
+	 */
 	public boolean canBuyImproveEngine() {
 		return(getStore().canBuy(getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) && 
 				getStore().noMaxPower(getHook().getEngine().getPower()));
@@ -149,6 +163,9 @@ public class TreasureHunterGame{
 		return(hook.thereIsFuel() || canBuyFuel());
 	}
 	
+	/*
+	 * DEVUELVE TRUE SI EL JUGADOR GANÓ LA PARTIDA, SINO FALSE
+	 */
 	public boolean winCondition() {
 		return(getTreasure().isEmpty() && getHook().initialPosition() && getPlayer().getTreasure() == null);
 	}
@@ -163,6 +180,9 @@ public class TreasureHunterGame{
 
 	}
 	
+	/*
+	 * RESETEA LOS ATRIBUTOS INSTANCIANDOLOS NUEVAMENTE
+	 */
 	public void reset() {
 		this.player = new Player(null);
 		this.hook = new Hook();

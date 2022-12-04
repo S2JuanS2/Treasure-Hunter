@@ -8,7 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
-public class Interactions {
+public class Interactable {
 
 	public static final int MAX_LENGTH = 8;
 	public static final int BTN_ACTIONS_X = 20;
@@ -40,7 +40,7 @@ public class Interactions {
 	private Label lbError;
 	private TextField name;
 	
-	public Interactions() {
+	public Interactable() {
 		
 		btnNewGame = new Button();
 		btnContinueGame = new Button();
@@ -72,102 +72,79 @@ public class Interactions {
 	public String getTextField() {
 		return(name.getText());
 	}
-	
 	public Button getBtnBuyFuel() {
 		return btnBuyFuel;
 	}
-
 	public Button getBtnBuyImproveHook() {
 		return btnBuyImproveHook;
 	}
-
 	public Button getBtnBuyImprovePower() {
 		return btnBuyImprovePower;
 	}
-
 	public Button getBtnSave() {
 		return btnSave;
 	}
-
 	public Button getBtnPause() {
 		return btnPause;
 	}
-
 	public Button getBtnGoDown() {
 		return btnGoDown;
 	}
-
 	public Button getBtnBack() {
 		return btnBack;
 	}
-
 	public Button getBtnBackGame() {
 		return btnBackGame;
 	}
-
 	public Button getBtnMusicPause() {
 		return btnMusicPause;
 	}
-
 	public Button getBtnNewGame() {
 		return btnNewGame;
 	}
-
 	public Button getBtnContinueGame() {
 		return btnContinueGame;
 	}
-
 	public Button getBtnExitGame() {
 		return btnExitGame;
 	}
-
 	public Button getBtnHelp() {
 		return btnHelp;
 	}
-
 	public Button getBtnAbout() {
 		return btnAbout;
 	}
-
 	public Button getBtnContinue() {
 		return btnContinue;
 	}
-
 	public Button getBtnPlayGame() {
 		return btnPlayGame;
 	}
-
 	public Button getBtnStart() {
 		return btnStart;
 	}
-
 	public Button getBtnFinish() {
 		return btnFinish;
 	}
-
 	public Label getLbHelp() {
 		return lbHelp;
 	}
-
 	public Label getLbAbout() {
 		return lbAbout;
 	}
-
 	public Label getLbPause() {
 		return lbPause;
 	}
-
 	public Label getLbError() {
 		return lbError;
 	}
-
 	public TextField getName() {
 		return name;
 	}
-
+	
 	/*
 	 * DEVUELVE TRUE SI EL NOMBRE DADO POR EL USUARIO ESTÁ VACÍO O TIENE
-	 * MAS DE 8 CARACTERES.
+	 * MAS CARACTERES DE LO PERMITIDO
 	 */
 	public boolean errorTextField() {
 		return (!(name.getLength() <= MAX_LENGTH && getTextField() != ""));

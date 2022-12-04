@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class View extends Interactions{
+public class View extends Interactable{
 	
 	private static final String TITLE = "Treasure Hunter";
 	
