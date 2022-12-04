@@ -35,10 +35,16 @@ public class Engine implements Serializable{
 		return power;
 	}
 
+	/*
+	 * DEVUELVE LA VELOCIDAD DEL MOTOR
+	 */
 	public int getVelocity() {
 		return velocity;
 	}
 
+	/*
+	 * RESETEA LA VELOCIDAD DEL MOTOR A SU ESTADO INICIAL
+	 */
 	public void resetVelocity() {
 		this.velocity = INITIAL_VELOCITY;
 	}
@@ -51,7 +57,7 @@ public class Engine implements Serializable{
 	}
 
 	/*
-	 * AUMENTA EL COMBUSTIBLE
+	 * AUMENTA EL COMBUSTIBLE CON LA CANTIDAD RECIBIDA POR PARAMETRO
 	 */
 	public void accreditFuel(int rechargeFuel) {
 		this.fuel += rechargeFuel;
@@ -66,21 +72,12 @@ public class Engine implements Serializable{
 	}
 	
 	/*
-	 * DEVUELVE TRUE SI LA POTENCIA DEL MOTOR ES SUFICIENTE PARA LEVANTAR EL PESO
+	 * REDUCE LA VELOCIDAD DEL MOTOR EN CASO DE QUE EL PESO RECIBIDO POR PARAMETRO
+	 * SEA MAYOR A LA POTENCIA DEL MOTOR
 	 */
 	public void enoughPower(int weight) {	
 		if(weight > this.power) {
 			this.velocity--;			
 		}
-	}
-	
-	@Override
-	public String toString() {
-		return "Engine [fuel=" + fuel + ", power=" + power + "]";
-	}
-
-
-
-
-	
+	}	
 }

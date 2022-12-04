@@ -11,8 +11,8 @@ public class Coordinate implements Serializable{
 	
 	public Coordinate() {
 		
-		this.x = (int)(Math.random()*570+20);
-		this.y = (int)(Math.random()*260+180);
+		this.x = (int)(Math.random()*(TreasureHunterGame.MAP_WIDTH-Interactions.BTN_SIZE*2-6) + 20);
+		this.y = (int)(Math.random()*TreasureHunterGame.MAP_DEPTH/2 + Hook.INITIAL_POSITION_Y*2);
 		
 	}
 	
@@ -54,16 +54,9 @@ public class Coordinate implements Serializable{
 	}
 
 	/*
-	 * DEVUELVE TRUE SI LAS POSICIONES SON IGUALES
+	 * DEVUELVE TRUE SI LAS POSICIONES SON IGUALES RESPECTO AL TAMAÑO DE LA IMAGEN
 	 */
 	public boolean equals(Coordinate coords) { 
-		return(Math.abs(this.x - coords.getX()) <= 16 && Math.abs(this.y - coords.getY()) <= 10);
-	}
-	
-	@Override
-	public String toString() {
-		return "[x=" + x + ", y=" + y + "]";
-	}
-
-	
+		return(Math.abs(this.x - coords.getX()) <= (Interactions.BTN_SIZE/2) && Math.abs(this.y - coords.getY()) <= (Interactions.BTN_SIZE/2 - 6));
+	}	
 }

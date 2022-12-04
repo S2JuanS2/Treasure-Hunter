@@ -85,6 +85,9 @@ public class Resources {
 		return background;
 	}
 	
+	/*
+	* CARGA IMAGENES EXTERNAS
+	*/
 	public void loadBackground() {
 			
 			background.put(BACKGROUND_GAS, new Background(new BackgroundImage(images.get("gas"),BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,
@@ -143,6 +146,9 @@ public class Resources {
 	
 		}
 		
+		/*
+		* CARGA IMAGENES EXTERNAS
+		*/
 		public void loadImages() {
 		
 			images.put(FONDO,new Image(getClass().getResource("/res/fondo.png").toExternalForm()));
@@ -189,6 +195,9 @@ public class Resources {
 			
 		}
 		
+		/*
+		 * CARGA SONIDOS EXTERNOS
+		 */
 		public void loadSounds() {		
 			sounds.put(SOUND_CLICK, new AudioClip(getClass().getResource("/res/clickMenu.wav").toExternalForm()));
 			sounds.put(SOUND_WIN, new AudioClip (getClass().getResource("/res/win.wav").toExternalForm()));
@@ -203,4 +212,29 @@ public class Resources {
 			sounds.put(SOUND_AMBIENCE, new AudioClip(getClass().getResource("/res/ambiencePlay.wav").toExternalForm()));
 		}
 		
+		/*
+		 * REPRODUCE UN SONIDO
+		 */
+		public void playSound(String sound) {
+			getSounds().get(sound).play();
+		}
+		
+		/*
+		 * DETIENE LA REPRODUCCION DE UN SONIDO
+		 */
+		public void stopSound(String sound) {
+			if(getSounds().get(sound).isPlaying()){
+				getSounds().get(sound).stop();
+			}
+		}
+		
+		/*
+		 * REPRODUCE UN SONIDO VERIFICANDO SI EL MISMO NO SE
+		 * ESTA REPRODUCIENDO
+		 */
+		public void loopSound(String sound) {
+			if(!getSounds().get(sound).isPlaying()) {
+				getSounds().get(sound).play();			
+			}
+		}
 	}

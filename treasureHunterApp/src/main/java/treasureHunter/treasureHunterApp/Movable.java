@@ -8,6 +8,7 @@ public abstract class Movable {
 	private Coordinate position;
 	private Engine engine;
 	private int loweredMeter = 0;
+	private boolean moveRight = true;
 	
 	public void setState(Coordinate position, Engine engine) {
 		this.position = position;
@@ -18,6 +19,9 @@ public abstract class Movable {
 		return loweredMeter;
 	}
 
+	/*
+	 * REINICIA LA DISTANCIA DE METROS RECORRIDOS A CERO
+	 */
 	public void resetLoweredMeter() {
 		this.loweredMeter = 0;
 	}
@@ -65,7 +69,25 @@ public abstract class Movable {
 	}
 	
 	/*
-	 *  MUEVE UNA POSICION A LA IZQUIERDA EL GANCHO
+	 * MUEVE EL GANCHO DE FORMA HORIZONTAL
+	 */
+	public void horizontalMovement() {
+		
+		if(moveRight){
+			moveRight(610);
+			if(!collisionBorderMap(610)) {
+				moveRight = false;
+			}
+		}else{
+			moveLeft();
+			if(!collisionBorderMap()) {
+				moveRight = true;
+			}
+		}
+	}
+	
+	/*
+	 *  MUEVE TRES POSICION A LA IZQUIERDA EL GANCHO
 	 */
 	public void moveLeft() {
 		if( collisionBorderMap() && thereIsFuel()) {
@@ -77,7 +99,7 @@ public abstract class Movable {
 	}
 	
 	/*
-	 * MUEVE UNA POSICION A LA DERECHA EL GANCHO
+	 * MUEVE TRES POSICION A LA DERECHA EL GANCHO
 	 */
 	public void moveRight(int width) {		
 		if(collisionBorderMap(width) && thereIsFuel()) {
@@ -100,7 +122,7 @@ public abstract class Movable {
 	}
 	
 	/*
-	 * VUELVE AL GANCHO A SU POSICION ORIGINAL
+	 * ELEVA EL GANCHO HASTA SU POSICION INICIAL
 	 */
 	public void goUp() {
 		for(int i = 0; i < engine.getVelocity()*engine.getPower(); i++) {

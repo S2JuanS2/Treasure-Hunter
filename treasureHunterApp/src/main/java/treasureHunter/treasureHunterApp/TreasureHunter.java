@@ -15,13 +15,11 @@ public class TreasureHunter{
 	
 	AnimationTimer timer;
 	AnimationTimer priceEffect;
-	private boolean moveLeft = false;
-	private boolean moveRight = true;
+	private boolean start = false;
 	private boolean action = false;
 	private boolean goDown = false;
 	private boolean goUp = false;
 	private boolean stop = false;
-	private boolean start = false;
 	private boolean musicPause = false;
 	private float price;
 
@@ -31,6 +29,9 @@ public class TreasureHunter{
 		this.view = view;
 	}
 	
+	/*
+	 * VERIFICA LA EXISTENCIA DE PARTIDAS GUARDADAS EN ARCHIVOS
+	 */
 	public boolean checkFiles() {
 		File archivoP = new File(Persistence.FILE_PLAYER);
 		File archivoH = new File(Persistence.FILE_HOOK);
@@ -62,7 +63,7 @@ public class TreasureHunter{
 				} catch (ClassNotFoundException | IOException e) {
 					e.printStackTrace();
 				}
-				view.getResources().getSounds().get(Resources.SOUND_CLICK).play();
+				view.getResources().playSound(Resources.SOUND_CLICK);
 				view.loadStageGame();
 				timeStart();
 			}
@@ -71,7 +72,7 @@ public class TreasureHunter{
 		view.recordListenExitGame(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get(Resources.SOUND_CLICK).play();
+				view.getResources().playSound(Resources.SOUND_CLICK);
 				System.exit(0);
 			}	
 		});
@@ -107,8 +108,8 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				if(view.getTextField() != "" && !view.maxLengthTextField()) {
-					view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				if(!view.errorTextField()) {
+					view.getResources().playSound(Resources.SOUND_SAVE);
 					game.getPlayer().setName(view.getTextField());
 					view.loadStageGame();
 					timeStart();
@@ -123,7 +124,7 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				view.getResources().playSound(Resources.SOUND_SAVE);
 				view.menuScene(!checkFiles());
 			}
 			
@@ -133,7 +134,7 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				view.getResources().playSound(Resources.SOUND_SAVE);
 				view.menuScene(!checkFiles());
 			}
 			
@@ -152,8 +153,9 @@ public class TreasureHunter{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				if(game.getHook().thereIsFuel() && !action && !stop) {
-					view.actionGoDown();
+				if(start) {
+					view.getResources().playSound(Resources.SOUND_SAVE);
+					view.getResources().playSound(Resources.SOUND_CHAIN);
 					goDown = true;
 					action = true;
 				}
@@ -166,7 +168,7 @@ public class TreasureHunter{
 			public void handle(ActionEvent event) {
 				if(game.inGame()) {
 					game.getStore().buyFuel(game.getPlayer(), game.getHook().getEngine());
-					view.actionBuyFuel();
+					view.getResources().playSound(Resources.SOUND_BUY);
 					start = true;
 				}
 			}
@@ -277,115 +279,69 @@ public class TreasureHunter{
 		
 		timer = new AnimationTimer() {
 					
-					int n = 0;
 					@Override
 					public void handle(long now) {
 						
 						if(start) {
 													
-							n++;
 							view.refreshCanvas(game);
 							
-							if(game.getHook().thereIsFuel()){
-								
-								if(moveRight && !action) {
-									game.getHook().moveRight(610);
-									if(!game.getHook().collisionBorderMap(610)) {
-										moveLeft = true;
-										moveRight = false;
+							if(!action) {						
+								game.getHook().horizontalMovement();
+							}		
+							if(goDown){
+								game.goDownHook();
+								if(!game.getHook().canKeepGoingDown() || game.collisionTreasure()) {
+									goDown = false;
+									goUp = true;
+									if(game.getHook().canKeepGoingDown()) {
+										view.getResources().playSound(Resources.SOUND_COLLISION);								
 									}
 								}
-								if(moveLeft && !action) {
-									game.getHook().moveLeft();
-									if(!game.getHook().collisionBorderMap()) {
-										moveLeft = false;
-										moveRight = true;
-									}
-								}
-								if(goDown) {
-									game.goDownHook();
-									if(!game.getHook().canKeepGoingDown() || game.collisionTreasure()) {
-										goDown = false;
-										goUp = true;
-										if(game.getHook().canKeepGoingDown()) {
-											view.getResources().getSounds().get(Resources.SOUND_COLLISION).play();								
-										}
-									}
-								}
-								if((!game.collisionTreasure()) && (goUp) && (!game.getHook().initialPosition()) ) {
+							}	
+							if(goUp) {					
+								if(!game.collisionTreasure()) {
 									game.getHook().goUp();
-								}
-								else if(game.getHook().initialPosition()){
 									if(game.getPlayer().getTreasure() != null) {
-										view.getResources().getSounds().get(Resources.SOUND_COLLECT).play();
 										price = game.getPlayer().getTreasure().getPrice();
-										priceEffect.start();
-										game.collect();							
 									}
-									view.getResources().getSounds().get(Resources.SOUND_CHAIN).stop();
+								}
+								if(game.getHook().initialPosition()){
+									view.getResources().stopSound(Resources.SOUND_CHAIN);
 									action = false;
 									goUp = false;
-								}
-							}else {
-								view.getResources().getSounds().get(Resources.SOUND_NO_FUEL).play();
-								view.getResources().getSounds().get(Resources.SOUND_CHAIN).stop();
+								}						
+							}	
+							if(game.collect()){
+								view.getResources().playSound(Resources.SOUND_COLLECT);		
+								priceEffect.start();
+							}			
+							if(!game.getHook().thereIsFuel()){
+								view.refreshCanvas(game);
 								view.drawWithoutFuel(game.getHook().getPosition().getX()-32,game.getHook().getPosition().getY()+45);
 								start = false;
-								if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST)) {
+								if(!game.canBuyFuel()) {
 									this.stop();
-									view.drawDefeat();
-									view.endScene();
+									view.endScene(game.winCondition());
 								}
 							}
-							if(!game.getStore().canBuy(game.getPlayer().getBalance(), Store.FUEL_COST) || 
-								!game.getStore().noMaxFuel(game.getHook().getEngine().getFuel())) {
-								view.getBtnBuyFuel().setDisable(true);
-							}else {
-								view.getBtnBuyFuel().setDisable(false);
-							}
-							
-							if((!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) || 
-								!game.getStore().noMaxLength(game.getHook().getLength())) || !game.getHook().thereIsFuel()) {
-								view.getBtnBuyImproveHook().setDisable(true);
-							}else {
-								view.getBtnBuyImproveHook().setDisable(false);
-							}
-							
-							if((!game.getStore().canBuy(game.getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) || 
-								!game.getStore().noMaxPower(game.getHook().getEngine().getPower())) || !game.getHook().thereIsFuel()) {
-								view.getBtnBuyImprovePower().setDisable(true);
-							}else {
-								view.getBtnBuyImprovePower().setDisable(false);
-							}
-							
-							if(action) {
-								view.getBtnSave().setDisable(true);
-								view.getBtnGoDown().setDisable(true);
-							}else {
-								view.getBtnSave().setDisable(false);
-								view.getBtnGoDown().setDisable(false);
-							}
-													
-							if(game.getTreasure().isEmpty() && game.getHook().initialPosition() && game.getPlayer().getTreasure() == null) {
-								
-								view.drawVictory();
-								view.refreshCanvas(game);
+							view.getBtnBuyFuel().setDisable(!game.canBuyFuel());
+							view.getBtnBuyImproveHook().setDisable(!game.canBuyImproveHook() || !game.getHook().thereIsFuel());
+							view.getBtnBuyImprovePower().setDisable(!game.canBuyImproveEngine() || !game.getHook().thereIsFuel());
+							view.getBtnSave().setDisable(!game.getHook().initialPosition());
+							view.getBtnGoDown().setDisable(!game.getHook().initialPosition() || !game.getHook().thereIsFuel());
+														
+							if(game.winCondition()) {
 								this.stop();
-								view.endScene();
-							}
-							
-							if(n%2500 == 0) {
-								view.getResources().getSounds().get("ambiencePlay").stop();
-								view.getResources().getSounds().get("ambiencePlay").play();
-							}	
+								view.refreshCanvas(game);
+								view.endScene(game.winCondition());
+							}		
+							view.getResources().loopSound(Resources.SOUND_AMBIENCE);
 						}			
 					}	
 				};
-				
 				timer.start();
-				
 				view.disableButtons();
 				view.refreshCanvas(game);	
-	}
-		
+	}	
 }

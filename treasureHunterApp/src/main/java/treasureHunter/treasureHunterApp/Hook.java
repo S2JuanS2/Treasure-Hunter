@@ -64,26 +64,23 @@ public class Hook extends Movable implements Serializable{
 	}
 	
 	/*
-	 * AUMENTA LA LONGITUD DEL GANCHO DE FORMA CONSTANTE
+	 * AUMENTA LA LONGITUD DEL GANCHO CON LA CANTIDAD RECIBIDA POR PARAMETRO
 	 */
 	public void increaseLength(int improveLength) {
 		this.length += improveLength;
 	}
 	
 	/*
-	 * RECIBE LA CANTIDAD DE METROS RECORRIDOS
-	 * DEVUELVE TRUE SI NO FUE SUPERADO POR LA LONGITUD DEL GANCHO
+	 * DEVUELVE TRUE SI LA CANTIDAD DE METROS RECORRIDOS NO FUE SUPERADO POR LA LONGITUD DEL GANCHO
 	 */
 	public boolean canKeepGoingDown() {
 		
 		return (getLoweredMeter()*(engine.getPower()+1) < getLength());
 	}
 
-	@Override
-	public String toString() {
-		return "Hook [position=" + position + ", engine=" + engine + ", length=" + length + "]";
-	}
-	
+	/*
+	 * DIBUJA EN LA PANTALLA AL MOTOR
+	 */
 	public void draw(GraphicsContext graphics, Resources resource) {
 		graphics.drawImage(resource.getImages().get(nameImage), getPosition().getX(), getPosition().getY());
 	}

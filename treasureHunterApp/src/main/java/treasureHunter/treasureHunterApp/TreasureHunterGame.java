@@ -105,10 +105,13 @@ public class TreasureHunterGame{
 		return false;
 	}
 	
-	public void collect() {
+	public boolean collect() {
 		if(hook.initialPosition() && player.getTreasure() != null) {
 			player.accreditBalance(player.getTreasure().getPrice());
 			player.setTreasure(null);
+			return true;
+		}else {	
+			return false;
 		}
 	}
 	
@@ -123,12 +126,31 @@ public class TreasureHunterGame{
 		}
 	}
 
+	public boolean canBuyFuel() {
+		return(getStore().canBuy(getPlayer().getBalance(), Store.FUEL_COST) && 
+			   getStore().noMaxFuel(getHook().getEngine().getFuel()));
+	}
+	
+	public boolean canBuyImproveHook() {
+		return(getStore().canBuy(getPlayer().getBalance(), Store.COST_UPGRADE_HOOK) && 
+				getStore().noMaxLength(getHook().getLength()));
+	}
+	
+	public boolean canBuyImproveEngine() {
+		return(getStore().canBuy(getPlayer().getBalance(), Store.COST_UPGRADE_ENGINE) && 
+				getStore().noMaxPower(getHook().getEngine().getPower()));
+	}
+	
 	/*
 	 * DEVUELVE TRUE SI EL GANCHO TIENE COMBUSTIBLE O SI EL JUGADOR
 	 * PUEDE COMPRAR EL MISMO.
 	 */
 	public boolean inGame() {
-		return(hook.thereIsFuel() || store.canBuy(player.getBalance(),Store.FUEL_COST));
+		return(hook.thereIsFuel() || canBuyFuel());
+	}
+	
+	public boolean winCondition() {
+		return(getTreasure().isEmpty() && getHook().initialPosition() && getPlayer().getTreasure() == null);
 	}
 	
 	/*
@@ -140,7 +162,7 @@ public class TreasureHunterGame{
 		snapshot.saveGame(player, hook, treasure);
 
 	}
-
+	
 	public void reset() {
 		this.player = new Player(null);
 		this.hook = new Hook();
