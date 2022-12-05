@@ -288,8 +288,8 @@ public class Interactable {
 		lbAbout.setLayoutY(300);
 		
 		lbHelp.setBackground(resources.getBackground().get(Resources.BACKGROUND_HELP_TEXT));
-		lbHelp.setPrefSize(550, 110);
-		lbHelp.setLayoutX(100);
+		lbHelp.setPrefSize(640, 115);
+		lbHelp.setLayoutX(0);
 		lbHelp.setLayoutY(300);
 		
 		lbError.setLayoutX(135);

@@ -198,26 +198,30 @@ public class View extends Interactable{
 		getBtnFinish().setOnAction(eventHandler);
 	}	
 	
-	public void refreshCanvas(TreasureHunterGame game) {
-		
-		graphicsGame.setFont(Font.font(10));
-		graphicsGame.clearRect(0,0,canvasGame.getWidth(),canvasGame.getHeight());
-		graphicsGame.drawImage(resources.getImages().get(Resources.FONDO), 0, 0);
-		game.getHook().draw(graphicsGame, resources);
-		
+	public void drawTreasures(TreasureHunterGame game) {
 		if(!game.getTreasure().isEmpty()) {
 			Iterator<Treasure> it = game.getTreasure().iterator();
 			while(it.hasNext()) {
 				it.next().draw(graphicsGame, resources);
 			}
 		}
-		
 		if(game.getPlayer().getTreasure() != null) {
-			graphicsGame.drawImage(resources.getImages().get(game.getPlayer().getTreasure().getNameImage()), game.getHook().getPosition().getX(), game.getHook().getPosition().getY()+10);
+			graphicsGame.drawImage(resources.getImages().get(game.getPlayer().getTreasure().getNameImage()), 
+								game.getHook().getPosition().getX(), game.getHook().getPosition().getY()+10);
 		}
+	}
 		
+	public void refreshCanvas(TreasureHunterGame game) {
+		
+		graphicsGame.setFont(Font.font(10));
+		graphicsGame.clearRect(0,0,canvasGame.getWidth(),canvasGame.getHeight());
+		graphicsGame.drawImage(resources.getImages().get(Resources.FONDO), 0, 0);
+		
+		game.getHook().draw(graphicsGame, resources);
+		drawTreasures(game);
+	
 		graphicsGame.setFill(Color.GRAY);
-		graphicsGame.fillRect(20, 9, 2000/5, 11);
+		graphicsGame.fillRect(20, 9, Store.MAX_FUEL/5, 11);
 		graphicsGame.setFill(Color.DARKRED);
 		graphicsGame.setFont(Font.font(12));
 		graphicsGame.fillRect(20, 9, game.getHook().getEngine().getFuel()/5, 11);
