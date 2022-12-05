@@ -42,38 +42,42 @@ public class View extends Interactable{
 	}
 	
 	public void actionPlayGame() {
+		
 		group.getChildren().remove(getBtnPlayGame());
 		getBtnPause().setDisable(false);
 		resources.playSound(Resources.SOUND_SAVE);
-
+		
+	}
+	
+	public void disableBuyButtons() {
+		getBtnBuyFuel().setDisable(true);
+		getBtnBuyImproveHook().setDisable(true);
+		getBtnBuyImprovePower().setDisable(true);
 	}
 	
 	public void actionPause(boolean stop) {
+		
 		if(!stop) {
 			resources.stopSound(Resources.SOUND_CHAIN);
 			resources.playSound(Resources.SOUND_SAVE);
 			group.getChildren().add(getLbPause());
-			getBtnBuyFuel().setDisable(true);
-			getBtnBuyImproveHook().setDisable(true);
-			getBtnBuyImprovePower().setDisable(true);
+			disableBuyButtons();
 			getBtnGoDown().setDisable(true);
 		}else {
 			resources.playSound(Resources.SOUND_SAVE);
 			group.getChildren().remove(getLbPause());
-			getBtnBuyFuel().setDisable(false);
-			getBtnBuyImproveHook().setDisable(false);
-			getBtnBuyImprovePower().setDisable(false);
-
+			disableBuyButtons();
 		}
+		
 	}
 	
 	public void actionMusicPause(boolean musicPause) {
 		
 		resources.playSound(Resources.SOUND_SAVE);	
 		if(!musicPause) {
-			resources.stopSound(Resources.SOUND_AMBIENCE);
-		}else {
 			resources.playSound(Resources.SOUND_AMBIENCE);
+		}else {
+			resources.stopSound(Resources.SOUND_AMBIENCE);
 		}
 	}
 	
@@ -198,7 +202,10 @@ public class View extends Interactable{
 		getBtnFinish().setOnAction(eventHandler);
 	}	
 	
-	public void drawTreasures(TreasureHunterGame game) {
+	public void drawTreasuresAndHook(TreasureHunterGame game) {
+		
+		game.getHook().draw(graphicsGame, resources);
+		
 		if(!game.getTreasure().isEmpty()) {
 			Iterator<Treasure> it = game.getTreasure().iterator();
 			while(it.hasNext()) {
@@ -217,8 +224,7 @@ public class View extends Interactable{
 		graphicsGame.clearRect(0,0,canvasGame.getWidth(),canvasGame.getHeight());
 		graphicsGame.drawImage(resources.getImages().get(Resources.FONDO), 0, 0);
 		
-		game.getHook().draw(graphicsGame, resources);
-		drawTreasures(game);
+		drawTreasuresAndHook(game);
 	
 		graphicsGame.setFill(Color.GRAY);
 		graphicsGame.fillRect(20, 9, Store.MAX_FUEL/5, 11);
@@ -255,6 +261,15 @@ public class View extends Interactable{
 		}
 	}
 
+	public void disableButtons() {
+		getBtnGoDown().setDisable(true);
+		getBtnBuyFuel().setDisable(true);
+		getBtnBuyImproveHook().setDisable(true);
+		getBtnBuyImprovePower().setDisable(true);
+		getBtnSave().setDisable(true);
+		getBtnPause().setDisable(true);
+	}
+	
 	public void loadStageGame() {
 		
 		group = new Group();	
@@ -349,6 +364,11 @@ public class View extends Interactable{
 	
 	public void endScene(boolean victory) {
 		
+		getResources().stopSound(Resources.SOUND_AMBIENCE);
+		getResources().stopSound(Resources.SOUND_AMBIENCE);
+		getResources().stopSound(Resources.SOUND_CHAIN);
+		getResources().stopSound(Resources.SOUND_NO_FUEL);
+		
 		graphicsGame.drawImage(resources.getImages().get(Resources.PARCHMENT), 160, 160);
 		if(victory) {
 			getResources().playSound(Resources.SOUND_WIN);
@@ -359,21 +379,9 @@ public class View extends Interactable{
 		}
 		
 		disableButtons();
-		getResources().stopSound(Resources.SOUND_AMBIENCE);
-		getResources().stopSound(Resources.SOUND_CHAIN);
-		getResources().stopSound(Resources.SOUND_NO_FUEL);
 		group.getChildren().add(getBtnFinish());
 			
 	}	
-	
-	public void disableButtons() {
-		getBtnGoDown().setDisable(true);
-		getBtnBuyFuel().setDisable(true);
-		getBtnBuyImproveHook().setDisable(true);
-		getBtnBuyImprovePower().setDisable(true);
-		getBtnSave().setDisable(true);
-		getBtnPause().setDisable(true);
-	}
 	
 	public void drawEffectPrice(float price, int x, double y) {
 		graphicsGame.setFill(Color.GREEN);	

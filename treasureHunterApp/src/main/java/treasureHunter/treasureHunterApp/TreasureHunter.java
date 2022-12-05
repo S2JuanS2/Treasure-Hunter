@@ -4,11 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.animation.AnimationTimer;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 
 public class TreasureHunter{
-	
 	
 	private TreasureHunterGame game;
 	private View view;
@@ -20,7 +17,7 @@ public class TreasureHunter{
 	private boolean action = false;
 	private boolean goDown = false;
 	private boolean goUp = false;
-	private boolean stop = false;
+	private boolean pause = false;
 	private boolean musicPause = false;
 	private float price;
 
@@ -151,12 +148,12 @@ public class TreasureHunter{
 		});	
 		
 		view.recordListenPause(e ->  {
-			view.actionPause(stop);
-			if(!stop) {
-				stop = true;
+			view.actionPause(pause);
+			if(!pause) {
+				pause = true;
 				start = false;
 			}else {
-				stop = false;
+				pause = false;
 				start = true;
 			}
 		});	
@@ -176,14 +173,26 @@ public class TreasureHunter{
 			action = false;
 			goDown = false;
 			goUp = false;
-			stop = false;
+			pause = false;
 			start = false;
 			view.menuScene(!checkFiles());
 		});	
 	}
 	
 	/*
+	 * ACTIVA O DESACTIVA LOS BOTONES SEGÚN EL ESTADO DEL JUEGO
+	 */
+	public void buttonsState() {
+		view.getBtnBuyFuel().setDisable(!game.canBuyFuel());
+		view.getBtnBuyImproveHook().setDisable(!game.canBuyImproveHook() || !game.getHook().thereIsFuel());
+		view.getBtnBuyImprovePower().setDisable(!game.canBuyImproveEngine() || !game.getHook().thereIsFuel());
+		view.getBtnSave().setDisable(!game.getHook().initialPosition());
+		view.getBtnGoDown().setDisable(!game.getHook().initialPosition() || !game.getHook().thereIsFuel());
+	}
+	
+	/*
 	 * ARRANCA EL JUEGO
+	 * LOOP PRINCIPAL DEL JUEGO
 	 */
 	public void timeStart() {
 		
@@ -196,13 +205,12 @@ public class TreasureHunter{
 				e.printStackTrace();
 			}
 		}
-		
 		priceEffect = new AnimationTimer() {
 			
 			double n = 0;
 			@Override
 			public void handle(long now) {
-				if(!stop && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
+				if(!pause && game.getHook().thereIsFuel() && !game.getTreasure().isEmpty()) {
 					view.drawEffectPrice(price, game.getHook().getPosition().getX()+32,game.getHook().getPosition().getY()+50-n);
 					n = n + 0.5;
 					if(n == 25) {
@@ -212,7 +220,6 @@ public class TreasureHunter{
 				}
 			}
 		};
-		
 		timer = new AnimationTimer() {
 					
 					@Override
@@ -261,11 +268,8 @@ public class TreasureHunter{
 									view.endScene(game.winCondition());
 								}
 							}
-							view.getBtnBuyFuel().setDisable(!game.canBuyFuel());
-							view.getBtnBuyImproveHook().setDisable(!game.canBuyImproveHook() || !game.getHook().thereIsFuel());
-							view.getBtnBuyImprovePower().setDisable(!game.canBuyImproveEngine() || !game.getHook().thereIsFuel());
-							view.getBtnSave().setDisable(!game.getHook().initialPosition());
-							view.getBtnGoDown().setDisable(!game.getHook().initialPosition() || !game.getHook().thereIsFuel());
+							
+							buttonsState();
 														
 							if(game.winCondition()) {
 								this.stop();
