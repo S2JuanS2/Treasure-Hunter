@@ -47,214 +47,143 @@ public class TreasureHunter{
 					
 		view.menuScene(!checkFiles());
 			
-		view.recordListenNewGame(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				game.reset();
-				game.generateTreasures();
-				view.actionNewGame();
-				view.nameScene();
+		view.recordListenNewGame(e -> {	
+			game.reset();
+			game.generateTreasures();
+			view.actionNewGame();
+			view.nameScene();	
+		});
+				
+		view.recordListenContinueGame(e ->{	
+			try {
+				game.setTreasure(game.getSnapshot().loadTreasures());
+				game.setPlayer(game.getSnapshot().loadPlayer());
+				game.setHook(game.getSnapshot().loadHook());
+			} catch (ClassNotFoundException | IOException exc) {
+				exc.printStackTrace();
 			}
+			view.getResources().playSound(Resources.SOUND_CLICK);
+			view.loadStageGame();
+			timeStart();
 		});
 		
-		view.recordListenContinueGame(new EventHandler<ActionEvent>(){
-			@Override
-			public void handle(ActionEvent event) {
-				try {
-					game.setTreasure(game.getSnapshot().loadTreasures());
-					game.setPlayer(game.getSnapshot().loadPlayer());
-					game.setHook(game.getSnapshot().loadHook());
-				} catch (ClassNotFoundException | IOException e) {
-					e.printStackTrace();
-				}
-				view.getResources().playSound(Resources.SOUND_CLICK);
+		view.recordListenExitGame(e -> {
+			view.getResources().playSound(Resources.SOUND_CLICK);
+			System.exit(0);
+		});
+		
+		view.recordListenHelp(e -> {
+			view.actionHelp();
+		});
+		
+		view.recordListenAbout(e -> {
+			view.actionAbout();
+		});
+		
+		view.recordListenContinue(e -> {
+			view.actionContinue();
+		});
+		
+		view.recordListenStart(e ->  {
+			if(!view.errorTextField()) {
+				view.getResources().playSound(Resources.SOUND_SAVE);
+				game.getPlayer().setName(view.getTextField());
 				view.loadStageGame();
 				timeStart();
-			}
+			}else{
+				view.actionStart();
+			}		
 		});
 		
-		view.recordListenExitGame(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				view.getResources().playSound(Resources.SOUND_CLICK);
-				System.exit(0);
-			}	
+		view.recordListenBack(e ->  {
+			view.getResources().playSound(Resources.SOUND_SAVE);
+			view.menuScene(!checkFiles());
 		});
 		
-		view.recordListenHelp(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionHelp();
-			}
-			
-		});
+		view.recordListenFinish(e ->  {
+			view.getResources().playSound(Resources.SOUND_SAVE);
+			view.menuScene(!checkFiles());	
+		});	
 		
-		view.recordListenAbout(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionAbout();
-			}
-			
-		});
+		view.recordListenPlayGame(e ->  {
+			view.actionPlayGame();
+			start = true;	
+		});	
 		
-		view.recordListenContinue(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionContinue();
-			}
-			
-		});
-		
-		view.recordListenStart(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(!view.errorTextField()) {
-					view.getResources().playSound(Resources.SOUND_SAVE);
-					game.getPlayer().setName(view.getTextField());
-					view.loadStageGame();
-					timeStart();
-				}else{
-					view.actionStart();
-				}
-			}
-			
-		});
-		
-		view.recordListenBack(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
+		view.recordListenGoDown(e ->  {
+			if(start) {
 				view.getResources().playSound(Resources.SOUND_SAVE);
-				view.menuScene(!checkFiles());
-			}
-			
-		});
-		
-		view.recordListenFinish(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				view.getResources().playSound(Resources.SOUND_SAVE);
-				view.menuScene(!checkFiles());
-			}
-			
-		});	
-		
-		view.recordListenPlayGame(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionPlayGame();
-				start = true;	
+				view.getResources().playSound(Resources.SOUND_CHAIN);
+				goDown = true;
+				action = true;
 			}
 		});	
 		
-		view.recordListenGoDown(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(start) {
-					view.getResources().playSound(Resources.SOUND_SAVE);
-					view.getResources().playSound(Resources.SOUND_CHAIN);
-					goDown = true;
-					action = true;
-				}
+		view.recordListenBuyFuel(e -> {
+			if(game.inGame()) {
+				game.getStore().buyFuel(game.getPlayer(), game.getHook().getEngine());
+				view.getResources().playSound(Resources.SOUND_BUY);
+				start = true;
 			}
 		});	
 		
-		view.recordListenBuyFuel(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					game.getStore().buyFuel(game.getPlayer(), game.getHook().getEngine());
-					view.getResources().playSound(Resources.SOUND_BUY);
-					start = true;
-				}
+		view.recordListenImproveHook(e ->  {
+			if(game.inGame()) {
+				view.getResources().getSounds().get(Resources.SOUND_BUY).play();
+				game.getStore().improveHook(game.getPlayer(), game.getHook());
 			}
 		});	
 		
-		view.recordListenImproveHook(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					view.getResources().getSounds().get(Resources.SOUND_BUY).play();
-					game.getStore().improveHook(game.getPlayer(), game.getHook());
-				}
+		view.recordListenImprovePower(e -> {
+			if(game.inGame()) {
+				view.getResources().getSounds().get(Resources.SOUND_BUY).play();
+				game.getStore().improveEngine(game.getPlayer(), game.getHook());
 			}
 		});	
 		
-		view.recordListenImprovePower(new EventHandler<ActionEvent>() {
-			
-			@Override
-			public void handle(ActionEvent event) {
-				if(game.inGame()) {
-					view.getResources().getSounds().get(Resources.SOUND_BUY).play();
-					game.getStore().improveEngine(game.getPlayer(), game.getHook());
-				}
+		view.recordListenSave(e ->  {
+			try {
+				view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
+				game.saveGame();
+			} catch (IOException exc) {
+				exc.printStackTrace();
 			}
 		});	
 		
-		view.recordListenSave(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				try {
-					view.getResources().getSounds().get(Resources.SOUND_SAVE).play();
-					game.saveGame();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		});	
-		
-		view.recordListenPause(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionPause(stop);
-				if(!stop) {
-					stop = true;
-					start = false;
-				}else {
-					stop = false;
-					start = true;
-				}
-			}
-		});	
-		
-		view.recordListenMusicPause(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				view.actionMusicPause(musicPause);
-				if(!musicPause) {
-					musicPause = true;
-				}else {
-					musicPause = false;
-				}
-			}
-		});	
-		
-		view.recordListenBackGame(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				timer.stop();
-				view.actionBackGame();
-				action = false;
-				goDown = false;
-				goUp = false;
-				stop = false;
+		view.recordListenPause(e ->  {
+			view.actionPause(stop);
+			if(!stop) {
+				stop = true;
 				start = false;
-				view.menuScene(!checkFiles());
+			}else {
+				stop = false;
+				start = true;
 			}
+		});	
+		
+		view.recordListenMusicPause(e ->  {
+			view.actionMusicPause(musicPause);
+			if(!musicPause) {
+				musicPause = true;
+			}else {
+				musicPause = false;
+			}
+		});	
+		
+		view.recordListenBackGame(e ->  {
+			timer.stop();
+			view.actionBackGame();
+			action = false;
+			goDown = false;
+			goUp = false;
+			stop = false;
+			start = false;
+			view.menuScene(!checkFiles());
 		});	
 	}
 	
 	/*
-	 * ARRANCA EL TIEMPO DEL JUEGO
+	 * ARRANCA EL JUEGO
 	 */
 	public void timeStart() {
 		
