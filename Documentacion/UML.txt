@@ -4,15 +4,33 @@ skinparam roundcorner 0
 skinparam linetype ortho
 skinparam groupInheritance 4
 
+class TreasureHunter{
+-TreasureHunterGame
+-View
+}
+
+class View{
+}
+
+class Interactable{
+}
+
+class Resources{
++loadBackground()
++loadImages()
++loadSounds()
+}
+
 class TreasureHunterGame{
--Store store;
--Player player;
--Hook hook;
--ArrayList<Treasure> treasure;
+-Store;
+-Player;
+-Hook;
+-ArrayList<Treasure>;
+-Snapshot
 }
 
 class Store{
-+pay(Player,int)
++pay(Player,int);
 +improveHook(Player,Hook);
 +improveEngine(Player,Engine);
 }
@@ -26,11 +44,14 @@ class Hook{
 -Coordinate position;
 -Engine engine;
 -int length;
+-String nameImage
 }
 
 abstract class Movable{
 -Coordinate position;
 -Engine engine;
+-int loweredMeter
+-boolean moveRight
 +setState(Coordinate,Engine);
 }
 
@@ -68,7 +89,7 @@ abstract class Persistence{
 }
 
 class DirectorTreasure{
-+constructTreasure(Builder,TreasureType,int);
++constructTreasure();
 }
 
 class TreasureBuilder{
@@ -76,7 +97,8 @@ class TreasureBuilder{
 -Coordinate position;
 -int rarity;
 -int weight;
-int price;
+-int price;
+-String nameImage;
 +Treasure getResults();
 }
 
@@ -87,17 +109,25 @@ TreasureHunterGame *--> Store
 TreasureHunterGame *--> Player
 TreasureHunterGame *--> Hook
 TreasureHunterGame *--> Treasure
-TreasureHunterGame ..> Snapshot
-TreasureHunterGame ..> DirectorTreasure
-TreasureHunterGame ..> TreasureBuilder
+TreasureHunterGame *--> Snapshot
 
-Store ..> Player
-Store ..> Hook
-Store ..> Engine
+TreasureHunter o--> TreasureHunterGame
+TreasureHunter o--> View
+
+View --|> Interactable
+View *--> Resources
+View ..> TreasureHunterGame
+
+Interactable ..> Resources
+
+Player o--> Treasure
 
 Hook *--> Coordinate
 Hook *--> Engine
 Hook --|> Movable
+
+Movable o--> Coordinate
+Movable o--> Engine
 
 Treasure ..> TreasureType
 Treasure o--> Coordinate
@@ -108,9 +138,7 @@ Snapshot o--> Treasure
 Snapshot --|> Persistence
 
 DirectorTreasure ..> Builder
-DirectorTreasure ..> TreasureType
 
 TreasureBuilder ..> Builder
 TreasureBuilder --> Treasure
-
 @enduml
