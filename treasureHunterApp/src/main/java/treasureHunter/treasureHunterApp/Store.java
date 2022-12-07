@@ -2,7 +2,7 @@ package treasureHunter.treasureHunterApp;
 
 public class Store {
 
-	public static final int COST_UPGRADE_HOOK = 120;
+	public static final int COST_UPGRADE_HOOK = 60;
 	public static final int MAX_LENGTH = 350;
 	public static final int IMPROVE_LENGTH = 10;
 	

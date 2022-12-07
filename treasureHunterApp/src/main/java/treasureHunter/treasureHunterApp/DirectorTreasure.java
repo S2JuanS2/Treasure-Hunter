@@ -33,7 +33,7 @@ public class DirectorTreasure {
 		}else if(randomProbability <= 34) {
 			constructTreasure(builder,TreasureType.PLANT,COMMON, "planta");
 		}else if(randomProbability <= 44){
-			constructTreasure(builder,TreasureType.CALDERO,LITTLE_COMMON, "caldero");
+			constructTreasure(builder,TreasureType.CALAVERA,LITTLE_COMMON, "calavera");
 		}else if(randomProbability <= 54){
 			constructTreasure(builder,TreasureType.IRON,LITTLE_COMMON, "iron");
 		}else if(randomProbability <= 64){
@@ -41,7 +41,7 @@ public class DirectorTreasure {
 		}else if(randomProbability <= 72){
 			constructTreasure(builder,TreasureType.SACO,RARE, "saco");
 		}else if(randomProbability <= 80){
-			constructTreasure(builder,TreasureType.CALAVERA,RARE, "calavera");
+			constructTreasure(builder,TreasureType.CALDERO,RARE, "caldero");
 		}else if(randomProbability <= 88){
 			constructTreasure(builder,TreasureType.MONEDA,RARE, "moneda");
 		}else if(randomProbability <= 94){

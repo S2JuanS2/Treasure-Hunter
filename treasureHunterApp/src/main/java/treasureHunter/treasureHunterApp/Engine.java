@@ -53,7 +53,9 @@ public class Engine implements Serializable{
 	 * REDUCE EL COMBUSTIBLE CON LA CANTIDAD RECIBIDA POR PARAMETRO
 	 */
 	public void deductFuel(double fuel) {
-		this.fuel -= fuel;
+		if (this.fuel > 0) {
+			this.fuel -= fuel;
+		}
 	}
 
 	/*

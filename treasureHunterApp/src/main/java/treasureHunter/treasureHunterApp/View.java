@@ -74,7 +74,7 @@ public class View extends Interactable{
 	public void actionMusicPause(boolean musicPause) {
 		
 		resources.playSound(Resources.SOUND_SAVE);	
-		if(!musicPause) {
+		if(musicPause) {
 			resources.playSound(Resources.SOUND_AMBIENCE);
 		}else {
 			resources.stopSound(Resources.SOUND_AMBIENCE);
@@ -356,6 +356,8 @@ public class View extends Interactable{
 	
 	public void nameScene() {
 		
+		getLbError().setText("");
+		getName().setText("'Nombre'");
 		group.getChildren().add(getBtnStart());
 		group.getChildren().add(getName());
 		group.getChildren().add(getBtnBack());
@@ -364,7 +366,6 @@ public class View extends Interactable{
 	
 	public void endScene(boolean victory) {
 		
-		getResources().stopSound(Resources.SOUND_AMBIENCE);
 		getResources().stopSound(Resources.SOUND_AMBIENCE);
 		getResources().stopSound(Resources.SOUND_CHAIN);
 		getResources().stopSound(Resources.SOUND_NO_FUEL);

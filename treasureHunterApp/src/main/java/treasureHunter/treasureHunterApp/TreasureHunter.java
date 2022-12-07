@@ -45,8 +45,6 @@ public class TreasureHunter{
 		view.menuScene(!checkFiles());
 			
 		view.recordListenNewGame(e -> {	
-			game.reset();
-			game.generateTreasures();
 			view.actionNewGame();
 			view.nameScene();	
 		});
@@ -84,7 +82,9 @@ public class TreasureHunter{
 		view.recordListenStart(e ->  {
 			if(!view.errorTextField()) {
 				view.getResources().playSound(Resources.SOUND_SAVE);
+				game.reset();
 				game.getPlayer().setName(view.getTextField());
+				game.generateTreasures();
 				view.loadStageGame();
 				timeStart();
 			}else{
@@ -265,18 +265,23 @@ public class TreasureHunter{
 								start = false;
 								if(!game.canBuyFuel()) {
 									this.stop();
+									priceEffect.stop();
 									view.endScene(game.winCondition());
 								}
 							}
 							
 							buttonsState();
-														
+							
+							if(!musicPause && start) {
+								view.getResources().loopSound(Resources.SOUND_AMBIENCE);	
+							}
+							
 							if(game.winCondition()) {
 								this.stop();
+								priceEffect.stop();
 								view.refreshCanvas(game);
 								view.endScene(game.winCondition());
-							}		
-							view.getResources().loopSound(Resources.SOUND_AMBIENCE);
+							}	
 						}			
 					}	
 				};
