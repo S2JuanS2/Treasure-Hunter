@@ -20,9 +20,6 @@ El juego se desarrollará en Java.
 
 Ilustraciones a modo de ejemplo: 
 
-![Treasure Hunter](https://user-images.githubusercontent.com/104468421/197403579-32875435-db1c-421e-9c8e-53aaaa7c7f32.png)
-
-
-URL del juego: https://www.juegosdiarios.com/juegos/treasure-hunter-jack.html
+![Treasure Hunter]
 
 
