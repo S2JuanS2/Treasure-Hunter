@@ -18,5 +18,8 @@ Se definió una clase directora para establecer el orden en el que se deben ejec
                             
 El juego se desarrolló en Java.
 
+Ilustración del juego:
 
+
+![Captura de pantalla 2025-03-02 005734](https://github.com/user-attachments/assets/e8bc101b-5e5a-451b-85f7-d39d750fedcb)
 
